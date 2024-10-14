@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Prendario</title>
+    <link href="./scss/custom.css" rel="stylesheet" >
+    <link href="./styles/index.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
+    <script src="./Javascript/jquery-3.7.1.js"></script>
+    
+    
+</head>
+<body>
+    <header class="cabezero">
+      <nav class="navbar bg-ligth border-bottom">
+        <div class="container-fluid1">
+          <div class="list-icon">
+            <i class="bi bi-list"></i>
+          </div>
+          <div class="logotipe">
+            <a href="index.html">
+              <img src="./Img/LOGO-ELPISTON-removebg-preview.png" alt="Logo">
+            </a>
+          </div>
+          
+          <label class=" search rounded" for="buscador">
+            <input type="text" placeholder="search.." class=" ps-2 rounded" id="buscador" name="buscador">
+            <i class="bi bi-search  text-secondary ps-2 pe-2"></i>
+          </label>
+        
+          <i class="bi bi-bell-fill text-success "></i>        
+          <div class="dropdown">
+            <a class="btn d-flex btn-ligth text-blue dropdown-toggle align-items-center btma text-success" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="justify-content-start  btma"><div class="fw-bolder text-success fs-6 text-start">El Piston</div><div class="text-success fs-7">administrador</div></div> 
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <div>
+
+      <div class="contenedor">
+        <div class="sidebar  ">
+          <div class="nav-sidebar">
+            <div class="menu">
+              <p class="titulo">Main</p>
+              <ul>
+                <li >
+                  <a href="#" >
+                    <i class="bi bi-house-door"></i>
+                    <span class="text-sidebar">Inicio</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="bi bi-pencil-square"></i>
+                    <span class="text-sidebar">Prestamos</span>
+                    <i class="bi bi-caret-down-fill"></i>
+                  </a>
+                  <ul class="sub-menu">
+                    <li>
+                      <a href="#">
+                        <span class="text-sidebar">Empeños</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <span class="text-sidebar">Pagos</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="bi bi-person-square"></i>
+                    <span class="text-sidebar">Clientes</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="bi bi-cash"></i>
+                    <span class="text-sidebar">Movimientos</span>
+                    <i class="bi bi-caret-down-fill"></i>
+                  </a>
+                  <ul class="sub-menu">
+                    <li>
+                      <a href="#">
+                        <span class="text-sidebar">Entradas</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <span class="text-sidebar">Salidas</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              
+              </ul>
+            </div>          
+          </div>
+          <div class="nav-sidebar">
+            <div class="menu">
+              <p class="titulo">setings</p>
+              <ul>
+               
+                <li>
+                  <a href="#">
+                    <i class="bi bi-gear-fill"></i>
+                    <span class="text-sidebar">Configuracion</span>
+                  </a>
+                </li>
+              </ul>
+            </div>          
+          </div>
+  
+          <div class="nav-sidebar suport-sidebar">
+            <div class="menu">
+              <p class="titulo">Suport</p>
+              <ul>
+               
+                <li>
+                  <a href="#">
+                    <i class="bi bi-info-square"></i>
+                    <button type="button" class="btn border border-0 text-sidebar text-info text-start" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Soporte</button>
+                  </a>
+                </li>
+              </ul>
+            </div>          
+          </div>
+          
+          
+        </div>
+      </div>
+  
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Envianos un correo</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Nombre</label>
+                  <input type="text" class="form-control" id="recipient-name">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label"> Detalles de tu consulta</label>
+                  <textarea class="form-control custom-textarea" id="message-text"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg pe-2"></i>Cerrar</button>
+              <button type="button" class="btn btn-success"><i class="bi bi-envelope pe-2"></i>Enviar correo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+
+    
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./Javascript/Index.js"></script>
+</body>
+</html>
