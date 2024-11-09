@@ -1,0 +1,120 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    + Nuevo Cliente
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-success">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Registro Cliente</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-4">
+                <div class="row justify-content-center">
+                    <div class="">
+                        <div class="">
+                            <div class="card-body  ">
+                                <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Tipo Documento:</label>
+                                            <select formControlName="tipoDocumento" class="form-select text-cyan">
+                                                <option value="">Seleccione un tipo</option>
+                                                <option value="DNI">DNI</option>
+                                                <option value="PASAPORTE">Pasaporte</option>
+                                                <option value="CEDULA">Cédula</option>
+                                            </select>
+                                            @if (clienteForm.get('tipoDocumento')?.errors?.['required'] && 
+                                                 clienteForm.get('tipoDocumento')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Número Documento:</label>
+                                            <input type="number" formControlName="numeroDocumento" class="text-cyan form-control">
+                                            @if (clienteForm.get('numeroDocumento')?.errors?.['required'] && 
+                                                 clienteForm.get('numeroDocumento')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Nombres:</label>
+                                            <input type="text" formControlName="nombres" class=" text-cyan form-control">
+                                            @if (clienteForm.get('nombres')?.errors?.['required'] && 
+                                                 clienteForm.get('nombres')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Apellidos:</label>
+                                            <input type="text" formControlName="apellidos" class="text-cyan form-control">
+                                            @if (clienteForm.get('apellidos')?.errors?.['required'] && 
+                                                 clienteForm.get('apellidos')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Fecha Nacimiento:</label>
+                                            <input type="date" formControlName="fechaNacimiento" class="text-cyan form-control">
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Dirección:</label>
+                                            <input type="text" formControlName="direccion" class="text-cyan form-control">
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Ciudad:</label>
+                                            <input type="text" formControlName="ciudad" class="text-cyan form-control">
+                                            @if (clienteForm.get('ciudad')?.errors?.['required'] && 
+                                                 clienteForm.get('ciudad')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Teléfono:</label>
+                                            <input type="text" formControlName="telefono" class="text-cyan form-control">
+                                            @if (clienteForm.get('telefono')?.errors?.['required'] && 
+                                                 clienteForm.get('telefono')?.touched) {
+                                                <div class="text-danger">Este campo es requerido</div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="opccion col-md-6 mb-3 text-success">
+                                            <label class="form-label">Email:</label>
+                                            <input type="email" formControlName="email" class="text-cyan form-control">
+                                            @if (clienteForm.get('email')?.errors?.['email'] && 
+                                                 clienteForm.get('email')?.touched) {
+                                                <div class="text-danger">Email inválido</div>
+                                            }
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="text-center btn-guardar">
+                                        <button type="submit" 
+                                                [disabled]="!clienteForm.valid"
+                                                class="btn btn-success">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+

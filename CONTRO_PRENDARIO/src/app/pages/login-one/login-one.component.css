@@ -1,0 +1,81 @@
+:host {
+    display: block; /* Asegúrate de que el componente ocupe espacio completo */
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(to bottom, #C1E8FF 0%, #093476 80%,#042454 100% );
+    position: relative;
+  }
+.login{
+    display: block;
+    background-color: white;
+    height: 500px;
+    width: 400px;
+    top: 50%; /* Centra verticalmente */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+.login img{
+    width: 64px;
+    top: 12.5%; /* Centra verticalmente */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: inherit;
+    
+}
+.login h2{
+    
+    top: 28%; /* Centra verticalmente */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: inherit;
+    color: black;
+}
+
+
+.overpass-piston {
+  font-family: "Overpass", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+.overpass-piston-h4 {
+  font-family: "Overpass", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.overpass-piston-h6 {
+  font-family: "Overpass", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.login h4{
+  margin: 223px 0 0 35px ;
+  color: black;
+ 
+}
+.login h6{
+  color: black;
+  margin: 0 35px;
+}
+.login button{
+  margin: 30px 0 0 35px;
+  width: 330px;
+  background-color: #3184E6;
+  color: white;
+  text-align: start;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+.login button:hover{
+  background-color: #042454;
+  transition: all 0.3s;
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  
+}
+
+  

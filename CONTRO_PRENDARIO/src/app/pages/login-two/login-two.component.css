@@ -1,0 +1,110 @@
+:host {
+  display: block; /* Asegúrate de que el componente ocupe espacio completo */
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(to bottom, #C1E8FF 0%, #093476 80%,#042454 100% );
+  position: relative;
+}
+.login{
+  display: block;
+  background-color: white;
+  height: 500px;
+  width: 400px;
+  top: 50%; /* Centra verticalmente */
+  left: 50%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+.login img{
+  width: 64px;
+  top: 12.5%; /* Centra verticalmente */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: inherit;
+  
+}
+.login h2{
+  
+  top: 28%; /* Centra verticalmente */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: inherit;
+  color: black;
+}
+.pt-sans-bold {
+  font-family: "PT Sans", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+}
+.login button{
+margin: 30px 0 0 35px;
+width: 330px;
+background-color: #3184E6;
+color: white;
+text-align: center;
+font-size: 16px;
+transition: all 0.3s;
+}
+.login button:hover{
+background-color: #042454;
+transition: all 0.3s;
+transform: scale(1.05);
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);  
+}
+.login span{
+  margin: 202px;
+  display: block;}
+.login .input{
+  border-bottom: solid 1.3px black;
+  margin: 30px 0 0 35px;
+  width: 330px;
+  color: black;
+}
+
+.login input{
+  width: 280px;
+  padding: 0 0 0 25px;
+  border: none;
+  color: black;
+  outline: none;
+}
+.login input:focus::placeholder, .login input:hover{
+  border: none;
+  color: #2c2c2c;
+}
+.login input::placeholder{
+  color: black;
+  font-size: 16px;
+  font-weight: bolder;
+}
+.login .center{
+  display: flex;
+  justify-content: center;
+  margin: 35px 0 0 0;  
+}
+.login .center a{
+  font-size: 11px;
+  text-decoration: none;
+  color: #3981F0;
+  font-weight: bolder;
+}
+.login .center a:hover{
+  color: #042454;
+}
+.login .center-two{
+  display: flex;
+  justify-content: center;
+  margin: 25px 0 0 0;  
+}
+.login .center-two a{
+  font-size: 11px;
+  text-decoration: none;
+  color: #757575;
+  font-weight: bolder;
+}
+.login .center-two a:hover{
+  color: #555555;
+}
+
+
+

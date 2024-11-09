@@ -1,0 +1,67 @@
+<!-- cliente-editar.component.html -->
+<div class="modal fade" [id]="modalId" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="clienteEditar" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label class="form-label">Tipo Documento:</label>
+                        <select formControlName="tipoDocumento" class="form-select">
+                            <option value="DNI">DNI</option>
+                            <option value="PASAPORTE">Pasaporte</option>
+                            <option value="CEDULA">Cédula</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Número Documento:</label>
+                        <input type="number" formControlName="numeroDocumento" class="form-control">
+                    </div>
+                    
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombres:</label>
+                        <input type="text" formControlName="nombres" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Apellidos:</label>
+                        <input type="text" formControlName="apellidos" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de nacimiento:</label>
+                        <input type="date" formControlName="fechaNacimiento" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Direccion:</label>
+                        <input type="text" formControlName="direccion" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ciudad:</label>
+                        <input type="text" formControlName="ciudad" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefono:</label>
+                        <input type="text" formControlName="telefono" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo electronico:</label>
+                        <input type="email" formControlName="email" class="form-control">
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!clienteEditar.valid">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+.opccion{
+    width: 294px;
+}
+.opccion select input{
+    width: 270px;
+}
+.modal-content{
+    width: 625px;
+}
+.btn-guardar{
+    width: 100%;
+}
+.btn-guardar .btn-success{
+    width: 80%;
+    margin-bottom: 5%;
+}
