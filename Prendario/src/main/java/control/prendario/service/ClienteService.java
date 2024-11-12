@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -30,7 +29,13 @@ public class ClienteService {
 
     public Cliente obtenerPorId(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente con ID " + id + " no encontrado"));
+    }
+
+    public class ClienteNotFoundException extends RuntimeException {
+        public ClienteNotFoundException(String message) {
+            super(message);
+        }
     }
     public boolean existeDocumento(String numeroDocumento) {
         return clienteRepository.existsByNumeroDocumento(numeroDocumento);

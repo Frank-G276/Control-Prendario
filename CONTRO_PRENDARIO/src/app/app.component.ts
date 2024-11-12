@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { HeaderComponent } from './pages/header/header.component';
-import { SidebarComponent } from './pages/sidebar/sidebar.component';
-import { LoginOneComponent } from './pages/login-one/login-one.component';
-import { VistaClienteOneComponent } from "./pages/vista-cliente-one/vista-cliente-one.component";
+import { HeaderComponent } from './pages/components/header/header.component';
+import { SidebarComponent } from './pages/components/sidebar/sidebar.component';
+import { LoginOneComponent } from './pages/components/login-one/login-one.component';
+import { VistaClienteOneComponent } from "./pages/components/vista-cliente-one/vista-cliente-one.component";
 import { ClienteListaComponent } from './clientes/components/cliente-lista/cliente-lista.component';
 import { ClienteFormComponent } from './clientes/components/cliente-form/cliente-form.component';
 

@@ -1,0 +1,331 @@
+<!-- prestamo-crear.component.html -->
+
+<app-header></app-header>
+<div class="pagina d-flex" >
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+   
+    <div class="prestamo-crear  mx-auto text-success">
+        <app-cliente-form (clienteCreado)="onClienteCreado($event)"></app-cliente-form>  
+        <h2 class="text-success font-bold">Nuevo Prestamo</h2>
+       
+        <div class="crear-cuerpo bg-white  rounded p-6">
+            <!-- Formulario del Vehículo -->
+            <div>
+                <h3 class="text-xl font-bold mb-4">Información general </h3>
+                <form [formGroup]="vehicleForm"  class="space-y-4">
+                    <div class=" justify-content-between d-flex flex-wrap">
+                        <!-- Tipo de Vehículo -->
+                        <div class="elemento-form">
+                            <label for="tipoVehiculo" class="block mb-1">Tipo de Vehículo *</label>
+                            <select id="tipoVehiculo" formControlName="tipoVehiculo" 
+                                    class="w-full p-2 border rounded"
+                                    [class.border-red-500]="vehicleForm.get('tipoVehiculo')?.touched && vehicleForm.get('tipoVehiculo')?.invalid">
+                                <option value="">Seleccione un tipo</option>
+                                <option *ngFor="let tipo of tiposVehiculo" [value]="tipo">
+                                    {{tipo}}
+                                </option>
+                            </select>
+                            <div *ngIf="vehicleForm.get('tipoVehiculo')?.touched && vehicleForm.get('tipoVehiculo')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Marca -->
+                        <div class="elemento-form">
+                            <label for="marca" class="block mb-1">Marca *</label>
+                            <input type="text" id="marca" formControlName="marca" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('marca')?.touched && vehicleForm.get('marca')?.invalid">
+                            <div *ngIf="vehicleForm.get('marca')?.touched && vehicleForm.get('marca')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Línea -->
+                        <div class="elemento-form">
+                            <label for="linea" class="block mb-1">Línea *</label>
+                            <input type="text" id="linea" formControlName="linea" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('linea')?.touched && vehicleForm.get('linea')?.invalid">
+                            <div *ngIf="vehicleForm.get('linea')?.touched && vehicleForm.get('linea')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Modelo -->
+                        <div class="elemento-form">
+                            <label for="modelo" class="block mb-1">Modelo (Año) *</label>
+                            <select id="modelo" formControlName="modelo" 
+                                    class="w-full p-2 border rounded"
+                                    [class.border-red-500]="vehicleForm.get('modelo')?.touched && vehicleForm.get('modelo')?.invalid">
+                                <option value="">Seleccione el año</option>
+                                <option *ngFor="let anio of modelosDisponibles" [value]="anio">
+                                    {{anio}}
+                                </option>
+                            </select>
+                            <div *ngIf="vehicleForm.get('modelo')?.touched && vehicleForm.get('modelo')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                <div *ngIf="vehicleForm.get('modelo')?.errors?.['required']">
+                                    El año del modelo es requerido
+                                </div>
+                                <div *ngIf="vehicleForm.get('modelo')?.errors?.['min']">
+                                    El año debe ser mayor a 1900
+                                </div>
+                                <div *ngIf="vehicleForm.get('modelo')?.errors?.['max']">
+                                    El año no puede ser mayor al actual
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Placa -->
+                        <div class="elemento-form">
+                            <label for="placa" class="block mb-1">Placa *</label>
+                            <input type="text" id="placa" formControlName="placa" 
+                                   class="w-full p-2 border rounded uppercase"
+                                   [class.border-red-500]="vehicleForm.get('placa')?.touched && vehicleForm.get('placa')?.invalid">
+                            <div *ngIf="vehicleForm.get('placa')?.touched && vehicleForm.get('placa')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido y solo acepta letras y números
+                            </div>
+                        </div>
+            
+                        <!-- Cilindraje -->
+                        <div class="elemento-form">
+                            <label for="cilindraje" class="block mb-1">Cilindraje *</label>
+                            <input type="number" id="cilindraje" formControlName="cilindraje" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('cilindraje')?.touched && vehicleForm.get('cilindraje')?.invalid">
+                            <div *ngIf="vehicleForm.get('cilindraje')?.touched && vehicleForm.get('cilindraje')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido y debe ser mayor a 0
+                            </div>
+                        </div>
+            
+                        <!-- Color -->
+                        <div class="elemento-form">
+                            <label for="color" class="block mb-1">Color *</label>
+                            <input type="text" id="color" formControlName="color" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('color')?.touched && vehicleForm.get('color')?.invalid">
+                            <div *ngIf="vehicleForm.get('color')?.touched && vehicleForm.get('color')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Número de Motor -->
+                        <div class="elemento-form">
+                            <label for="numeroMotor" class="block mb-1">Número de Motor *</label>
+                            <input type="text" id="numeroMotor" formControlName="numeroMotor" 
+                                   class="w-full p-2 border rounded uppercase"
+                                   [class.border-red-500]="vehicleForm.get('numeroMotor')?.touched && vehicleForm.get('numeroMotor')?.invalid">
+                            <div *ngIf="vehicleForm.get('numeroMotor')?.touched && vehicleForm.get('numeroMotor')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Número de Chasis -->
+                        <div class="elemento-form">
+                            <label for="numeroChasis" class="block mb-1">Número de Chasis *</label>
+                            <input type="text" id="numeroChasis" formControlName="numeroChasis" 
+                                   class="w-full p-2 border rounded uppercase"
+                                   [class.border-red-500]="vehicleForm.get('numeroChasis')?.touched && vehicleForm.get('numeroChasis')?.invalid">
+                            <div *ngIf="vehicleForm.get('numeroChasis')?.touched && vehicleForm.get('numeroChasis')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Sitio de Matrícula -->
+                        <div class="elemento-form">
+                            <label for="sitioMatricula" class="block mb-1">Sitio de Matrícula *</label>
+                            <input type="text" id="sitioMatricula" formControlName="sitioMatricula" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('sitioMatricula')?.touched && vehicleForm.get('sitioMatricula')?.invalid">
+                            <div *ngIf="vehicleForm.get('sitioMatricula')?.touched && vehicleForm.get('sitioMatricula')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Fecha de Matrícula -->
+                        <div class="elemento-form">
+                            <label for="fechaMatricula" class="block mb-1">Fecha de Matrícula *</label>
+                            <input type="date" id="fechaMatricula" formControlName="fechaMatricula" 
+                                   class=" p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('fechaMatricula')?.touched && vehicleForm.get('fechaMatricula')?.invalid">
+                            <div *ngIf="vehicleForm.get('fechaMatricula')?.touched && vehicleForm.get('fechaMatricula')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Propietario -->
+                        <div class="elemento-form">
+                            <label for="propietario" class="block mb-1">Propietario *</label>
+                            <input type="text" id="propietario" formControlName="propietario" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('propietario')?.touched && vehicleForm.get('propietario')?.invalid">
+                            <div *ngIf="vehicleForm.get('propietario')?.touched && vehicleForm.get('propietario')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+            
+                        <!-- Número de Documento del Propietario -->
+                        <div class="elemento-form">
+                            <label for="numeroDocumentoPropietario" class="block mb-1">Número de Documento del Propietario *</label>
+                            <input type="text" id="numeroDocumentoPropietario" formControlName="numeroDocumentoPropietario" 
+                                   class="w-full p-2 border rounded"
+                                   [class.border-red-500]="vehicleForm.get('numeroDocumentoPropietario')?.touched && vehicleForm.get('numeroDocumentoPropietario')?.invalid">
+                            <div *ngIf="vehicleForm.get('numeroDocumentoPropietario')?.touched && vehicleForm.get('numeroDocumentoPropietario')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Campo requerido
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Botón de Submit -->
+                    
+                </form>
+            </div>
+        
+            <!-- Formulario del Préstamo -->
+            <div >
+                <form [formGroup]="loanForm" class="space-y-4">
+                    <div class="justify-content-between d-flex flex-wrap">
+                        <!-- Cliente -->
+                        <div class="elemento-form relative">
+                            <div class="mb-3 d-flex justify-content-between align-items-start">
+                                <!-- Buscador -->
+                                <div class="flex-grow-1 me-3">
+                                    <label for="buscadorClientes">Buscar Cliente *</label>
+                                    <div class="relative">
+                                        <input
+                                            id="buscadorClientes"
+                                            type="text"
+                                            [formControl]="buscadorControl"
+                                            class="w-full p-2 border rounded"
+                                            placeholder="Buscar por nombre o documento..."
+                                            [class.border-red-500]="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid"
+                                        >
+                                        <button
+                                            *ngIf="clienteSeleccionado"
+                                            (click)="limpiarSeleccion()"
+                                            class="btn"
+                                            type="button"
+                                        >
+                                        <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </div>
+                        
+                                    <!-- Lista de resultados -->
+                                    <div *ngIf="mostrarResultados && clientesEncontrados.length > 0"
+                                         class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                                        <ul class="max-h-60 overflow-auto">
+                                            <li *ngFor="let cliente of clientesEncontrados"
+                                                (click)="seleccionarCliente(cliente)"
+                                                class="p-2 hover:bg-gray-100 cursor-pointer">
+                                                {{cliente.nombres}} {{cliente.apellidos}} - {{cliente.numeroDocumento}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                        
+                                    <!-- Mensaje si no hay resultados -->
+                                    <div *ngIf="mostrarResultados && clientesEncontrados.length === 0 && buscadorControl.value"
+                                         class="mt-1 text-sm text-gray-500">
+                                        No se encontraron clientes
+                                    </div>
+                                </div>
+                        
+                                <!-- Botón para nuevo cliente -->
+                                <div class="mt-4">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                        + Nuevo Cliente
+                                    </button>
+                                </div>
+                            </div>
+                        
+                            <!-- Mensaje de validación -->
+                            <div *ngIf="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                Debe seleccionar un cliente
+                            </div>
+                        </div>
+
+                        
+        
+                        <!-- Monto del Préstamo -->
+                        <div class="elemento-form">
+                            <label for="montoPrestamo" class="block mb-1 font-medium">Monto del Préstamo *</label>
+                            <input type="number" id="montoPrestamo" formControlName="montoPrestamo" 
+                                   class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   [class.border-red-500]="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid">
+                            <div *ngIf="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['required']">
+                                    El monto es requerido
+                                </div>
+                                <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['min']">
+                                    El monto debe ser mayor a 0
+                                </div>
+                            </div>
+                        </div>
+        
+                        <!-- Tasa de Interés -->
+                        <div class="elemento-form ">
+                            <label for="tasaInteres" class="block mb-1 font-medium">Tasa de Interés (%) *</label>
+                            <input type="number" id="tasaInteres" formControlName="tasaInteres" 
+                                   class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   [class.border-red-500]="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid">
+                            <div *ngIf="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid" 
+                                 class="text-red-500 text-sm mt-1">
+                                <div *ngIf="loanForm.get('tasaInteres')?.errors?.['required']">
+                                    La tasa de interés es requerida
+                                </div>
+                                <div *ngIf="loanForm.get('tasaInteres')?.errors?.['min'] || loanForm.get('tasaInteres')?.errors?.['max']">
+                                    La tasa debe estar entre 0 y 100
+                                </div>
+                            </div>
+                        </div>
+        
+                        <!-- Observaciones -->
+                        <div class="elemento-form area-texto" >
+                            <label for="observaciones" class="block mb-1 font-medium">Observaciones</label>
+                            <textarea id="observaciones" formControlName="observaciones" 
+                                    rows="4"
+                                    class=""
+                                    placeholder="Ingrese cualquier observación relevante sobre el préstamo..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+            <!-- Botones -->
+            <div class="botones flex justify-content-between mt-5">
+                <button (click)="router.navigate(['/prestamos'])" 
+                        class="btn btn-danger m-2">
+                    Cancelar
+                </button>
+                <button (click)="onSubmit()" 
+                        [disabled]="!vehicleForm.valid || !loanForm.valid || loading"
+                        class="btn btn-success m-2">
+                    <span *ngIf="loading" class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Procesando...
+                    </span>
+                    <span *ngIf="!loading">
+                        Registrar Préstamo
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+  </div> 

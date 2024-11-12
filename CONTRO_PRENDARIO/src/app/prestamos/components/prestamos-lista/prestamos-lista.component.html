@@ -1,0 +1,164 @@
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <div class=" titulo d-flex align-items-center justify-content-between ">
+                    <h2 class="text-success">Prestamos</h2>
+                    <button 
+                        (click)="navigateToCreate()"
+                        class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        + Nuevo Préstamo
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="loading" class="flex justify-center items-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                    {{ error }}
+                </div>
+
+                <!-- Table -->
+                <div *ngIf="!loading && !error" class="bg-white shadow-md rounded-lg overflow-hidden">
+                    
+                    <div class="d-flex align-items-center justify-content-between buscador_tabla" [formGroup]="filtrosForm">
+                        <input type="text" 
+                               formControlName="numeroPrestamo"
+                               placeholder="Número" 
+                               class="form-control me-2">
+                               
+                        <input type="text" 
+                               formControlName="nombreCliente"
+                               placeholder="Cliente" 
+                               class="form-control me-2">
+                               
+                        <input type="date" 
+                               formControlName="fechaCreacion"
+                               placeholder="Creación" 
+                               class="form-control me-2">
+                               
+                        <input type="date" 
+                               formControlName="fechaVencimiento"
+                               placeholder="Vencimiento" 
+                               class="form-control me-2">
+                               
+                        <select formControlName="estado" 
+                                class="form-control me-2">
+                            <option value="">Estado</option>
+                            <option *ngFor="let estado of estadosPrestamo" [value]="estado">
+                                {{estado}}
+                            </option>
+                        </select>
+                        
+                        <button class="btn btn-outline-success" 
+                                (click)="limpiarFiltros()">
+                            <i class="bi bi-x-circle"></i>
+                            Limpiar
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="tabla ">
+                            <thead class="cabeza-tabla">
+                                <tr class="text-success">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Número
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Cliente
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Creación
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Vencimiento
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Total
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Abonado
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Saldo
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Estado
+                                    </th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="tabla_cuerpo text-success">
+                                <tr *ngFor="let prestamo of prestamosFiltrados" >
+                                    <td >
+                                        {{ prestamo.idPrestamo }}
+                                    </td>
+                                    <td >
+                                        <div class="text-sm text-gray-900">
+                                            {{ prestamo.cliente?.nombres }} {{ prestamo.cliente?.apellidos }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ prestamo.cliente?.numeroDocumento }}
+                                        </div>
+                                    </td>
+                                    <td >
+                                        {{ formatDate(prestamo.fechaPrestamo!) }}
+                                    </td>
+                                    <td >
+                                        {{ formatDate(prestamo.fechaVencimiento!) }}
+                                    </td>
+                                    <td >
+                                        ${{ calculateTotal(prestamo.montoPrestamo) | number:'1.2-2' }}
+                                    </td>
+                                    <td>
+                                        $0
+                                    </td>
+                                    <td >
+                                        $0
+                                    </td>
+                                    <td >
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                              [ngClass]="{
+                                                'bg-green-100 text-green-800': prestamo.estadoPrestamo === 'ACTIVO',
+                                                'bg-yellow-100 text-yellow-800': prestamo.estadoPrestamo === 'PENDIENTE',
+                                                'bg-red-100 text-red-800': prestamo.estadoPrestamo === 'VENCIDO',
+                                                'bg-blue-100 text-blue-800': prestamo.estadoPrestamo === 'PAGADO'
+                                              }">
+                                            {{ prestamo.estadoPrestamo }}
+                                        </span>
+                                    </td>
+                                    <td >
+                                        <button 
+                                            (click)="navigateToEdit(prestamo.idPrestamo!)"
+                                            class="btn btn-sm">
+                                            <i class="bi bi-pencil text-success"></i>
+                                        </button>
+                                        <button 
+                                            (click)="deletePrestamo(prestamo.idPrestamo!)"
+                                            class="btn btn-sm">
+                                            <i class="bi bi-x-lg text-success"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Empty State -->
+                                <tr *ngIf="prestamosFiltrados.length === 0">
+                                    <td colspan="9" class="px-6 py-4 text-center text-gray-500">
+                                        No se encontraron préstamos con los filtros aplicados
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+</div>

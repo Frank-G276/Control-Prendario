@@ -496,7 +496,7 @@ body{
         padding: 5px;
         background-color: #ffffff;
         position: fixed;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
     }
     .menu .titulo {
         font-size: 8px;
@@ -558,6 +558,7 @@ body{
 /* Diseño Abierto */
     .sidebar {
         width: 92px;
+        transition: all 0.3s ease;
     }
     
     .sidebar .menu .titulo{

@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -26,11 +29,35 @@ public class ClienteController {
     public ResponseEntity<List<Cliente>> listarClientes() {
         return ResponseEntity.ok(clienteService.obtenerTodos());
     }
+
     @GetMapping("/buscar")
     public ResponseEntity<List<Cliente>> buscarClientes(
+            @RequestParam(required = false) String termino,
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String numeroDocumento) {
-        return ResponseEntity.ok(clienteService.buscar(nombre, numeroDocumento));
+
+        try {
+            List<Cliente> resultados = new ArrayList<>();
+
+            if (termino != null && !termino.trim().isEmpty()) {
+                // Búsqueda combinada
+                Set<Cliente> clientesUnicos = new LinkedHashSet<>();
+                clientesUnicos.addAll(clienteService.buscarPorNombre(termino));
+                clientesUnicos.addAll(clienteService.buscarPorNumeroDocumento(termino));
+                resultados = new ArrayList<>(clientesUnicos);
+            } else if (nombre != null || numeroDocumento != null) {
+                // Búsqueda específica
+                resultados = clienteService.buscar(
+                        nombre != null ? nombre : "",
+                        numeroDocumento != null ? numeroDocumento : ""
+                );
+            }
+
+            return ResponseEntity.ok(resultados);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -51,4 +78,6 @@ public class ClienteController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
 }

@@ -37,15 +37,24 @@ export class ClienteService {
     eliminarCliente(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
-    buscarClientes(nombre?: string, numeroDocumento?: string): Observable<Cliente[]> {
-        let params = new HttpParams();
-        if (nombre) {
-          params = params.set('nombre', nombre);
-        }
-        if (numeroDocumento) {
-          params = params.set('numeroDocumento', numeroDocumento);
-        }
-        return this.http.get<Cliente[]>(`${this.apiUrl}/buscar`, { params });
+    buscarClientes(nombre: string = '', numeroDocumento: string = ''): Observable<Cliente[]> {
+      let params = new HttpParams();
+      
+      // Si el mismo término se usa para nombre y número de documento
+      if (nombre && nombre === numeroDocumento) {
+          params = params.set('termino', nombre);
+          return this.http.get<Cliente[]>(`${this.apiUrl}/buscar`, { params });
       }
+
+      // Si se proporcionan términos diferentes
+      if (nombre.trim()) {
+          params = params.set('nombre', nombre);
+      }
+      if (numeroDocumento.trim()) {
+          params = params.set('numeroDocumento', numeroDocumento);
+      }
+      
+      return this.http.get<Cliente[]>(`${this.apiUrl}/buscar`, { params });
+  }
       
 }

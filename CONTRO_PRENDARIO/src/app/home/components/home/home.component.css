@@ -1,0 +1,19 @@
+.pagina{
+    background-color: #F5F6FB;
+}
+@media (max-width:1200px) {
+    .lateral{
+        width: 93px;
+    }
+}@media (max-width:700) {
+    .lateral{
+        width: 0;
+    }
+}
+
+.cuerpo{
+    margin-top: 58px !important;
+    width: auto;
+    margin-left: 5%;
+    margin-right: 5%;
+}

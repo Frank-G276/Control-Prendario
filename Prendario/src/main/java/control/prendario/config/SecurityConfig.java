@@ -22,7 +22,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/clientes/**").permitAll()  // Permite todas las rutas de clientes
+                        .requestMatchers("/api/clientes/**").permitAll()
+                        .requestMatchers("/api/vehicles/**").permitAll()
+                        .requestMatchers("/api/prestamos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

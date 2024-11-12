@@ -1,10 +1,11 @@
 // cliente-form.component.ts
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ClienteService } from '../../services/cliente.service';
 import { inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Cliente } from '../../models/cliente.interface';
 
 @Component({
   selector: 'app-cliente-form',
@@ -14,6 +15,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   styleUrl: './cliente-form.component.css'
 })
 export class ClienteFormComponent {
+
+  @Output() clienteCreado = new EventEmitter<Cliente>();
+  
   private fb = inject(FormBuilder);
   private clienteService = inject(ClienteService);
   private router = inject(Router);
@@ -41,34 +45,21 @@ export class ClienteFormComponent {
       if (params['id']) {
         this.clienteId = +params['id'];
         this.isEditing = true;
-        this.cargarCliente(this.clienteId);
+       
       }
     });
   }
 
-  private cargarCliente(id: number) {
-    this.clienteService.obtenerClientePorId(id).subscribe({
-      next: (cliente) => {
-        this.clienteForm.patchValue(cliente);
-      },
-      error: (error) => {
-        console.error('Error al cargar cliente', error);
-      }
-    });
-  }
+  
 
   onSubmit(): void {
     if (this.clienteForm.valid) {
-      const operation = this.isEditing
-        ? this.clienteService.actualizarCliente(this.clienteId!, this.clienteForm.value)
-        : this.clienteService.crearCliente(this.clienteForm.value);
-
-      operation.subscribe({
-        next: (response) => {
-          console.log(this.isEditing ? 'Cliente actualizado' : 'Cliente guardado', response);
-          this.router.navigate(['/clientes']).then(() => {
-            window.location.reload();
-          });
+ 
+        this.clienteService.crearCliente(this.clienteForm.value).subscribe({
+        next: (cliente) => {
+          this.clienteCreado.emit(cliente); // Emitir el cliente creado
+          this.clienteForm.reset();
+          
         },
         error: (error) => {
           console.error('Error al guardar', error);

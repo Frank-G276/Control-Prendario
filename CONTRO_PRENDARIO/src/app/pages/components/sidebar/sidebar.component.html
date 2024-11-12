@@ -1,60 +1,40 @@
 <div>
 
     <div class="contenedor">
-      <div class="sidebar  ">
+      <div class="sidebar" [class.noactive]="isSidebarCollapsed">
         <div class="nav-sidebar">
           <div class="menu">
             <p class="titulo">Main</p>
             <ul>
               <li >
-                <a href="#" >
+                <a [routerLink]="['/home']" >
                   <i class="bi bi-house-door"></i>
                   <span class="text-sidebar">Inicio</span>
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a [routerLink]="['/prestamos']" >
                   <i class="bi bi-pencil-square"></i>
                   <span class="text-sidebar">Prestamos</span>
-                  <i class="bi bi-caret-down-fill"></i>
                 </a>
-                <ul class="sub-menu">
-                  <li>
-                    
-                      <span class="text-sidebar">Empeños</span>
-                    
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="text-sidebar">Pagos</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
               <li>
-                <a href="#">
+                <a [routerLink]="['/pagos']">
+                  <i class="bi bi-cash-coin"></i>
+                  <span class="text-sidebar">Pagos</span>
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['/clientes']">
                   <i class="bi bi-person-square"></i>
                   <span class="text-sidebar">Clientes</span>
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a [routerLink]="['/movimientos']">
                   <i class="bi bi-cash"></i>
                   <span class="text-sidebar">Movimientos</span>
-                  <i class="bi bi-caret-down-fill"></i>
                 </a>
-                <ul class="sub-menu">
-                  <li>
-                    <a href="#">
-                      <span class="text-sidebar">Entradas</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="text-sidebar">Salidas</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
             
             </ul>
@@ -81,10 +61,10 @@
             <ul>
              
               <li>
-                <a href="#">
+                
                   <i class="bi bi-info-square"></i>
                   <button type="button" class="btn border border-0 text-sidebar text-info text-start" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Soporte</button>
-                </a>
+                
               </li>
             </ul>
           </div>          

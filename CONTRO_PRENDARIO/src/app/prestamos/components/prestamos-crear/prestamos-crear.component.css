@@ -27,7 +27,8 @@
 h2{
     font-size: 40px;
     justify-content: center;
-    text-align: center;
+    text-align: start;
+    margin-bottom: 45px;
 }
 .tabla{
     background-color: white;
@@ -50,7 +51,7 @@ h2{
     border-bottom: 1px solid #d0d0d0;
 }
 .buscador_tabla input{
-    width: 190px;
+    width: 120px;
     height: 40px;
     font-size: 14px;
 }
@@ -64,8 +65,45 @@ h2{
     width: 20px;
 }
 
+.prestamo-crear{
+    margin-top: 58px;
+    width: 75%;
+}
 
 .tabla_cuerpo tr td {
     padding: 20px 25px;
     font-size: 14px;
+}
+
+.crear-cuerpo{
+    padding: 25px;
+}
+.elemento-form{
+    margin-right: 25px;
+    margin-bottom: 30px;
+    width: 226px;
+}
+.elemento-form input{
+    width: 100%;
+    
+}
+.elemento-form select, .elemento-form{
+    width: 212px;
+}
+
+.area-texto{
+    width: 500px;
+    margin: 0;
+}
+.area-texto textarea{
+    width: 100%;
+    border-radius: 10px;  
+}
+.area-texto textarea::placeholder{
+    color: #093476;
+    opacity: 0.8; 
+}
+.botones{
+    width: 100%;
+    text-align: center;
 }
