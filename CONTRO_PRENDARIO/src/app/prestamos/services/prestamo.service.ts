@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, forkJoin, map, mergeMap, Observable, tap, throwError } from 'rxjs';
 import { Prestamo } from '../models/prestamo.interface';
+import { PagoService } from '../../pagos/services/pago.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,12 +15,22 @@ import { Prestamo } from '../models/prestamo.interface';
       })
     };
   
-    constructor(private http: HttpClient) { }
+    constructor(
+      private http: HttpClient,
+      private pagoService: PagoService
+    ) {}
   
     getPrestamos(): Observable<Prestamo[]> {
       return this.http.get<Prestamo[]>(this.apiUrl).pipe(
           tap(prestamos => console.log('Préstamos obtenidos:', prestamos)),
           catchError(this.handleError)
+      );
+    }
+
+    getPrestamosVencidos(): Observable<Prestamo[]> {
+      return this.http.get<Prestamo[]>(`${this.apiUrl}/vencidos`).pipe(
+        tap(prestamos => console.log('Préstamos vencidos:', prestamos)),
+        catchError(this.handleError)
       );
     }
   
@@ -69,5 +80,36 @@ import { Prestamo } from '../models/prestamo.interface';
       
       return throwError(() => errorMessage);
   }
+
+  buscarPrestamos(termino: string, numeroDocumento: string): Observable<Prestamo[]> {
+    let params = new HttpParams();
+    if (termino) {
+      params = params.set('termino', termino);
+    }
+    if (numeroDocumento) {
+      params = params.set('numeroDocumento', numeroDocumento);
+    }
+    return this.http.get<Prestamo[]>(`${this.apiUrl}/buscar`, { params });
+  }
+
+  getPrestamosConResumen(): Observable<any[]> {
+    return this.getPrestamos().pipe(
+      map(prestamos => {
+        const observables = prestamos.map(prestamo => 
+          forkJoin({
+            prestamo: Promise.resolve(prestamo),
+            resumen: this.pagoService.obtenerResumenPagos(prestamo.idPrestamo!)
+          })
+        );
+        return forkJoin(observables);
+      }),
+      mergeMap(results => results)
+    );
+  }
+  
+  calcularInteresTotal(montoPrestamo: number, tasaInteres: number): number {
+    return montoPrestamo * (tasaInteres / 100) * 3; // Multiplicado por 3 meses
+  }
+
 }
   

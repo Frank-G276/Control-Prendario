@@ -1,38 +1,49 @@
-<!-- <div class="login">
-    <img src="Img/LOGO-PISTON.png" alt="">
+<!-- src/app/pages/login-two/login-two.component.html -->
+<div class="login">
+    <img src="Img/LOGO-PISTON.png" alt="Logo">
     <h2 class="pt-sans-bold">Login</h2>
-    <span *ngIf="error" class="error">{{error}}</span>
+    
+    @if (error) {
+    <span class="error">{{error}}</span>
+    }
+    
     <label for="user">
         <div class="input">
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2zm-2 0l-8 5l-8-5zm0 12H4V8l8 5l8-5z"/>
             </svg>
-            <input type="email" 
-                   name="username" 
-                   id="user" 
-                   placeholder="user"
-                   [(ngModel)]="credentials.username">
+            <input type="email"
+                   name="username"
+                   id="user"
+                   placeholder="Email"
+                   [(ngModel)]="credentials.username"
+                   required>
         </div>
     </label>
+
     <label for="password">
         <div class="input">
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 13a1.49 1.49 0 0 0-1 2.61V17a1 1 0 0 0 2 0v-1.39A1.49 1.49 0 0 0 12 13m5-4V7A5 5 0 0 0 7 7v2a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-7a3 3 0 0 0-3-3M9 7a3 3 0 0 1 6 0v2H9Zm9 12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1Z"/>
             </svg>
-            <input type="password" 
-                   name="password" 
-                   id="password" 
-                   placeholder="password"
-                   [(ngModel)]="credentials.password">
+            <input type="password"
+                   name="password"
+                   id="password"
+                   placeholder="Contraseña"
+                   [(ngModel)]="credentials.password"
+                   required>
         </div>
     </label>
+
     <button type="button" class="btn" (click)="onLogin()">
-        Login
+        Iniciar Sesión
     </button>
+
     <div class="center">
-        <a href="#">Continuar como cliente</a>
+        <a href="#" (click)="onClienteClick($event)">Continuar como cliente</a>
     </div>
+
     <div class="center-two">
-        <a href="#">Olvidaste tu contraseña?</a>
+        <a href="#" (click)="onOlvidePasswordClick($event)">¿Olvidaste tu contraseña?</a>
     </div>
-</div> -->
+</div>

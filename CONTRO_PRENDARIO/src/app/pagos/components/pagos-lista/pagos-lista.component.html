@@ -1,7 +1,145 @@
+<!-- pagos-lista.component.html -->
 <app-header></app-header>
-<div class="pagina d-flex" >
+<div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
     <div class="cuerpo flex-grow-1">
-      PAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-  </div>
-  </div> 
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <div class="titulo d-flex align-items-center justify-content-between">
+                    <h2 class="text-success">Pagos</h2>
+                    <button 
+                        (click)="navigateToCreate()"
+                        class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        + Nuevo Pago
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="loading" class="flex justify-center items-center py-8">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="error" class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+
+                <!-- Table -->
+                <div *ngIf="!loading && !error" class="bg-white shadow-md rounded-lg overflow-hidden">
+                    
+                    <div class="d-flex align-items-center justify-content-between buscador_tabla" [formGroup]="filtrosForm">
+                        <input type="text" 
+                               formControlName="nombreCliente"
+                               placeholder="Buscar por cliente" 
+                               class="form-control me-2">
+                               
+                        <input type="date" 
+                               formControlName="fechaPago"
+                               placeholder="Fecha de pago" 
+                               class="form-control me-2">
+                               
+                        <select formControlName="tipoPago" 
+                                class="form-control me-2">
+                            <option value="">Tipo de Pago</option>
+                            <option *ngFor="let tipo of tiposPago" [value]="tipo">
+                                {{tipo}}
+                            </option>
+                        </select>
+                        
+                        <select formControlName="metodoPago" 
+                                class="form-control me-2">
+                            <option value="">Método de Pago</option>
+                            <option *ngFor="let metodo of metodosPago" [value]="metodo">
+                                {{metodo}}
+                            </option>
+                        </select>
+                        
+                        <button class="btn btn-outline-success" 
+                                (click)="limpiarFiltros()">
+                            <i class="bi bi-x-circle"></i>
+                            Limpiar
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="tabla">
+                            <thead class="cabeza-tabla">
+                                <tr class="text-success">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Préstamo
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Cliente
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Fecha Pago
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Monto
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Tipo
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Método
+                                    </th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="tabla_cuerpo text-success">
+                                <tr *ngFor="let pago of pagosFiltrados">
+                                    <td>
+                                        {{ pago.prestamo?.idPrestamo }}
+                                    </td>
+                                    <td>
+                                        <div class="text-sm text-gray-900">
+                                            {{ pago.prestamo?.cliente?.nombres }} {{ pago.prestamo?.cliente?.apellidos }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ pago.prestamo?.cliente?.numeroDocumento }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ formatDate(pago.fechaPago) }}
+                                    </td>
+                                    <td>
+                                        {{ formatMoney(pago.montoPagado) }}
+                                    </td>
+                                    <td>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                              [ngClass]="{
+                                                'bg-green-100 text-green-800': pago.tipoPago === 'CAPITAL',
+                                                'bg-blue-100 text-blue-800': pago.tipoPago === 'INTERES',
+                                                'bg-red-100 text-red-800': pago.tipoPago === 'MORA'
+                                              }">
+                                            {{ pago.tipoPago }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ pago.metodoPago }}
+                                    </td>
+                                    <td class="text-right">
+                                        <button (click)="verPrestamo(pago.prestamo.idPrestamo)" 
+                                                class="btn btn-sm me-2">
+                                            <i class="bi bi-eye text-success"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Empty State -->
+                                <tr *ngIf="pagosFiltrados.length === 0">
+                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                        No se encontraron pagos con los filtros aplicados
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

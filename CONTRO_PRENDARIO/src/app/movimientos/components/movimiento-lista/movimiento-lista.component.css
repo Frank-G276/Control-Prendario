@@ -1,6 +1,10 @@
 .pagina{
     background-color: #F5F6FB;
 }
+
+@media (min-width:1200px) {
+    
+}
 @media (max-width:1200px) {
     .lateral{
         width: 93px;
@@ -12,8 +16,57 @@
 }
 
 .cuerpo{
-    margin-top: 58px !important;
+    margin-top: 75px !important;
     width: auto;
     margin-left: 5%;
     margin-right: 5%;
+}
+.titulo{
+    height: auto;
+    margin-bottom: 30px;
+}
+h2{
+    font-size: 40px;
+    justify-content: center;
+    text-align: center;
+}
+.tabla{
+    background-color: white;
+    width: 100%;
+    border-bottom: 1px solid #f6f6f6;
+   
+}
+
+.cabeza-tabla tr th{
+    background-color: #eeeff3;
+    height: 80px;  
+    padding: 0 25px; 
+    font-size: 14px;
+}
+.buscador_tabla {
+    height: 70px;
+    width: 100%;
+    background-color: #eeeff3;
+    border-radius:10px 10px 0px 0 ;
+    border-bottom: 1px solid #d0d0d0;
+}
+.buscador_tabla input{
+    width: 120px;
+    height: 40px;
+    font-size: 14px;
+}
+.btn{
+    font-size: 14px;
+}
+.buscador_tabla{
+    padding: 0 25px;
+}
+.bi-pencil{
+    width: 20px;
+}
+
+
+.tabla_cuerpo tr td {
+    padding: 20px 25px;
+    font-size: 14px;
 }

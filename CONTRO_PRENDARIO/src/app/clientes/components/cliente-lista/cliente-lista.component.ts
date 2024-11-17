@@ -42,6 +42,10 @@ export class ClienteListaComponent implements OnInit{
     this.router.navigate(['/clientes/editar', id]);
   }
 
+  verCliente(id: number): void {
+    this.router.navigate(['/clientes/ver', id]);
+  }
+
   eliminarCliente(id: number): void {
     if (confirm('¿Está seguro que desea eliminar este cliente?')) {
       this.clienteServie.eliminarCliente(id).subscribe({

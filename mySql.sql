@@ -62,6 +62,13 @@ CREATE TABLE pagos (
     FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
 );
 
+CREATE TABLE movimientos (
+    id_movimiento INT PRIMARY KEY AUTO_INCREMENT,
+    fecha_movimiento DATETIME DEFAULT CURRENT_TIMESTAMP,
+    tipo_movimiento ENUM('ENTRADA', 'SALIDA') NOT NULL,
+    monto DECIMAL(12,2) NOT NULL
+);
+
 -- Tabla de Documentos Adjuntos
 -- Tabla modificada para guardar PDFs en MySQL
 CREATE TABLE documentos_prestamos (

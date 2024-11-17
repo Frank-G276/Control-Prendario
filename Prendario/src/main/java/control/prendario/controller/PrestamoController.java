@@ -64,4 +64,22 @@ public class PrestamoController {
                     .body("Error al eliminar el préstamo: " + e.getMessage());
         }
     }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Prestamo>> buscarPrestamos(
+            @RequestParam(required = false) String termino,
+            @RequestParam(required = false) String nombreCliente,
+            @RequestParam(required = false) String numeroDocumento) {
+
+        if (termino != null) {
+            return ResponseEntity.ok(prestamoService.buscarPorTermino(termino));
+        }
+
+        return ResponseEntity.ok(prestamoService.buscarPorFiltros(termino, numeroDocumento));
+    }
+
+    @GetMapping("/vencidos")
+    public ResponseEntity<List<Prestamo>> getPrestamosVencidos() {
+        return ResponseEntity.ok(prestamoService.findPrestamosVencidos());
+    }
 }

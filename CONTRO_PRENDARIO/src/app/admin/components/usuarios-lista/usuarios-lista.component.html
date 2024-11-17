@@ -1,0 +1,75 @@
+
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <div class="container">
+            <div class="titulo d-flex align-items-center justify-content-between">
+                <div>
+                    <h2 class="text-success">Usuarios del Sistema</h2>
+                </div>
+                <div>
+                    <button class="btn btn-success" [routerLink]="['/usuarios/crear']">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Crear Usuario
+                    </button>
+                </div>
+            </div>
+
+            @if (error) {
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+            }
+
+            <div style="background-color: white; height: 100vh;">
+                <table class="tabla">
+                    <thead class="cabeza-tabla">
+                        <tr class="text-success">
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Roles</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabla_cuerpo text-success">
+                        @for (usuario of usuarios; track usuario.id) {
+                        <tr>
+                            <td>{{usuario.email}}</td>
+                            <td>{{usuario.nombre}}</td>
+                            <td>
+                                @for (rol of usuario.roles; track rol) {
+                                <span class="badge bg-success me-1">{{rol}}</span>
+                                }
+                            </td>
+                            <td>
+                                <span [class]="usuario.activo ? 'badge bg-success' : 'badge bg-danger'">
+                                    {{usuario.activo ? 'Activo' : 'Inactivo'}}
+                                </span>
+                            </td>
+                            <td>
+                                @if (usuario.activo) {
+                                    <button class="btn btn-sm text-success" 
+                                            (click)="desactivarUsuario(usuario.id)">
+                                        <i class="bi bi-person-x"></i>
+                                    </button>
+                                } @else {
+                                    <button class="btn btn-sm text-success" 
+                                            (click)="activarUsuario(usuario.id)">
+                                        <i class="bi bi-person-check"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="5" class="text-center">No hay usuarios registrados</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

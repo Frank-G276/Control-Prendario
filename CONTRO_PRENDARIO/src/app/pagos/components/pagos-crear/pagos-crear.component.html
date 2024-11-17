@@ -1,0 +1,157 @@
+<!-- pagos-crear.component.html -->
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">Registrar Nuevo Pago</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Alertas -->
+                        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ error }}
+                            <button type="button" class="btn-close" (click)="error = ''"></button>
+                        </div>
+                        <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ success }}
+                            <button type="button" class="btn-close" (click)="success = ''"></button>
+                        </div>
+
+                        <form [formGroup]="pagoForm" (ngSubmit)="onSubmit()" class="row g-3">
+                            <!-- Búsqueda de Préstamo -->
+                            <div class="col-md-12 position-relative">
+                                <label class="form-label">Buscar Préstamo</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       formControlName="busquedaPrestamo"
+                                       placeholder="Buscar por nombre de cliente o documento"
+                                       [class.is-invalid]="pagoForm.get('busquedaPrestamo')?.invalid && 
+                                                         pagoForm.get('busquedaPrestamo')?.touched">
+                                
+                                <!-- Resultados de búsqueda -->
+                                <div *ngIf="prestamosEncontrados.length > 0" class="search-results">
+                                    <div *ngFor="let prestamo of prestamosEncontrados" 
+                                         class="search-item" 
+                                         (click)="seleccionarPrestamo(prestamo)">
+                                        <div>{{prestamo.cliente.nombres}} {{prestamo.cliente.apellidos}}</div>
+                                        <small>Préstamo #{{prestamo.idPrestamo}} - {{prestamo.cliente.numeroDocumento}}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Préstamo Seleccionado -->
+                            <div *ngIf="prestamoSeleccionado" class="col-12">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-success">Información del Préstamo</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Cliente:</strong> {{prestamoSeleccionado.cliente.nombres}} 
+                                                    {{prestamoSeleccionado.cliente.apellidos}}</p>
+                                                <p><strong>Documento:</strong> {{prestamoSeleccionado.cliente.numeroDocumento}}</p>
+                                                <p><strong>Monto Préstamo:</strong> {{formatMoney(prestamoSeleccionado.montoPrestamo)}}</p>
+                                                <p><strong>Tasa de Interés:</strong> {{prestamoSeleccionado.tasaInteres}}%</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Capital Pagado:</strong> {{formatMoney(prestamoSeleccionado.capitalPagado)}}</p>
+                                                <p><strong>Interés Pagado:</strong> {{formatMoney(prestamoSeleccionado.interesPagado)}}</p>
+                                                <p><strong>Capital Pendiente:</strong> {{formatMoney(prestamoSeleccionado.capitalPendiente)}}</p>
+                                                <p><strong>Interés Pendiente:</strong> {{formatMoney(prestamoSeleccionado.interesPendiente)}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-12">
+                                                <div class="alert alert-info">
+                                                    <strong>Total Pagado:</strong> {{formatMoney(prestamoSeleccionado.totalPagado)}}
+                                                    <br>
+                                                    <strong>Total Pendiente:</strong> {{formatMoney(prestamoSeleccionado.totalPendiente)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Campos del formulario -->
+                            <div class="col-md-6">
+                                <label class="form-label">Monto a Pagar</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           formControlName="montoPagado"
+                                           [class.is-invalid]="pagoForm.get('montoPagado')?.invalid && 
+                                                             pagoForm.get('montoPagado')?.touched">
+                                </div>
+                                <div class="invalid-feedback" *ngIf="pagoForm.get('montoPagado')?.errors?.['required']">
+                                    El monto es requerido
+                                </div>
+                                <div class="invalid-feedback" *ngIf="pagoForm.get('montoPagado')?.errors?.['min']">
+                                    El monto debe ser mayor a 0
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Pago</label>
+                                <select class="form-select" 
+                                        formControlName="tipoPago"
+                                        [class.is-invalid]="pagoForm.get('tipoPago')?.invalid && 
+                                                          pagoForm.get('tipoPago')?.touched">
+                                    <option value="">Seleccione tipo de pago</option>
+                                    <option *ngFor="let tipo of tiposPago" [value]="tipo">{{tipo}}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Seleccione un tipo de pago
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Método de Pago</label>
+                                <select class="form-select" 
+                                        formControlName="metodoPago"
+                                        [class.is-invalid]="pagoForm.get('metodoPago')?.invalid && 
+                                                          pagoForm.get('metodoPago')?.touched">
+                                    <option value="">Seleccione método de pago</option>
+                                    <option *ngFor="let metodo of metodosPago" [value]="metodo">{{metodo}}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Seleccione un método de pago
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Observaciones</label>
+                                <textarea class="form-control" 
+                                          formControlName="observaciones" 
+                                          rows="3"></textarea>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="col-12 d-flex gap-2 justify-content-end">
+                                <button type="button" 
+                                        class="btn btn-outline-secondary" 
+                                        (click)="cancelar()">
+                                    Cancelar
+                                </button>
+                                <button type="button" 
+                                        class="btn btn-outline-success" 
+                                        (click)="limpiarFormulario()">
+                                    Limpiar
+                                </button>
+                                <button type="submit" 
+                                        class="btn btn-success" 
+                                        [disabled]="!pagoForm.valid || loading">
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Registrar Pago
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

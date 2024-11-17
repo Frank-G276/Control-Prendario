@@ -50,6 +50,7 @@ body{
     }
     .container-fluid1 .dropdown{
         grid-column: span 1;
+        
     }
     .search{
         cursor: pointer;   
@@ -420,10 +421,7 @@ body{
         text-align: start;
         
     }
-    .container-fluid1 .bi-bell-fill {
-       display: none;
-    
-    }
+   
     /* .container-fluid1 .dropdown{
         display: none;
     } */

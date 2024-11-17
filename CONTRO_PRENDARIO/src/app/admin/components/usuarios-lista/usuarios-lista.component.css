@@ -1,0 +1,72 @@
+.pagina{
+    background-color: #F5F6FB;
+}
+@media (max-width:1200px) {
+    .lateral{
+        width: 93px;
+    }
+}@media (max-width:700) {
+    .lateral{
+        width: 0;
+    }
+}
+
+.titulo{
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.cuerpo{
+    margin-top: 64px !important;
+    width: auto;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.tabla{
+  background-color: white;
+  width: 100%;
+  border-bottom: 1px solid #f6f6f6;
+  margin-right: 15px;
+}
+
+.cabeza-tabla tr th{
+  background-color: #eeeff3;
+  height: 80px;  
+  padding: 0 25px; 
+  font-size: 14px;
+}
+.tabla_cuerpo tr td {
+  padding: 20px 25px;
+  font-size: 14px;
+  border-bottom: 1px solid #eeeff3;
+}
+.card {
+    transition: transform 0.2s;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+  }
+  
+  .progress-bar {
+    transition: width 0.6s ease;
+  }
+  
+  .list-group-item {
+    border: none;
+    background-color: transparent;
+    padding: 0.5rem 0;
+  }
+  
+  .badge {
+    font-size: 0.9em;
+  }

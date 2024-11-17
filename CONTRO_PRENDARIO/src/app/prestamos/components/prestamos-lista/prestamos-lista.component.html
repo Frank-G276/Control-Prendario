@@ -114,14 +114,14 @@
                                     <td >
                                         {{ formatDate(prestamo.fechaVencimiento!) }}
                                     </td>
-                                    <td >
-                                        ${{ calculateTotal(prestamo.montoPrestamo) | number:'1.2-2' }}
+                                    <td>
+                                        ${{ calculateTotal(prestamo.montoPrestamo, prestamo.tasaInteres) | number:'1.2-2' }}
                                     </td>
                                     <td>
-                                        $0
+                                        ${{ prestamo.totalAbonado | number:'1.2-2' }}
                                     </td>
-                                    <td >
-                                        $0
+                                    <td>
+                                        ${{ prestamo.saldoPendiente | number:'1.2-2' }}
                                     </td>
                                     <td >
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -135,6 +135,9 @@
                                         </span>
                                     </td>
                                     <td >
+                                        <button (click)="verPrestamo(prestamo.idPrestamo!)" class="btn btn-sm me-2">
+                                            <i class="bi bi-eye text-success"></i>
+                                        </button>
                                         <button 
                                             (click)="navigateToEdit(prestamo.idPrestamo!)"
                                             class="btn btn-sm">

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PrestamoService {
@@ -114,4 +115,29 @@ public class PrestamoService {
     public void deletePrestamo(Long id) {
         prestamoRepository.deleteById(id);
     }
+
+    public List<Prestamo> buscarPorTermino(String termino) {
+        return prestamoRepository.findByBusquedaGeneral(termino);
+    }
+
+    public List<Prestamo> buscarPorFiltros(String termino, String numeroDocumento) {
+        if (termino != null && !termino.isEmpty()) {
+            return prestamoRepository.findByClienteNombresContainingIgnoreCaseOrClienteApellidosContainingIgnoreCase(termino, termino);
+        } else if (numeroDocumento != null && !numeroDocumento.isEmpty()) {
+            return prestamoRepository.findByClienteNumeroDocumentoContaining(numeroDocumento);
+        }
+        return getAllPrestamos();
+    }
+
+    public List<Prestamo> findPrestamosVencidos() {
+        LocalDateTime now = LocalDateTime.now();
+        return prestamoRepository.findAll().stream()
+                .filter(prestamo ->
+                        prestamo.getEstadoPrestamo() == EstadoPrestamo.ACTIVO &&
+                                prestamo.getFechaVencimiento() != null &&
+                                prestamo.getFechaVencimiento().isBefore(now))
+                .collect(Collectors.toList());
+    }
+
+
 }

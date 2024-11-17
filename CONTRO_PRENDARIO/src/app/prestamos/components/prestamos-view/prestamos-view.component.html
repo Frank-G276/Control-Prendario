@@ -1,0 +1,126 @@
+<!-- prestamo-view.component.html -->
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <!-- Loading State -->
+                <div *ngIf="loading" class="flex justify-center items-center py-8">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="error" class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+
+                <!-- Content -->
+                <div *ngIf="!loading && !error && prestamo" class="card shadow-lg">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Préstamo #{{ prestamo.idPrestamo }}</h3>
+                        <div>
+                            <button class="btn btn-outline-light me-2" (click)="navigateToEdit()">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-outline-light" (click)="volver()">
+                                <i class="bi bi-arrow-left"></i> Volver
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <!-- Información del Préstamo -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">Información del Préstamo</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="fw-bold text-success">Estado:</label>
+                                            <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-warning': prestamo.estadoPrestamo === 'PENDIENTE',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ prestamo.estadoPrestamo }}
+                                            </span>
+                                        </div>
+                                        <p><strong class="text-success">Fecha de Préstamo:</strong> {{ formatDate(prestamo.fechaPrestamo) }}</p>
+                                        <p><strong class="text-success">Fecha de Vencimiento:</strong> {{ formatDate(prestamo.fechaVencimiento) }}</p>
+                                        <p><strong class="text-success">Monto:</strong> {{ formatCurrency(prestamo.montoPrestamo) }}</p>
+                                        <p><strong class="text-success">Tasa de Interés:</strong> {{ prestamo.tasaInteres }}%</p>
+                                        <p><strong class="text-success">Total a Pagar:</strong> {{ formatCurrency(calcularTotal()) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Cliente -->
+                            <div class="col-md-6" *ngIf="prestamo.cliente">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">Información del Cliente</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong class="text-success">Nombre:</strong> {{ prestamo.cliente.nombres }} {{ prestamo.cliente.apellidos }}</p>
+                                        <p><strong class="text-success">Documento:</strong> {{ prestamo.cliente.tipoDocumento }} - {{ prestamo.cliente.numeroDocumento }}</p>
+                                        <p><strong class="text-success">Teléfono:</strong> {{ prestamo.cliente.telefono }}</p>
+                                        <p><strong class="text-success">Email:</strong> {{ prestamo.cliente.email }}</p>
+                                        <p><strong class="text-success">Dirección:</strong> {{ prestamo.cliente.direccion }}</p>
+                                        <p><strong class="text-success">Ciudad:</strong> {{ prestamo.cliente.ciudad }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Vehículo -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">Información del Vehículo</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong class="text-success">Tipo:</strong> {{ prestamo.vehiculo.tipoVehiculo }}</p>
+                                                <p><strong class="text-success">Marca:</strong> {{ prestamo.vehiculo.marca }}</p>
+                                                <p><strong class="text-success">Línea:</strong> {{ prestamo.vehiculo.linea }}</p>
+                                                <p><strong class="text-success">Modelo:</strong> {{ prestamo.vehiculo.modelo }}</p>
+                                                <p><strong class="text-success">Placa:</strong> {{ prestamo.vehiculo.placa }}</p>
+                                                <p><strong class="text-success">Color:</strong> {{ prestamo.vehiculo.color }}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong class="text-success">Número de Motor:</strong> {{ prestamo.vehiculo.numeroMotor }}</p>
+                                                <p><strong class="text-success">Número de Chasis:</strong> {{ prestamo.vehiculo.numeroChasis }}</p>
+                                                <p><strong class="text-success">Cilindraje:</strong> {{ prestamo.vehiculo.cilindraje }} cc</p>
+                                                <p><strong class="text-success">Sitio de Matrícula:</strong> {{ prestamo.vehiculo.sitioMatricula }}</p>
+                                                <p><strong class="text-success">Fecha de Matrícula:</strong> {{ formatDate(prestamo.vehiculo.fechaMatricula) }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="col-md-12" *ngIf="prestamo.observaciones">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">Observaciones</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>{{ prestamo.observaciones }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

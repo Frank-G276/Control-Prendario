@@ -5,19 +5,19 @@
   background: linear-gradient(to bottom, #C1E8FF 0%, #093476 80%,#042454 100% );
   position: relative;
 }
-.login{
+/* .login{
   display: block;
   background-color: white;
   height: 500px;
   width: 400px;
-  top: 50%; /* Centra verticalmente */
-  left: 50%; /* Centra horizontalmente */
+  top: 50%; 
+  left: 50%; 
   transform: translate(-50%, -50%);
   position: absolute;
 }
 .login img{
   width: 64px;
-  top: 12.5%; /* Centra verticalmente */
+  top: 12.5%; 
   left: 50%;
   transform: translate(-50%, -50%);
   position: inherit;
@@ -25,7 +25,7 @@
 }
 .login h2{
   
-  top: 28%; /* Centra verticalmente */
+  top: 28%; 
   left: 50%;
   transform: translate(-50%, -50%);
   position: inherit;
@@ -104,6 +104,87 @@ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 .login .center-two a:hover{
   color: #555555;
+} */
+
+/* src/app/pages/login-two/login-two.component.css */
+.login {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.login img {
+  display: block;
+  margin: 0 auto 2rem;
+  max-width: 200px;
+}
+
+.pt-sans-bold {
+  font-family: 'PT Sans', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.input svg {
+  margin-right: 0.5rem;
+  color: #666;
+}
+
+.input input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.error {
+  color: #dc3545;
+  display: block;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+.center, .center-two {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.center a, .center-two a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.center a:hover, .center-two a:hover {
+  text-decoration: underline;
 }
 
 

@@ -97,22 +97,28 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     }
 
     loadPrestamos() {
-        this.loading = true;
-        this.error = '';
-
-        this.prestamoService.getPrestamos().subscribe({
-            next: (prestamos) => {
-                console.log('Préstamos recibidos:', prestamos);
-                this.prestamos = prestamos;
-                this.prestamosFiltrados = prestamos;
-                this.loading = false;
-            },
-            error: (error) => {
-                console.error('Error loading loans:', error);
-                this.error = 'Error al cargar los préstamos';
-                this.loading = false;
-            }
-        });
+      this.loading = true;
+      this.error = '';
+  
+      this.prestamoService.getPrestamosConResumen().subscribe({
+        next: (prestamosConResumen) => {
+          this.prestamos = prestamosConResumen.map(item => ({
+            ...item.prestamo,
+            resumenPagos: item.resumen,
+            totalPagar: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres),
+            totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
+            saldoPendiente: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres) - 
+                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0))
+          }));
+          this.prestamosFiltrados = this.prestamos;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading loans:', error);
+          this.error = 'Error al cargar los préstamos';
+          this.loading = false;
+        }
+      });
     }
 
     limpiarFiltros() {
@@ -134,13 +140,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
       }
     }
   
+    verPrestamo(id: number): void {
+      this.router.navigate(['/prestamos/ver', id]);
+    }
+
     formatDate(date: string | Date): string {
       if (!date) return '';
       return new Date(date).toLocaleDateString();
     }
   
-    calculateTotal(montoPrestamo: number): number {
-      return montoPrestamo + (montoPrestamo * 0.15);
+    calculateTotal(montoPrestamo: number, tasaInteres: number): number {
+      const interesTotal = this.prestamoService.calcularInteresTotal(montoPrestamo, tasaInteres);
+      return montoPrestamo + interesTotal;
     }
   
     navigateToEdit(id: number) {

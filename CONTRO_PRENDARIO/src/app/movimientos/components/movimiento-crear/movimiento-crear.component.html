@@ -1,0 +1,74 @@
+<!-- movimientos-crear.component.html -->
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">Registrar Nuevo Movimiento</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Alertas -->
+                        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ error }}
+                            <button type="button" class="btn-close" (click)="error = ''"></button>
+                        </div>
+                        <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ success }}
+                            <button type="button" class="btn-close" (click)="success = ''"></button>
+                        </div>
+
+                        <form [formGroup]="movimientoForm" (ngSubmit)="onSubmit()" class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Movimiento</label>
+                                <select class="form-select" 
+                                        formControlName="tipoMovimiento"
+                                        [class.is-invalid]="movimientoForm.get('tipoMovimiento')?.invalid && 
+                                                          movimientoForm.get('tipoMovimiento')?.touched">
+                                    <option value="">Seleccione tipo</option>
+                                    <option value="ENTRADA">Entrada</option>
+                                    <option value="SALIDA">Salida</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Seleccione un tipo de movimiento
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Monto</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           formControlName="monto"
+                                           [class.is-invalid]="movimientoForm.get('monto')?.invalid && 
+                                                             movimientoForm.get('monto')?.touched">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Ingrese un monto válido
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="col-12 d-flex gap-2 justify-content-end mt-4">
+                                <button type="button" 
+                                        class="btn btn-outline-secondary" 
+                                        (click)="cancelar()">
+                                    Cancelar
+                                </button>
+                                <button type="submit" 
+                                        class="btn btn-success" 
+                                        [disabled]="!movimientoForm.valid || loading">
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Registrar Movimiento
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

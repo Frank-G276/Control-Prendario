@@ -1,0 +1,46 @@
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <div class="container">
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Detalles del Cliente</h3>
+                    <button class="btn btn-outline-light" (click)="volver()">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </button>
+                </div>
+                <div class="card-body">
+                    @if (cliente) {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-success">Información Personal</h4>
+                                <p><strong>Documento:</strong> {{cliente.tipoDocumento}} - {{cliente.numeroDocumento}}</p>
+                                <p><strong>Nombres:</strong> {{cliente.nombres}}</p>
+                                <p><strong>Apellidos:</strong> {{cliente.apellidos}}</p>
+                                <p><strong>Fecha de Nacimiento:</strong> {{cliente.fechaNacimiento | date:'dd/MM/yyyy'}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="text-success">Información de Contacto</h4>
+                                <p><strong>Dirección:</strong> {{cliente.direccion}}</p>
+                                <p><strong>Ciudad:</strong> {{cliente.ciudad}}</p>
+                                <p><strong>Teléfono:</strong> {{cliente.telefono}}</p>
+                                <p><strong>Email:</strong> {{cliente.email}}</p>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h4 class="text-success">Información Adicional</h4>
+                                <p><strong>Fecha de Registro:</strong> {{cliente.fechaRegistro | date:'dd/MM/yyyy HH:mm'}}</p>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="text-center">
+                            <p>Cargando información del cliente...</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

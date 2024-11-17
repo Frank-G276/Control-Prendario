@@ -1,13 +1,17 @@
 package control.prendario.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "prestamos")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Prestamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +21,10 @@ public class Prestamo {
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
+
+    @OneToMany(mappedBy = "prestamo")
+    @JsonIgnore // Ignora la lista de pagos al serializar
+    private List<Pago> pagos;
 
     @ManyToOne
     @JoinColumn(name = "id_vehiculo")
@@ -36,7 +44,7 @@ public class Prestamo {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_prestamo")
-    private EstadoPrestamo estadoPrestamo;
+    private EstadoPrestamo estadoPrestamo = EstadoPrestamo.ACTIVO;
 
     private String observaciones;
 
@@ -62,4 +70,6 @@ public class Prestamo {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
 }

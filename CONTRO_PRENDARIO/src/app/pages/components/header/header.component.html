@@ -1,34 +1,60 @@
 <header class="cabezero">
-    <nav class="navbar bg-ligth border-bottom">
-      <div class="container-fluid1">
-        <div class="list-icon" (click)="toggleSidebar()">
+  <nav class="navbar  border-bottom">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <div class="list-icon me-3" (click)="toggleSidebar()">
           <i class="bi bi-list"></i>
         </div>
         <div class="logotipe">
-          <a href="index.html">
-            <img src="Img/LOGO-ELPISTON.png" alt="Logo">
+          <a [routerLink]="['/home']">
+            <img src="Img/LOGO-ELPISTON.png" alt="Logo" height="40">
           </a>
-        </div>
-        
-        <label class=" search rounded" for="buscador">
-          <input type="text" placeholder="search.." class=" ps-2 rounded text-black text-opacity-75" id="buscador" name="buscador">
-          <i class="bi bi-search  text-secondary ps-2 pe-2"></i>
-        </label>
-      
-        <i class="bi bi-bell-fill text-success "></i>        
-        <div class="dropdown">
-          <a class="btn d-flex btn-ligth text-blue dropdown-toggle align-items-center btma text-success" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="justify-content-start  btma"><div class="fw-bolder text-success fs-6 text-start">El Piston</div><div class="text-success fs-7">administrador</div></div> 
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
         </div>
       </div>
-    </nav>
-  </header>
-  
-  
-  
+      
+      <div class="  ">
+        <label class="search rounded " for="buscador">
+          <input type="text" 
+                 [(ngModel)]="searchTerm"
+                 (input)="onSearchInput()"
+                 (blur)="onBlur()"
+                 placeholder="Buscar préstamos..." 
+                 class="rounded ms-3" 
+                 id="buscador" 
+                 name="buscador">
+          <i class="bi bi-search text-secondary  "></i>
+        </label>
+        
+        <!-- Dropdown de resultados -->
+        <div class="dropdown-menu" [class.show]="showResults" style="max-height: 300px; overflow-y: auto;">
+          <button class="dropdown-item" 
+                  *ngFor="let prestamo of searchResults" 
+                  (click)="selectPrestamo(prestamo); clic()" 
+                  type="button">
+            {{ prestamo.cliente?.nombres }} {{ prestamo.cliente?.apellidos }} - {{ prestamo.cliente?.numeroDocumento }}
+          </button>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="btn dropdown-toggle d-flex align-items-center btma text-success"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+          <div class="d-flex flex-column align-items-end">
+            <span class="fw-bolder fs-6">{{userName}}</span>
+            <small class="text-muted">{{userRole}}</small>
+          </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <button class="dropdown-item d-flex align-items-center gap-2" (click)="logout()">
+              <i class="bi bi-box-arrow-right text-danger"></i>
+              <span>Cerrar Sesión</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

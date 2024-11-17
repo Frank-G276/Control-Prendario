@@ -18,6 +18,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(private sidebarService: SidebarService) {}
 
+  showSupportModal = false;
+
+  toggleSupportModal() {
+    this.showSupportModal = !this.showSupportModal;
+  }
+
   ngOnInit(): void {
     // Suscribirse a los cambios del estado del sidebar
     this.sidebarService.isCollapsed$

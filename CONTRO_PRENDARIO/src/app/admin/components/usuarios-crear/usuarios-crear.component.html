@@ -1,0 +1,126 @@
+<!-- src/app/admin/components/usuarios-crear/usuarios-crear.component.html -->
+
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="flex-grow-1 text-success ">
+      <div class="container mx-auto p-4 cuerpo  ">
+        <div class=" mx-auto bg-white rounded-4 cuerpo-formulario">
+          <h2 class="text-2xl font-bold mb-6">Crear Nuevo Usuario</h2>
+      
+          @if (error) {
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+            <p class="text-sm">{{error}}</p>
+          </div>
+          }
+      
+          @if (successMessage) {
+          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+            <p class="text-sm">{{successMessage}}</p>
+          </div>
+          }
+      
+          <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                [class.border-red-500]="hasError('email')">
+              @if (hasError('email')) {
+                <p class="mt-1 text-sm text-red-600">{{getErrorMessage('email')}}</p>
+              }
+            </div>
+      
+            <!-- Nombre -->
+            <div class="form-group">
+              <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+              <input
+                type="text"
+                id="nombre"
+                formControlName="nombre"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                [class.border-red-500]="hasError('nombre')">
+              @if (hasError('nombre')) {
+                <p class="mt-1 text-sm text-red-600">{{getErrorMessage('nombre')}}</p>
+              }
+            </div>
+      
+            <!-- Contraseña -->
+            <div class="form-group">
+              <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                formControlName="password"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                [class.border-red-500]="hasError('password')">
+              @if (hasError('password')) {
+                <p class="mt-1 text-sm text-red-600">{{getErrorMessage('password')}}</p>
+              }
+            </div>
+      
+            <!-- Confirmar Contraseña -->
+            <div class="form-group">
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                [class.border-red-500]="hasError('confirmPassword')">
+              @if (hasError('confirmPassword')) {
+                <p class="mt-1 text-sm text-red-600">{{getErrorMessage('confirmPassword')}}</p>
+              }
+            </div>
+      
+            <!-- Roles -->
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Roles</label>
+              <div class="space-y-2">
+                @for (role of roles; track role) {
+                  <div class="flex items-center">
+                    <input
+                      type="checkbox"
+                      [id]="role"
+                      [checked]="isRoleSelected(role)"
+                      (change)="onRoleChange(role, $event)"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label [for]="role" class="ml-2 block text-sm text-gray-900">
+                      {{role}}
+                    </label>
+                  </div>
+                }
+              </div>
+              @if (selectedRoles.length === 0 && (userForm.touched || userForm.dirty)) {
+                <p class="mt-1 text-sm text-red-600">Debe seleccionar al menos un rol</p>
+              }
+            </div>
+      
+            <!-- Botones -->
+            <div class="flex justify-end space-x-3 mt-6">
+              <button
+                type="button"
+                (click)="onCancel()"
+                class="btn btn-danger me-3">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                [disabled]="!isFormValid() || isLoading"
+                class="btn btn-success ">
+                @if (isLoading) {
+                  <span>Creando...</span>
+                } @else {
+                  <span>Crear Usuario</span>
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>   
+    </div>
+</div>
