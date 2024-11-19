@@ -9,12 +9,13 @@ import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.comp
 import { HeaderComponent } from "../../../pages/components/header/header.component";
 import { Cliente } from '../../../clientes/models/cliente.interface';
 import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-prestamos-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ClienteFormComponent, SidebarComponent, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, ClienteFormComponent, SidebarComponent, HeaderComponent, TranslateModule],
   templateUrl: './prestamos-editar.component.html',
   styleUrl: './prestamos-editar.component.css'
 })
@@ -25,6 +26,7 @@ export class PrestamosEditarComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private prestamoService = inject(PrestamoService);
   private clienteService = inject(ClienteService);
+  private translateService = inject(TranslateService);
 
   tiposVehiculo: string[] = ['AUTOMOVIL', 'MOTOCICLETA', 'CAMIONETA', 'CAMION'];
   modelosDisponibles: number[] = [];
@@ -205,7 +207,9 @@ export class PrestamosEditarComponent implements OnInit{
     this.prestamoService.updatePrestamo(this.prestamoId, prestamoData).subscribe({
       next: (response) => {
         console.log('Préstamo actualizado:', response);
-        this.successMessage = 'Préstamo actualizado exitosamente';
+        this.translateService.get('LOAN_EDIT.SUCCESS_MESSAGE').subscribe((res: string) => {
+          this.successMessage = res;
+        });
         this.loading = false;
         setTimeout(() => {
           this.router.navigate(['/prestamos']);
@@ -213,7 +217,9 @@ export class PrestamosEditarComponent implements OnInit{
       },
       error: (error) => {
         console.error('Error:', error);
-        this.error = error.message || 'Error al actualizar el préstamo';
+        this.translateService.get('LOAN_EDIT.ERROR_MESSAGE').subscribe((res: string) => {
+          this.error = error.message || res;
+        });
         this.loading = false;
       }
     });

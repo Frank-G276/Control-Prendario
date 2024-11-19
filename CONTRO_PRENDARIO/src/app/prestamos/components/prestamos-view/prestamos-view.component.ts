@@ -5,11 +5,12 @@ import { SidebarComponent } from '../../../pages/components/sidebar/sidebar.comp
 import { ActivatedRoute, Router } from '@angular/router';
 import { PrestamoService } from '../../services/prestamo.service';
 import { Prestamo } from '../../models/prestamo.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-prestamos-view',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, SidebarComponent],
+  imports: [CommonModule, HeaderComponent, SidebarComponent, TranslateModule],
   templateUrl: './prestamos-view.component.html',
   styleUrl: './prestamos-view.component.css'
 })
@@ -18,6 +19,7 @@ export class PrestamosViewComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private prestamoService = inject(PrestamoService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   prestamo?: Prestamo;
   loading = true;
@@ -40,7 +42,9 @@ export class PrestamosViewComponent implements OnInit{
         this.loading = false;
       },
       error: (error) => {
-        this.error = error;
+        this.translateService.get('LOAN_VIEW.ERROR_LOADING').subscribe((res: string) => {
+          this.error = res;
+        });
         this.loading = false;
         console.error('Error al cargar préstamo', error);
       }
@@ -54,13 +58,13 @@ export class PrestamosViewComponent implements OnInit{
 
   formatDate(date: string | undefined): string {
     if (!date) return '';
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleDateString(this.translateService.currentLang);
   }
 
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-CO', { 
-      style: 'currency', 
-      currency: 'COP' 
+    return new Intl.NumberFormat(this.translateService.currentLang, {
+      style: 'currency',
+      currency: 'COP'
     }).format(amount);
   }
 

@@ -6,11 +6,12 @@ import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { HeaderComponent } from "../../../pages/components/header/header.component";
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-usuarios-lista',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent, SidebarComponent],
+  imports: [CommonModule, RouterModule, HeaderComponent, SidebarComponent, TranslateModule],
   templateUrl: './usuarios-lista.component.html',
   styleUrl: './usuarios-lista.component.css'
 })
@@ -21,7 +22,8 @@ export class UsuariosListaComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -38,37 +40,47 @@ export class UsuariosListaComponent implements OnInit {
         this.usuarios = users;
       },
       error: (error) => {
-        this.error = 'Error al cargar usuarios';
+        this.translateService.get('USERS.ERROR_LOADING').subscribe((res: string) => {
+          this.error = res;
+        });
         console.error('Error:', error);
       }
     });
   }
 
   desactivarUsuario(id: number): void {
-    if (confirm('¿Está seguro de desactivar este usuario?')) {
-      this.userService.deactivateUser(id).subscribe({
-        next: () => {
-          this.cargarUsuarios();
-        },
-        error: (error) => {
-          this.error = 'Error al desactivar usuario';
-          console.error('Error:', error);
-        }
-      });
-    }
+    this.translateService.get('USERS.CONFIRM_DEACTIVATE').subscribe((res: string) => {
+      if (confirm(res)) {
+        this.userService.deactivateUser(id).subscribe({
+          next: () => {
+            this.cargarUsuarios();
+          },
+          error: (error) => {
+            this.translateService.get('USERS.ERROR_DEACTIVATE').subscribe((res: string) => {
+              this.error = res;
+            });
+            console.error('Error:', error);
+          }
+        });
+      }
+    });
   }
 
   activarUsuario(id: number): void {
-    if (confirm('¿Está seguro de reactivar este usuario?')) {
-      this.userService.activateUser(id).subscribe({
-        next: () => {
-          this.cargarUsuarios();
-        },
-        error: (error) => {
-          this.error = 'Error al activar usuario';
-          console.error('Error:', error);
-        }
-      });
-    }
+    this.translateService.get('USERS.CONFIRM_ACTIVATE').subscribe((res: string) => {
+      if (confirm(res)) {
+        this.userService.activateUser(id).subscribe({
+          next: () => {
+            this.cargarUsuarios();
+          },
+          error: (error) => {
+            this.translateService.get('USERS.ERROR_ACTIVATE').subscribe((res: string) => {
+              this.error = res;
+            });
+            console.error('Error:', error);
+          }
+        });
+      }
+    });
   }
 }

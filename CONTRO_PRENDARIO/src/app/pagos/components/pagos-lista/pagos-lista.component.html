@@ -1,4 +1,3 @@
-<!-- pagos-lista.component.html -->
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
@@ -6,18 +5,18 @@
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
                 <div class="titulo d-flex align-items-center justify-content-between">
-                    <h2 class="text-success">Pagos</h2>
+                    <h2 class="text-success">{{ 'PAYMENTS.TITLE' | translate }}</h2>
                     <button 
                         (click)="navigateToCreate()"
                         class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                        + Nuevo Pago
+                        {{ 'PAYMENTS.NEW_PAYMENT' | translate }}
                     </button>
                 </div>
 
                 <!-- Loading State -->
                 <div *ngIf="loading" class="flex justify-center items-center py-8">
                     <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Cargando...</span>
+                        <span class="visually-hidden">{{ 'PAYMENTS.LOADING' | translate }}</span>
                     </div>
                 </div>
 
@@ -32,34 +31,34 @@
                     <div class="d-flex align-items-center justify-content-between buscador_tabla" [formGroup]="filtrosForm">
                         <input type="text" 
                                formControlName="nombreCliente"
-                               placeholder="Buscar por cliente" 
+                               placeholder="{{ 'PAYMENTS.SEARCH_BY_CLIENT' | translate }}" 
                                class="form-control me-2">
                                
                         <input type="date" 
                                formControlName="fechaPago"
-                               placeholder="Fecha de pago" 
+                               placeholder="{{ 'PAYMENTS.PAYMENT_DATE' | translate }}" 
                                class="form-control me-2">
                                
                         <select formControlName="tipoPago" 
                                 class="form-control me-2">
-                            <option value="">Tipo de Pago</option>
+                            <option value="">{{ 'PAYMENTS.PAYMENT_TYPE' | translate }}</option>
                             <option *ngFor="let tipo of tiposPago" [value]="tipo">
-                                {{tipo}}
+                                {{ 'PAYMENT_TYPES.' + tipo | translate }}
                             </option>
                         </select>
                         
                         <select formControlName="metodoPago" 
                                 class="form-control me-2">
-                            <option value="">Método de Pago</option>
+                            <option value="">{{ 'PAYMENTS.PAYMENT_METHOD' | translate }}</option>
                             <option *ngFor="let metodo of metodosPago" [value]="metodo">
-                                {{metodo}}
+                                {{ 'PAYMENT_METHODS.' + metodo | translate }}
                             </option>
                         </select>
                         
                         <button class="btn btn-outline-success" 
                                 (click)="limpiarFiltros()">
                             <i class="bi bi-x-circle"></i>
-                            Limpiar
+                            {{ 'PAYMENTS.CLEAR' | translate }}
                         </button>
                     </div>
 
@@ -68,25 +67,25 @@
                             <thead class="cabeza-tabla">
                                 <tr class="text-success">
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Préstamo
+                                        {{ 'PAYMENTS.LOAN' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Cliente
+                                        {{ 'PAYMENTS.CLIENT' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Fecha Pago
+                                        {{ 'PAYMENTS.PAYMENT_DATE' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Monto
+                                        {{ 'PAYMENTS.AMOUNT' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tipo
+                                        {{ 'PAYMENTS.TYPE' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Método
+                                        {{ 'PAYMENTS.METHOD' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Acciones
+                                        {{ 'PAYMENTS.ACTIONS' | translate }}
                                     </th>
                                 </tr>
                             </thead>
@@ -116,11 +115,11 @@
                                                 'bg-blue-100 text-blue-800': pago.tipoPago === 'INTERES',
                                                 'bg-red-100 text-red-800': pago.tipoPago === 'MORA'
                                               }">
-                                            {{ pago.tipoPago }}
+                                            {{ 'PAYMENT_TYPES.' + pago.tipoPago | translate }}
                                         </span>
                                     </td>
                                     <td>
-                                        {{ pago.metodoPago }}
+                                        {{ 'PAYMENT_METHODS.' + pago.metodoPago | translate }}
                                     </td>
                                     <td class="text-right">
                                         <button (click)="verPrestamo(pago.prestamo.idPrestamo)" 
@@ -132,7 +131,7 @@
                                 <!-- Empty State -->
                                 <tr *ngIf="pagosFiltrados.length === 0">
                                     <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                        No se encontraron pagos con los filtros aplicados
+                                        {{ 'PAYMENTS.NO_PAYMENTS_FOUND' | translate }}
                                     </td>
                                 </tr>
                             </tbody>

@@ -24,14 +24,11 @@ export class AuthService {
           if (response && response.token) {
             this.storageService.setItem('token', response.token);
             this.storageService.setItem('roles', JSON.stringify(response.roles));
+            this.storageService.setItem('username', response.username);
+            this.storageService.setItem('nombre', response.nombre);
           } else {
             throw new Error('Respuesta inválida del servidor');
           }
-
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('roles', JSON.stringify(response.roles));
-          localStorage.setItem('username', response.username);
-          localStorage.setItem('nombre', response.nombre);
         }),
         catchError(error => {
           console.error('Error en login:', error);
@@ -51,10 +48,10 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('roles');
-    localStorage.removeItem('email');
-    localStorage.removeItem('nombre');
+    this.storageService.removeItem('token');
+    this.storageService.removeItem('roles');
+    this.storageService.removeItem('username');
+    this.storageService.removeItem('nombre');
   }
 
   getToken(): string | null {
@@ -66,7 +63,6 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      // Verificar si el token está expirado
       const tokenParts = token.split('.');
       if (tokenParts.length !== 3) return false;
 
@@ -80,7 +76,12 @@ export class AuthService {
   }
 
   getCurrentUsername(): string {
-    return localStorage.getItem('nombre') || 'Usuario';  // Retornar nombre en lugar de email
+    return this.storageService.getItem('nombre') || 'Usuario';
   }
  
+  getCurrentUserRole(): string {
+    if (this.isAdmin()) return 'ADMIN';
+    if (this.isGerente()) return 'GERENTE';
+    return 'USUARIO';
+  }
 }

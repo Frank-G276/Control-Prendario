@@ -1,4 +1,3 @@
-<!-- home.component.html -->
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
@@ -7,14 +6,13 @@
             <div class="container mx-auto px-6 py-8">
 
               <div class="titulo d-flex flex-wrap align-items-center justify-content-between">
-                <h2 class="text-success">Movimientos</h2>
-
+                <h2 class="text-success">{{ 'HOME.MOVEMENTS' | translate }}</h2>
               </div>
 
                 <!-- Loading State -->
                 <div *ngIf="loading" class="flex justify-center items-center py-8">
                     <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Cargando...</span>
+                        <span class="visually-hidden">{{ 'HOME.LOADING' | translate }}</span>
                     </div>
                 </div>
 
@@ -25,19 +23,17 @@
 
                 <!-- Content -->
                 <div *ngIf="!loading && !error">
-                    <h1 class="text-success mb-4">Resumen del negocio</h1>
+                    <h1 class="text-success mb-4">{{ 'HOME.BUSINESS_SUMMARY' | translate }}</h1>
                     
                     <div class="row g-4">
                         <!-- Dinero Fluyendo -->
                         <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title text-success">Dinero Fluyendo</h5>
+                                    <h5 class="card-title text-success">{{ 'HOME.FLOWING_MONEY' | translate }}</h5>
                                     <h2 class="mb-3">{{ formatMoney(resumen.dineroFluyendo) }}</h2>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" 
-                                             style="width: 100%">
-                                        </div>
+                                        <div class="progress-bar bg-success" style="width: 100%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -47,12 +43,10 @@
                         <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title text-success">Dinero Disponible</h5>
+                                    <h5 class="card-title text-success">{{ 'HOME.AVAILABLE_MONEY' | translate }}</h5>
                                     <h2 class="mb-3">{{ formatMoney(resumen.dineroDisponible) }}</h2>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" 
-                                             [style.width.%]="getDisponiblePercentage()">
-                                        </div>
+                                        <div class="progress-bar bg-success" [style.width.%]="getDisponiblePercentage()"></div>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +57,7 @@
                             <div class="card h-100">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="card-title text-danger mb-0">Préstamos Vencidos</h5>
+                                        <h5 class="card-title text-danger mb-0">{{ 'HOME.OVERDUE_LOANS' | translate }}</h5>
                                         <span class="badge bg-danger">
                                             {{resumen.prestamosVencidos.length}}
                                         </span>
@@ -78,7 +72,7 @@
                                                             {{prestamo.cliente?.nombres}} {{prestamo.cliente?.apellidos}}
                                                         </div>
                                                         <small class="text-danger">
-                                                            {{getDiasVencidos(prestamo.fechaVencimiento)}} días vencido
+                                                            {{ 'HOME.DAYS_OVERDUE' | translate:{days: getDiasVencidos(prestamo.fechaVencimiento)} }}
                                                         </small>
                                                     </div>
                                                     <span class="badge bg-danger rounded-pill">
@@ -88,7 +82,7 @@
                                             </div>
                                         } @empty {
                                             <div class="text-center text-muted py-3">
-                                                No hay préstamos vencidos
+                                                {{ 'HOME.NO_OVERDUE_LOANS' | translate }}
                                             </div>
                                         }
                                     </div>
@@ -98,15 +92,13 @@
                                             <button class="btn btn-outline-danger btn-sm"
                                                     routerLink="/prestamos"
                                                     [queryParams]="{filter: 'vencidos'}">
-                                                Ver todos los préstamos vencidos
+                                                {{ 'HOME.VIEW_ALL_OVERDUE_LOANS' | translate }}
                                             </button>
                                         </div>
                                     }
                                 </div>
                             </div>
                         </div>
-
-                      
                     </div>
                 </div>
             </div>

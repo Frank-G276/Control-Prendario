@@ -1,4 +1,3 @@
-<!-- movimientos-lista.component.html -->
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
@@ -6,39 +5,39 @@
         <main class="cuerpo flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
                 <div class="titulo d-flex flex-wrap align-items-center justify-content-between">
-                    <h2 class="text-success">Movimientos</h2>
+                    <h2 class="text-success">{{ 'MOVEMENTS.TITLE' | translate }}</h2>
                     <button 
                         (click)="navigateToCreate()"
                         class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                        + Nuevo Movimiento
+                        {{ 'MOVEMENTS.NEW_MOVEMENT' | translate }}
                     </button>
                     <div class="mx-auto w-100">
                         <div class="mt-3">
                             <div class="card bg-light">
                                 <div class="card-body">
-                                    <h5 class="card-title text-success">Balance General</h5>
+                                    <h5 class="card-title text-success">{{ 'MOVEMENTS.GENERAL_BALANCE' | translate }}</h5>
                                     <div class="row g-3">
                                         <div class="col-md-3">
                                             <div class="d-flex justify-content-between">
-                                                <span>Movimientos:</span>
+                                                <span>{{ 'MOVEMENTS.MOVEMENTS' | translate }}:</span>
                                                 <strong>{{ formatMoney(balance.movimientos) }}</strong>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="d-flex justify-content-between">
-                                                <span>Pagos Recibidos:</span>
+                                                <span>{{ 'MOVEMENTS.PAYMENTS_RECEIVED' | translate }}:</span>
                                                 <strong class="text-success">{{ formatMoney(balance.pagos) }}</strong>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="d-flex justify-content-between">
-                                                <span>Préstamos Activos:</span>
+                                                <span>{{ 'MOVEMENTS.ACTIVE_LOANS' | translate }}:</span>
                                                 <strong class="text-danger">{{ formatMoney(balance.prestamos) }}</strong>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="d-flex justify-content-between">
-                                                <span>Balance Total:</span>
+                                                <span>{{ 'MOVEMENTS.TOTAL_BALANCE' | translate }}:</span>
                                                 <strong [class.text-success]="balance.total >= 0" 
                                                     [class.text-danger]="balance.total < 0">
                                                 {{ formatMoney(balance.total) }}
@@ -56,7 +55,7 @@
                 <!-- Loading State -->
                 <div *ngIf="loading" class="flex justify-center items-center py-8">
                     <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Cargando...</span>
+                        <span class="visually-hidden">{{ 'MOVEMENTS.LOADING' | translate }}</span>
                     </div>
                 </div>
 
@@ -72,16 +71,16 @@
                             <thead class="cabeza-tabla">
                                 <tr class="text-success">
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        ID
+                                        {{ 'MOVEMENTS.ID' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Fecha
+                                        {{ 'MOVEMENTS.DATE' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tipo
+                                        {{ 'MOVEMENTS.TYPE' | translate }}
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Monto
+                                        {{ 'MOVEMENTS.AMOUNT' | translate }}
                                     </th>
                                 </tr>
                             </thead>
@@ -99,7 +98,7 @@
                                                 'bg-green-100 text-green-800': movimiento.tipoMovimiento === 'ENTRADA',
                                                 'bg-red-100 text-red-800': movimiento.tipoMovimiento === 'SALIDA'
                                               }">
-                                            {{ movimiento.tipoMovimiento }}
+                                            {{ 'MOVEMENT_TYPES.' + movimiento.tipoMovimiento | translate }}
                                         </span>
                                     </td>
                                     <td>
@@ -109,7 +108,7 @@
                                 <!-- Empty State -->
                                 <tr *ngIf="movimientos.length === 0">
                                     <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                                        No hay movimientos registrados
+                                        {{ 'MOVEMENTS.NO_MOVEMENTS' | translate }}
                                     </td>
                                 </tr>
                             </tbody>

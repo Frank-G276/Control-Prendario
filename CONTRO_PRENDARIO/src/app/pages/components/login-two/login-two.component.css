@@ -5,7 +5,7 @@
   background: linear-gradient(to bottom, #C1E8FF 0%, #093476 80%,#042454 100% );
   position: relative;
 }
-/* .login{
+.login{
   display: block;
   background-color: white;
   height: 500px;
@@ -104,10 +104,10 @@ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 .login .center-two a:hover{
   color: #555555;
-} */
+}
 
 /* src/app/pages/login-two/login-two.component.css */
-.login {
+/* .login {
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
@@ -188,4 +188,4 @@ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
 
-
+ */

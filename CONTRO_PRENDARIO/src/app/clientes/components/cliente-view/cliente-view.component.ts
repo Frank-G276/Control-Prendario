@@ -5,19 +5,21 @@ import { SidebarComponent } from '../../../pages/components/sidebar/sidebar.comp
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../models/cliente.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cliente-view',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, SidebarComponent],
+  imports: [CommonModule, HeaderComponent, SidebarComponent, TranslateModule],
   templateUrl: './cliente-view.component.html',
   styleUrl: './cliente-view.component.css'
 })
-export class ClienteViewComponent implements OnInit{
+export class ClienteViewComponent implements OnInit {
   
   private route = inject(ActivatedRoute);
   private clienteService = inject(ClienteService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   cliente?: Cliente;
 
@@ -35,6 +37,10 @@ export class ClienteViewComponent implements OnInit{
       next: (cliente) => this.cliente = cliente,
       error: (error) => {
         console.error('Error al cargar cliente', error);
+        this.translateService.get('CLIENT_VIEW.ERROR_LOADING').subscribe((res: string) => {
+          // Aquí puedes mostrar un mensaje de error
+          console.error(res);
+        });
         this.router.navigate(['/clientes']);
       }
     });
@@ -43,5 +49,4 @@ export class ClienteViewComponent implements OnInit{
   volver(): void {
     this.router.navigate(['/clientes']);
   }
-
 }

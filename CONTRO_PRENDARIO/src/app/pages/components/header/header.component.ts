@@ -8,11 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 import { PrestamoService } from '../../../prestamos/services/prestamo.service';
 import { Prestamo } from '../../../prestamos/models/prestamo.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LenguageSelectorComponent } from "../../../internationalization/components/lenguage-selector/lenguage-selector.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, LenguageSelectorComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -30,12 +32,16 @@ export class HeaderComponent implements OnInit, OnDestroy{
     private sidebarService: SidebarService,
     private authService: AuthService,
     private router: Router,
-    private prestamoService: PrestamoService
+    private prestamoService: PrestamoService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.userName = this.authService.getCurrentUsername() || 'Usuario';
-    this.userRole = this.authService.isAdmin() ? 'Administrador' : 'Gerente';
+    this.userName = this.authService.getCurrentUsername();
+    const role = this.authService.getCurrentUserRole();
+    this.translateService.get(`ROLES.${role}`).subscribe((res: string) => {
+      this.userRole = res;
+    });
 
     this.searchSubscription = this.searchSubject.pipe(
       debounceTime(300),
@@ -65,10 +71,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
   onSearchInput(): void {
     this.searchSubject.next(this.searchTerm);
     
-  }
-
-  clic(): void {
-    console.log('Le dio clic');
   }
 
   selectPrestamo(prestamo: Prestamo): void {

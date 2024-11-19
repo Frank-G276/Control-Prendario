@@ -5,14 +5,18 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MovimientoService } from '../../services/movimiento.service';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-movimiento-crear',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     ReactiveFormsModule,
     HeaderComponent,
-    SidebarComponent],
+    SidebarComponent,
+    TranslateModule
+  ],
   templateUrl: './movimiento-crear.component.html',
   styleUrl: './movimiento-crear.component.css'
 })
@@ -20,6 +24,7 @@ export class MovimientosCrearComponent {
   private fb = inject(FormBuilder);
   private movimientoService = inject(MovimientoService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   loading = false;
   error = '';
@@ -38,14 +43,18 @@ export class MovimientosCrearComponent {
 
       this.movimientoService.crearMovimiento(this.movimientoForm.value).subscribe({
         next: () => {
-          this.success = 'Movimiento registrado exitosamente';
+          this.translateService.get('MOVEMENT_CREATE.SUCCESS_MESSAGE').subscribe((res: string) => {
+            this.success = res;
+          });
           this.loading = false;
           setTimeout(() => {
             this.router.navigate(['/movimientos']);
           }, 2000);
         },
         error: (error) => {
-          this.error = error;
+          this.translateService.get('MOVEMENT_CREATE.ERROR_MESSAGE').subscribe((res: string) => {
+            this.error = res;
+          });
           this.loading = false;
         }
       });

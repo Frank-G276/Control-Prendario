@@ -1,16 +1,15 @@
-// cliente-editar.component.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ClienteService } from '../../services/cliente.service';
 import { inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cliente-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './cliente-editar.component.html',
   styleUrl: './cliente-editar.component.css'
 })
@@ -20,6 +19,7 @@ export class ClienteEditarComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private clienteService = inject(ClienteService);
+  private translateService = inject(TranslateService);
 
   clienteEditar: FormGroup = this.fb.group({
     tipoDocumento: ['CEDULA', Validators.required],
@@ -31,7 +31,7 @@ export class ClienteEditarComponent implements OnInit {
     ciudad: ['', Validators.required],
     telefono: ['', Validators.required],
     email: ['', Validators.email]
-  });  
+  });
 
   ngOnInit() {
     // Si tenemos un ID, cargamos los datos del cliente
@@ -57,6 +57,10 @@ export class ClienteEditarComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar cliente', error);
+        this.translateService.get('CLIENT_EDIT.ERROR_LOADING').subscribe((res: string) => {
+          // Aquí puedes mostrar un mensaje de error
+          console.error(res);
+        });
       }
     });
   }
@@ -66,14 +70,23 @@ export class ClienteEditarComponent implements OnInit {
       this.clienteService.actualizarCliente(this.clienteId, this.clienteEditar.value).subscribe({
         next: (response) => {
           console.log('Cliente actualizado', response);
+          this.translateService.get('CLIENT_EDIT.SUCCESS_UPDATE').subscribe((res: string) => {
+            // Aquí puedes mostrar un mensaje de éxito
+            console.log(res);
+          });
           window.location.reload();
         },
         error: (error) => {
           console.error('Error al actualizar', error);
+          this.translateService.get('CLIENT_EDIT.ERROR_UPDATE').subscribe((res: string) => {
+            // Aquí puedes mostrar un mensaje de error
+            console.error(res);
+          });
         }
       });
     }
   }
+
   cerrarModal() {
     const modal = document.getElementById('staticBackdrop' + this.clienteId);
     if (modal) {

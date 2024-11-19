@@ -5,9 +5,9 @@
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
     <div class="prestamo-crear  mx-auto text-success">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Editar Préstamo</h2>
+            <h2 class="text-2xl font-bold">{{ 'LOAN_EDIT.TITLE' | translate }}</h2>
             <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                Modo Edición
+                {{ 'LOAN_EDIT.EDIT_MODE' | translate }}
             </span>
         </div>
     
@@ -20,57 +20,57 @@
             <div class="crear-cuerpo bg-white  rounded p-6">
                 <!-- Formulario del Vehículo -->
                 <div >
-                    <h3 class="text-xl font-bold mb-4">Información general </h3>
+                    <h3 class="text-xl font-bold mb-4">{{ 'LOAN_EDIT.GENERAL_INFO' | translate }}</h3>
                     <form [formGroup]="vehicleForm"  class="space-y-4">
                         <div class="justify-content-between d-flex flex-wrap">
                             <!-- Tipo de Vehículo -->
                             <div class="elemento-form">
-                                <label for="tipoVehiculo" class="block mb-1">Tipo de Vehículo *</label>
+                                <label for="tipoVehiculo" class="block mb-1">{{ 'LOAN_EDIT.VEHICLE_TYPE' | translate }} *</label>
                                 <select id="tipoVehiculo" formControlName="tipoVehiculo" 
                                         class="w-full p-2 border rounded"
                                         [class.border-red-500]="vehicleForm.get('tipoVehiculo')?.touched && vehicleForm.get('tipoVehiculo')?.invalid">
-                                    <option value="">Seleccione un tipo</option>
+                                    <option value="">{{ 'LOAN_EDIT.SELECT_TYPE' | translate }}</option>
                                     <option *ngFor="let tipo of tiposVehiculo" [value]="tipo">
-                                        {{tipo}}
+                                        {{ 'VEHICLE_TYPES.' + tipo | translate }}
                                     </option>
                                 </select>
                                 <div *ngIf="vehicleForm.get('tipoVehiculo')?.touched && vehicleForm.get('tipoVehiculo')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                    {{ 'LOAN_EDIT.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Marca -->
                             <div class="elemento-form">
-                                <label for="marca" class="block mb-1">Marca *</label>
+                                <label for="marca" class="block mb-1">{{ 'LOAN_CREATE.BRAND' | translate }} *</label>
                                 <input type="text" id="marca" formControlName="marca" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('marca')?.touched && vehicleForm.get('marca')?.invalid">
                                 <div *ngIf="vehicleForm.get('marca')?.touched && vehicleForm.get('marca')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Línea -->
                             <div class="elemento-form">
-                                <label for="linea" class="block mb-1">Línea *</label>
+                                <label for="linea" class="block mb-1">{{ 'LOAN_CREATE.LINE' | translate }} *</label>
                                 <input type="text" id="linea" formControlName="linea" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('linea')?.touched && vehicleForm.get('linea')?.invalid">
                                 <div *ngIf="vehicleForm.get('linea')?.touched && vehicleForm.get('linea')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                    {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Modelo -->
                             <div class="elemento-form">
-                                <label for="modelo" class="block mb-1">Modelo (Año) *</label>
+                                <label for="modelo" class="block mb-1">{{ 'LOAN_CREATE.MODEL' | translate }} *</label>
                                 <select id="modelo" formControlName="modelo" 
                                         class="w-full p-2 border rounded"
                                         [class.border-red-500]="vehicleForm.get('modelo')?.touched && vehicleForm.get('modelo')?.invalid">
-                                    <option value="">Seleccione el año</option>
+                                    <option value="">{{ 'LOAN_CREATE.SELECT_YEAR' | translate }}</option>
                                     <option *ngFor="let anio of modelosDisponibles" [value]="anio">
                                         {{anio}}
                                     </option>
@@ -78,122 +78,116 @@
                                 <div *ngIf="vehicleForm.get('modelo')?.touched && vehicleForm.get('modelo')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
                                     <div *ngIf="vehicleForm.get('modelo')?.errors?.['required']">
-                                        El año del modelo es requerido
-                                    </div>
-                                    <div *ngIf="vehicleForm.get('modelo')?.errors?.['min']">
-                                        El año debe ser mayor a 1900
-                                    </div>
-                                    <div *ngIf="vehicleForm.get('modelo')?.errors?.['max']">
-                                        El año no puede ser mayor al actual
+                                        {{ 'LOAN_CREATE.MODEL_REQUIRED' | translate }}
                                     </div>
                                 </div>
                             </div>
                 
                             <!-- Placa -->
                             <div class="elemento-form">
-                                <label for="placa" class="block mb-1">Placa *</label>
+                                <label for="placa" class="block mb-1">{{ 'LOAN_CREATE.CYLINDER_CAPACITY' | translate }} *</label>
                                 <input type="text" id="placa" formControlName="placa" 
                                        class="w-full p-2 border rounded uppercase"
                                        [class.border-red-500]="vehicleForm.get('placa')?.touched && vehicleForm.get('placa')?.invalid">
                                 <div *ngIf="vehicleForm.get('placa')?.touched && vehicleForm.get('placa')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido y solo acepta letras y números
+                                     {{ 'LOAN_CREATE.PLATE_ERROR' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Cilindraje -->
                             <div class="elemento-form">
-                                <label for="cilindraje" class="block mb-1">Cilindraje *</label>
+                                <label for="cilindraje" class="block mb-1">{{ 'LOAN_CREATE.CYLINDER_CAPACITY' | translate }} *</label>
                                 <input type="number" id="cilindraje" formControlName="cilindraje" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('cilindraje')?.touched && vehicleForm.get('cilindraje')?.invalid">
                                 <div *ngIf="vehicleForm.get('cilindraje')?.touched && vehicleForm.get('cilindraje')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido y debe ser mayor a 0
+                                     {{ 'LOAN_CREATE.CYLINDER_CAPACITY_ERROR' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Color -->
                             <div class="elemento-form">
-                                <label for="color" class="block mb-1">Color *</label>
+                                <label for="color" class="block mb-1">{{ 'LOAN_CREATE.COLOR' | translate }} *</label>
                                 <input type="text" id="color" formControlName="color" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('color')?.touched && vehicleForm.get('color')?.invalid">
                                 <div *ngIf="vehicleForm.get('color')?.touched && vehicleForm.get('color')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Número de Motor -->
                             <div class="elemento-form">
-                                <label for="numeroMotor" class="block mb-1">Número de Motor *</label>
+                                <label for="numeroMotor" class="block mb-1">{{ 'LOAN_CREATE.ENGINE_NUMBER' | translate }} *</label>
                                 <input type="text" id="numeroMotor" formControlName="numeroMotor" 
                                        class="w-full p-2 border rounded uppercase"
                                        [class.border-red-500]="vehicleForm.get('numeroMotor')?.touched && vehicleForm.get('numeroMotor')?.invalid">
                                 <div *ngIf="vehicleForm.get('numeroMotor')?.touched && vehicleForm.get('numeroMotor')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Número de Chasis -->
                             <div class="elemento-form">
-                                <label for="numeroChasis" class="block mb-1">Número de Chasis *</label>
+                                <label for="numeroChasis" class="block mb-1">{{ 'LOAN_CREATE.CHASSIS_NUMBER' | translate }} *</label>
                                 <input type="text" id="numeroChasis" formControlName="numeroChasis" 
                                        class="w-full p-2 border rounded uppercase"
                                        [class.border-red-500]="vehicleForm.get('numeroChasis')?.touched && vehicleForm.get('numeroChasis')?.invalid">
                                 <div *ngIf="vehicleForm.get('numeroChasis')?.touched && vehicleForm.get('numeroChasis')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Sitio de Matrícula -->
                             <div class="elemento-form">
-                                <label for="sitioMatricula" class="block mb-1">Sitio de Matrícula *</label>
+                                <label for="sitioMatricula" class="block mb-1">{{ 'LOAN_CREATE.REGISTRATION_PLACE' | translate }} *</label>
                                 <input type="text" id="sitioMatricula" formControlName="sitioMatricula" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('sitioMatricula')?.touched && vehicleForm.get('sitioMatricula')?.invalid">
                                 <div *ngIf="vehicleForm.get('sitioMatricula')?.touched && vehicleForm.get('sitioMatricula')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Fecha de Matrícula -->
                             <div class="elemento-form">
-                                <label for="fechaMatricula" class="block mb-1">Fecha de Matrícula *</label>
+                                <label for="fechaMatricula" class="block mb-1">{{ 'LOAN_CREATE.REGISTRATION_DATE' | translate }} *</label>
                                 <input type="date" id="fechaMatricula" formControlName="fechaMatricula" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('fechaMatricula')?.touched && vehicleForm.get('fechaMatricula')?.invalid">
                                 <div *ngIf="vehicleForm.get('fechaMatricula')?.touched && vehicleForm.get('fechaMatricula')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Propietario -->
                             <div class="elemento-form">
-                                <label for="propietario" class="block mb-1">Propietario *</label>
+                                <label for="propietario" class="block mb-1">{{ 'LOAN_CREATE.OWNER' | translate }} *</label>
                                 <input type="text" id="propietario" formControlName="propietario" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('propietario')?.touched && vehicleForm.get('propietario')?.invalid">
                                 <div *ngIf="vehicleForm.get('propietario')?.touched && vehicleForm.get('propietario')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                 
                             <!-- Número de Documento del Propietario -->
                             <div class="elemento-form">
-                                <label for="numeroDocumentoPropietario" class="block mb-1">Número de Documento del Propietario *</label>
+                                <label for="numeroDocumentoPropietario" class="block mb-1">{{ 'LOAN_CREATE.OWNER_DOCUMENT' | translate }} *</label>
                                 <input type="text" id="numeroDocumentoPropietario" formControlName="numeroDocumentoPropietario" 
                                        class="w-full p-2 border rounded"
                                        [class.border-red-500]="vehicleForm.get('numeroDocumentoPropietario')?.touched && vehicleForm.get('numeroDocumentoPropietario')?.invalid">
                                 <div *ngIf="vehicleForm.get('numeroDocumentoPropietario')?.touched && vehicleForm.get('numeroDocumentoPropietario')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Campo requerido
+                                    {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
                                 </div>
                             </div>
                         </div>
@@ -212,14 +206,14 @@
                                 <div class="mb-3 d-flex justify-content-between align-items-start">
                                     <!-- Buscador -->
                                     <div class="flex-grow-1 me-3">
-                                        <label for="buscadorClientes">Buscar Cliente *</label>
+                                        <label for="buscadorClientes">{{ 'LOAN_EDIT.SEARCH_CLIENT' | translate }} *</label>
                                         <div class="relative">
                                             <input
                                                 id="buscadorClientes"
                                                 type="text"
                                                 [formControl]="buscadorControl"
                                                 class="w-full p-2 border rounded"
-                                                placeholder="Buscar por nombre o documento..."
+                                                placeholder="{{ 'LOAN_EDIT.SEARCH_CLIENT_PLACEHOLDER' | translate }}"
                                                 [class.border-red-500]="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid"
                                             >
                                             <button
@@ -234,20 +228,20 @@
                             
                                         <!-- Lista de resultados -->
                                         <div *ngIf="mostrarResultados && clientesEncontrados.length > 0"
-                                             class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
-                                            <ul class="max-h-60 overflow-auto">
-                                                <li *ngFor="let cliente of clientesEncontrados"
-                                                    (click)="seleccionarCliente(cliente)"
-                                                    class="p-2 hover:bg-gray-100 cursor-pointer">
-                                                    {{cliente.nombres}} {{cliente.apellidos}} - {{cliente.numeroDocumento}}
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                                           <ul class="max-h-60 overflow-auto">
+                                               <li *ngFor="let cliente of clientesEncontrados"
+                                                   (click)="seleccionarCliente(cliente)"
+                                                   class="p-2 hover:bg-gray-100 cursor-pointer">
+                                                   {{cliente.nombres}} {{cliente.apellidos}} - {{cliente.numeroDocumento}}
+                                               </li>
+                                           </ul>
+                                       </div>
                             
                                         <!-- Mensaje si no hay resultados -->
                                         <div *ngIf="mostrarResultados && clientesEncontrados.length === 0 && buscadorControl.value"
                                              class="mt-1 text-sm text-gray-500">
-                                            No se encontraron clientes
+                                            {{ 'LOAN_EDIT.NO_CLIENTS_FOUND' | translate }}
                                         </div>
                                     </div>
                             
@@ -257,50 +251,50 @@
                                 <!-- Mensaje de validación -->
                                 <div *ngIf="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
-                                    Debe seleccionar un cliente
+                                    {{ 'LOAN_EDIT.CLIENT_REQUIRED' | translate }}
                                 </div>
                             </div>
             
                             <!-- Monto del Préstamo -->
                             <div class="elemento-form">
-                                <label for="montoPrestamo" class="block mb-1 font-medium">Monto del Préstamo *</label>
+                                <label for="montoPrestamo" class="block mb-1 font-medium">{{ 'LOAN_CREATE.LOAN_AMOUNT' | translate }} *</label>
                                 <input type="number" id="montoPrestamo" formControlName="montoPrestamo" 
                                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                        [class.border-red-500]="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid">
                                 <div *ngIf="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
                                     <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['required']">
-                                        El monto es requerido
+                                        {{ 'LOAN_CREATE.AMOUNT_REQUIRED' | translate }}
                                     </div>
                                     <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['min']">
-                                        El monto debe ser mayor a 0
+                                        {{ 'LOAN_CREATE.AMOUNT_MIN' | translate }}
                                     </div>
                                 </div>
                             </div>
             
                             <!-- Tasa de Interés -->
                             <div class="elemento-form">
-                                <label for="tasaInteres" class="block mb-1 font-medium">Tasa de Interés (%) *</label>
+                                <label for="tasaInteres" class="block mb-1 font-medium">{{ 'LOAN_CREATE.INTEREST_RATE' | translate }} *</label>
                                 <input type="number" id="tasaInteres" formControlName="tasaInteres" 
                                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                        [class.border-red-500]="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid">
                                 <div *ngIf="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid" 
                                      class="text-red-500 text-sm mt-1">
                                     <div *ngIf="loanForm.get('tasaInteres')?.errors?.['required']">
-                                        La tasa de interés es requerida
+                                        {{ 'LOAN_CREATE.RATE_REQUIRED' | translate }}
                                     </div>
                                     <div *ngIf="loanForm.get('tasaInteres')?.errors?.['min'] || loanForm.get('tasaInteres')?.errors?.['max']">
-                                        La tasa debe estar entre 0 y 100
+                                        {{ 'LOAN_CREATE.RATE_RANGE' | translate }}
                                     </div>
                                 </div>
                             </div>
             
                             <!-- Observaciones -->
                             <div class="elemento-form area-texto">
-                                <label for="observaciones" class="block mb-1 font-medium">Observaciones</label>
+                                <label for="observaciones" class="block mb-1 font-medium">{{ 'LOAN_CREATE.OBSERVATIONS' | translate }}</label>
                                 <textarea id="observaciones" formControlName="observaciones" 
                                         rows="4"
-                                        placeholder="Ingrese cualquier observación relevante sobre el préstamo..."></textarea>
+                                        placeholder="{{ 'LOAN_CREATE.OBSERVATIONS_PLACEHOLDER' | translate }}"></textarea>
                             </div>
                         </div>
                     </form>
@@ -310,7 +304,7 @@
                 <div class="botones flex justify-content-between mt-5">
                     <button (click)="router.navigate(['/prestamos'])" 
                             class="btn btn-danger m-2">
-                        Cancelar
+                        {{ 'LOAN_EDIT.CANCEL' | translate }}
                     </button>
                     <button (click)="onSubmit()" 
                             [disabled]="!vehicleForm.valid || !loanForm.valid || loading"
@@ -320,10 +314,10 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Procesando...
+                            {{ 'LOAN_EDIT.PROCESSING' | translate }}
                         </span>
                         <span *ngIf="!loading">
-                            Actualizar Préstamo
+                            {{ 'LOAN_EDIT.UPDATE_LOAN' | translate }}
                         </span>
                     </button>
                 </div>

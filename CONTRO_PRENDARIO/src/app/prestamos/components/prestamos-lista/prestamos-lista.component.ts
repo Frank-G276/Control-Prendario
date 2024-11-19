@@ -9,11 +9,12 @@ import { ClienteService } from '../../../clientes/services/cliente.service';
 import { forkJoin, Observable, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Cliente } from '../../../clientes/models/cliente.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-prestamos-lista',
     standalone: true,
-    imports: [CommonModule, HeaderComponent, SidebarComponent, RouterModule, DecimalPipe, ReactiveFormsModule],
+    imports: [CommonModule, HeaderComponent, SidebarComponent, RouterModule, DecimalPipe, ReactiveFormsModule, TranslateModule],
     templateUrl: './prestamos-lista.component.html',
     styleUrl: './prestamos-lista.component.css'
   })
@@ -22,6 +23,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     private prestamoService = inject(PrestamoService);
     private clienteService = inject(ClienteService);
     private fb = inject(FormBuilder);
+    private translateService = inject(TranslateService);
   
     prestamos: Prestamo[] = [];
     prestamosFiltrados: Prestamo[] = [];
@@ -127,18 +129,22 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     }
   
     deletePrestamo(id: number) {
-      if (confirm('¿Está seguro de que desea eliminar este préstamo?')) {
-        this.prestamoService.deletePrestamo(id).subscribe({
-          next: () => {
-            this.loadPrestamos();
-          },
-          error: (error) => {
-            console.error('Error deleting loan:', error);
-            this.error = 'Error al eliminar el préstamo';
+      this.translateService.get('LOANS.CONFIRM_DELETE').subscribe((res: string) => {
+          if (confirm(res)) {
+              this.prestamoService.deletePrestamo(id).subscribe({
+                  next: () => {
+                      this.loadPrestamos();
+                  },
+                  error: (error) => {
+                      console.error('Error deleting loan:', error);
+                      this.translateService.get('LOANS.ERROR_DELETE').subscribe((res: string) => {
+                          this.error = res;
+                      });
+                  }
+              });
           }
-        });
-      }
-    }
+      });
+  }
   
     verPrestamo(id: number): void {
       this.router.navigate(['/prestamos/ver', id]);

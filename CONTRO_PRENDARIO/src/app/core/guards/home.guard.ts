@@ -8,7 +8,7 @@ export const homeGuard = () => {
   
     if (authService.isLoggedIn()) {
       if (authService.isAdmin()) {
-        router.navigate(['/admin']);
+        router.navigate(['/home']);
       } else {
         router.navigate(['/home']);
       }

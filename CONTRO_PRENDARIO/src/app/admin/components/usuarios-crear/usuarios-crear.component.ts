@@ -6,11 +6,12 @@ import { UserCreationDTO } from '../../../core/interfaces/user.interface';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../../pages/components/header/header.component";
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-usuarios-crear',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, SidebarComponent],
+  imports: [TranslateModule, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent, SidebarComponent],
   templateUrl: './usuarios-crear.component.html',
   styleUrl: './usuarios-crear.component.css'
 })
@@ -25,7 +26,8 @@ export class UsuariosCrearComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
   ) {
     this.initForm();
   }
@@ -78,7 +80,9 @@ export class UsuariosCrearComponent implements OnInit {
       });
       
       if (this.selectedRoles.length === 0) {
-        this.error = 'Debe seleccionar al menos un rol';
+        this.translateService.get('USER_CREATE.SELECT_ROLE_ERROR').subscribe((res: string) => {
+          this.error = res;
+        });
       }
       return;
     }
@@ -97,14 +101,18 @@ export class UsuariosCrearComponent implements OnInit {
 
     this.userService.createUser(userData).subscribe({
       next: () => {
-        this.successMessage = 'Usuario creado exitosamente';
+        this.translateService.get('USER_CREATE.SUCCESS_MESSAGE').subscribe((res: string) => {
+          this.successMessage = res;
+        });
         this.isLoading = false;
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 2000);
       },
       error: (error) => {
-        this.error = error.error?.message || 'Error al crear el usuario';
+        this.translateService.get('USER_CREATE.ERROR_MESSAGE').subscribe((res: string) => {
+          this.error = error.error?.message || res;
+        });
         this.isLoading = false;
       }
     });
@@ -124,17 +132,17 @@ export class UsuariosCrearComponent implements OnInit {
     if (!control || !control.errors || !control.touched) return '';
     
     if (control.errors['required']) {
-      return 'Este campo es requerido';
+      return this.translateService.instant('USER_CREATE.FIELD_REQUIRED');
     }
     if (control.errors['email']) {
-      return 'Email inválido';
+      return this.translateService.instant('USER_CREATE.INVALID_EMAIL');
     }
     if (control.errors['minlength']) {
-      return 'La contraseña debe tener al menos 6 caracteres';
+      return this.translateService.instant('USER_CREATE.PASSWORD_LENGTH');
     }
     if (this.userForm.errors?.['passwordMismatch'] && 
         (controlName === 'password' || controlName === 'confirmPassword')) {
-      return 'Las contraseñas no coinciden';
+      return this.translateService.instant('USER_CREATE.PASSWORD_MISMATCH');
     }
     return '';
   }

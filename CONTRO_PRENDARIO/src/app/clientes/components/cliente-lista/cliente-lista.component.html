@@ -3,9 +3,9 @@
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
     <div class="cuerpo flex-grow-1">
         <div class="container">
-            <div class=" titulo d-flex align-items-center justify-content-between ">
+            <div class="titulo d-flex align-items-center justify-content-between ">
                 <div class="" >
-                    <h2 class="text-success ">Clientes</h2>
+                    <h2 class="text-success">{{ 'CLIENTS.TITLE' | translate }}</h2>
                 </div>
                 <div >
                     <app-cliente-form></app-cliente-form>
@@ -17,37 +17,36 @@
                     <div class="d-flex align-items-center justify-content-between buscador_tabla">
                         <input type="text" 
                                [(ngModel)]="nombreBusqueda"
-                               placeholder="Buscar por nombre" 
+                               placeholder="{{ 'CLIENTS.SEARCH_BY_NAME' | translate }}" 
                                class="form-control me-2">
                         
                         <input type="text" 
                                [(ngModel)]="documentoBusqueda"
-                               placeholder="Buscar por identificación" 
+                               placeholder="{{ 'CLIENTS.SEARCH_BY_ID' | translate }}" 
                                class="form-control me-2">
                         
                         <button class="btn btn-success me-2" 
                                 (click)="buscarClientes()">
                             <i class="bi bi-search text-light ps-2 pe-2"></i>
-                            Buscar
+                            {{ 'CLIENTS.SEARCH' | translate }}
                         </button>
                         
                         <button class="btn btn-outline-success" 
                                 (click)="limpiarBusqueda()"
                                 *ngIf="nombreBusqueda || documentoBusqueda">
                             <i class="bi bi-x-circle"></i>
-                            Limpiar
+                            {{ 'CLIENTS.CLEAR' | translate }}
                         </button>
                     </div>
                     <div style="background-color: white; height: 100vh;">
-                        <table class="tabla ">
+                        <table class="tabla">
                             <thead class="cabeza-tabla">
                                 <tr class="text-success">
-                                    <th>Documento</th>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                   
-                                    <th>Teléfono</th>
-                                    <th>Acciones</th>
+                                    <th>{{ 'CLIENTS.DOCUMENT' | translate }}</th>
+                                    <th>{{ 'CLIENTS.FIRST_NAME' | translate }}</th>
+                                    <th>{{ 'CLIENTS.LAST_NAME' | translate }}</th>
+                                    <th>{{ 'CLIENTS.PHONE' | translate }}</th>
+                                    <th>{{ 'CLIENTS.ACTIONS' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody class="tabla_cuerpo text-success">
@@ -67,24 +66,24 @@
                                             </button>
                                             
                                             <button class="btn text-success btn-sm"
-                                                    data-bs-toggle = "modal"
-                                                    [attr.data-bs-target]= "'#editarModal' + cliente.idCliente" 
-                                                    (click)= "setSelectedCliente(cliente.idCliente!)">
+                                                    data-bs-toggle="modal"
+                                                    [attr.data-bs-target]="'#editarModal' + cliente.idCliente" 
+                                                    (click)="setSelectedCliente(cliente.idCliente!)">
                                                     <i class="bi bi-pencil"></i>
                                             </button>
                                            <app-cliente-editar 
-                                                [clienteId]= "cliente.idCliente"
-                                                [modalId]= "'editarModal' + cliente.idCliente">
+                                                [clienteId]="cliente.idCliente"
+                                                [modalId]="'editarModal' + cliente.idCliente">
                                            </app-cliente-editar>
 
-                                            <button class="btn btn-sm " (click)="eliminarCliente(cliente.idCliente!)">
+                                            <button class="btn btn-sm" (click)="eliminarCliente(cliente.idCliente!)">
                                                 <i class="bi bi-x-lg text-success"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 } @empty {
                                     <tr>
-                                        <td colspan="6" class="text-center">No hay clientes registrados</td>
+                                        <td colspan="6" class="text-center">{{ 'CLIENTS.NO_CLIENTS' | translate }}</td>
                                     </tr>
                                 }
                             </tbody>
@@ -94,5 +93,4 @@
             </div>
         </div>
     </div>
-  </div> 
-
+</div>

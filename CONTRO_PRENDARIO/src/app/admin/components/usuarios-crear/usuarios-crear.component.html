@@ -1,12 +1,10 @@
-<!-- src/app/admin/components/usuarios-crear/usuarios-crear.component.html -->
-
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
     <div class="flex-grow-1 text-success ">
       <div class="container mx-auto p-4 cuerpo  ">
         <div class=" mx-auto bg-white rounded-4 cuerpo-formulario">
-          <h2 class="text-2xl font-bold mb-6">Crear Nuevo Usuario</h2>
+          <h2 class="text-2xl font-bold mb-6">{{ 'USER_CREATE.TITLE' | translate }}</h2>
       
           @if (error) {
           <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
@@ -23,7 +21,7 @@
           <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-4">
             <!-- Email -->
             <div class="form-group">
-              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <label for="email" class="block text-sm font-medium text-gray-700">{{ 'USER_CREATE.EMAIL' | translate }}</label>
               <input
                 type="email"
                 id="email"
@@ -37,7 +35,7 @@
       
             <!-- Nombre -->
             <div class="form-group">
-              <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+              <label for="nombre" class="block text-sm font-medium text-gray-700">{{ 'USER_CREATE.NAME' | translate }}</label>
               <input
                 type="text"
                 id="nombre"
@@ -51,7 +49,7 @@
       
             <!-- Contraseña -->
             <div class="form-group">
-              <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+              <label for="password" class="block text-sm font-medium text-gray-700">{{ 'USER_CREATE.PASSWORD' | translate }}</label>
               <input
                 type="password"
                 id="password"
@@ -65,7 +63,7 @@
       
             <!-- Confirmar Contraseña -->
             <div class="form-group">
-              <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700">{{ 'USER_CREATE.CONFIRM_PASSWORD' | translate }}</label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -79,7 +77,7 @@
       
             <!-- Roles -->
             <div class="form-group">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Roles</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'USER_CREATE.ROLES' | translate }}</label>
               <div class="space-y-2">
                 @for (role of roles; track role) {
                   <div class="flex items-center">
@@ -90,13 +88,13 @@
                       (change)="onRoleChange(role, $event)"
                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                     <label [for]="role" class="ml-2 block text-sm text-gray-900">
-                      {{role}}
+                      {{ 'USER_ROLES.' + role | translate }}
                     </label>
                   </div>
                 }
               </div>
               @if (selectedRoles.length === 0 && (userForm.touched || userForm.dirty)) {
-                <p class="mt-1 text-sm text-red-600">Debe seleccionar al menos un rol</p>
+                <p class="mt-1 text-sm text-red-600">{{ 'USER_CREATE.SELECT_ROLE' | translate }}</p>
               }
             </div>
       
@@ -106,16 +104,16 @@
                 type="button"
                 (click)="onCancel()"
                 class="btn btn-danger me-3">
-                Cancelar
+                {{ 'USER_CREATE.CANCEL' | translate }}
               </button>
               <button
                 type="submit"
                 [disabled]="!isFormValid() || isLoading"
                 class="btn btn-success ">
                 @if (isLoading) {
-                  <span>Creando...</span>
+                  <span>{{ 'USER_CREATE.CREATING' | translate }}</span>
                 } @else {
-                  <span>Crear Usuario</span>
+                  <span>{{ 'USER_CREATE.CREATE_USER' | translate }}</span>
                 }
               </button>
             </div>

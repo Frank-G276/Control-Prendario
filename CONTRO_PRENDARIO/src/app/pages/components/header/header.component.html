@@ -1,5 +1,5 @@
 <header class="cabezero">
-  <nav class="navbar  border-bottom">
+  <nav class="navbar border-bottom">
     <div class="container-fluid">
       <div class="d-flex align-items-center">
         <div class="list-icon me-3" (click)="toggleSidebar()">
@@ -7,29 +7,28 @@
         </div>
         <div class="logotipe">
           <a [routerLink]="['/home']">
-            <img src="Img/LOGO-ELPISTON.png" alt="Logo" height="40">
+            <img src="assets/Img/LOGO-ELPISTON.png"  height="40">
           </a>
         </div>
-      </div>
-      
-      <div class="  ">
-        <label class="search rounded " for="buscador">
-          <input type="text" 
+      </div>   
+      <div class="">
+        <label class="search rounded" for="buscador">
+          <input type="text"
                  [(ngModel)]="searchTerm"
                  (input)="onSearchInput()"
                  (blur)="onBlur()"
-                 placeholder="Buscar préstamos..." 
-                 class="rounded ms-3" 
-                 id="buscador" 
+                 placeholder="{{ 'HEADER.SEARCH_PLACEHOLDER' | translate }}"
+                 class="rounded ms-3"
+                 id="buscador"
                  name="buscador">
-          <i class="bi bi-search text-secondary  "></i>
+          <i class="bi bi-search text-secondary"></i>
         </label>
         
         <!-- Dropdown de resultados -->
         <div class="dropdown-menu" [class.show]="showResults" style="max-height: 300px; overflow-y: auto;">
-          <button class="dropdown-item" 
-                  *ngFor="let prestamo of searchResults" 
-                  (click)="selectPrestamo(prestamo); clic()" 
+          <button class="dropdown-item"
+                  *ngFor="let prestamo of searchResults"
+                  (click)="selectPrestamo(prestamo); "
                   type="button">
             {{ prestamo.cliente?.nombres }} {{ prestamo.cliente?.apellidos }} - {{ prestamo.cliente?.numeroDocumento }}
           </button>
@@ -43,14 +42,14 @@
                 aria-expanded="false">
           <div class="d-flex flex-column align-items-end">
             <span class="fw-bolder fs-6">{{userName}}</span>
-            <small class="text-muted">{{userRole}}</small>
+            <small class="text-muted">{{ userRole | translate }}</small>
           </div>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li>
             <button class="dropdown-item d-flex align-items-center gap-2" (click)="logout()">
               <i class="bi bi-box-arrow-right text-danger"></i>
-              <span>Cerrar Sesión</span>
+              <span>{{ 'HEADER.LOGOUT' | translate }}</span>
             </button>
           </li>
         </ul>

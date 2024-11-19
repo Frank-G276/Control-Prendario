@@ -8,6 +8,7 @@ import { PrestamoService } from '../../../prestamos/services/prestamo.service';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { PrestamoSeleccionado, ResumenPrestamo  } from '../../interfaces/pago.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pagos-crear',
@@ -16,7 +17,8 @@ import { PrestamoSeleccionado, ResumenPrestamo  } from '../../interfaces/pago.in
     CommonModule,
     ReactiveFormsModule,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    TranslateModule
   ],
   templateUrl: './pagos-crear.component.html',
   styleUrl: './pagos-crear.component.css'
@@ -27,6 +29,7 @@ export class PagosCrearComponent implements OnInit{
   private pagoService = inject(PagoService);
   private prestamoService = inject(PrestamoService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   pagoForm: FormGroup;
   prestamosEncontrados: any[] = [];
@@ -64,7 +67,9 @@ export class PagosCrearComponent implements OnInit{
         this.loading = false;
        },
        error: (error) => {
-        this.error = 'Error al buscar préstamos';
+        this.translateService.get('PAYMENT_CREATE.ERROR_SEARCHING_LOANS').subscribe((res: string) => {
+          this.error = res;
+        });
         this.loading = false;
       }
     });
@@ -94,7 +99,9 @@ export class PagosCrearComponent implements OnInit{
         };
       },
       error: (error) => {
-        this.error = 'Error al cargar el resumen de pagos';
+        this.translateService.get('PAYMENT_CREATE.ERROR_LOADING_SUMMARY').subscribe((res: string) => {
+          this.error = res;
+        });
         console.error('Error:', error);
       }
     });
@@ -122,8 +129,12 @@ export class PagosCrearComponent implements OnInit{
 
       // Validar que el monto no exceda lo pendiente
       if (montoIngresado > montoPendiente) {
-        this.error = `El monto ingresado ($${montoIngresado.toLocaleString()}) 
-                     excede el monto pendiente ($${montoPendiente.toLocaleString()})`;
+        this.translateService.get('PAYMENT_CREATE.AMOUNT_EXCEEDS_PENDING', {
+          amount: this.formatMoney(montoIngresado),
+          pending: this.formatMoney(montoPendiente)
+        }).subscribe((res: string) => {
+          this.error = res;
+        });
         this.loading = false;
         return;
       }
@@ -140,19 +151,25 @@ export class PagosCrearComponent implements OnInit{
 
       this.pagoService.crearPago(pago).subscribe({
         next: (response) => {
-          this.success = 'Pago registrado exitosamente';
+          this.translateService.get('PAYMENT_CREATE.SUCCESS_MESSAGE').subscribe((res: string) => {
+            this.success = res;
+          });
           this.loading = false;
           setTimeout(() => {
             this.router.navigate(['/prestamos/ver', pago.prestamo.idPrestamo]);
           }, 2000);
         },
         error: (error) => {
-          this.error = error.error || 'Error al registrar el pago';
+          this.translateService.get('PAYMENT_CREATE.ERROR_REGISTERING').subscribe((res: string) => {
+            this.error = error.error || res;
+          });
           this.loading = false;
         }
       });
     } else {
-      this.error = 'Por favor, complete todos los campos requeridos correctamente.';
+      this.translateService.get('PAYMENT_CREATE.FILL_ALL_FIELDS').subscribe((res: string) => {
+        this.error = res;
+      });
     }
   }
 

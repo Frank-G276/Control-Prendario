@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PagoService } from '../../services/pago.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pagos-lista',
   standalone: true,
-  imports: [SidebarComponent, HeaderComponent, RouterModule, CommonModule, ReactiveFormsModule],
+  imports: [TranslateModule, SidebarComponent, HeaderComponent, RouterModule, CommonModule, ReactiveFormsModule],
   templateUrl: './pagos-lista.component.html',
   styleUrl: './pagos-lista.component.css'
 })
@@ -18,6 +19,7 @@ export class PagosListaComponent implements OnInit {
   private fb = inject(FormBuilder);
   private pagoService = inject(PagoService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   pagos: any[] = [];
   pagosFiltrados: any[] = [];
@@ -59,7 +61,9 @@ export class PagosListaComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.error = 'Error al cargar los pagos';
+        this.translateService.get('PAYMENTS.ERROR_LOADING').subscribe((res: string) => {
+          this.error = res;
+        });
         this.loading = false;
         console.error('Error cargando pagos:', error);
       }
@@ -107,11 +111,11 @@ export class PagosListaComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleDateString(this.translateService.currentLang);
   }
 
   formatMoney(amount: number): string {
-    return new Intl.NumberFormat('es-CO', {
+    return new Intl.NumberFormat(this.translateService.currentLang, {
       style: 'currency',
       currency: 'COP'
     }).format(amount);

@@ -1,4 +1,3 @@
-
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
@@ -6,12 +5,12 @@
         <div class="container">
             <div class="titulo d-flex align-items-center justify-content-between">
                 <div>
-                    <h2 class="text-success">Usuarios del Sistema</h2>
+                    <h2 class="text-success">{{ 'USERS.SYSTEM_USERS' | translate }}</h2>
                 </div>
                 <div>
                     <button class="btn btn-success" [routerLink]="['/usuarios/crear']">
                         <i class="bi bi-plus-circle me-2"></i>
-                        Crear Usuario
+                        {{ 'USERS.CREATE_USER' | translate }}
                     </button>
                 </div>
             </div>
@@ -26,11 +25,11 @@
                 <table class="tabla">
                     <thead class="cabeza-tabla">
                         <tr class="text-success">
-                            <th>Email</th>
-                            <th>Nombre</th>
-                            <th>Roles</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>{{ 'USERS.EMAIL' | translate }}</th>
+                            <th>{{ 'USERS.NAME' | translate }}</th>
+                            <th>{{ 'USERS.ROLES' | translate }}</th>
+                            <th>{{ 'USERS.STATUS' | translate }}</th>
+                            <th>{{ 'USERS.ACTIONS' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody class="tabla_cuerpo text-success">
@@ -40,22 +39,22 @@
                             <td>{{usuario.nombre}}</td>
                             <td>
                                 @for (rol of usuario.roles; track rol) {
-                                <span class="badge bg-success me-1">{{rol}}</span>
+                                <span class="badge bg-success me-1">{{ 'USER_ROLES.' + rol | translate }}</span>
                                 }
                             </td>
                             <td>
                                 <span [class]="usuario.activo ? 'badge bg-success' : 'badge bg-danger'">
-                                    {{usuario.activo ? 'Activo' : 'Inactivo'}}
+                                    {{ usuario.activo ? ('USERS.ACTIVE' | translate) : ('USERS.INACTIVE' | translate) }}
                                 </span>
                             </td>
                             <td>
                                 @if (usuario.activo) {
-                                    <button class="btn btn-sm text-success" 
+                                    <button class="btn btn-sm text-success"
                                             (click)="desactivarUsuario(usuario.id)">
                                         <i class="bi bi-person-x"></i>
                                     </button>
                                 } @else {
-                                    <button class="btn btn-sm text-success" 
+                                    <button class="btn btn-sm text-success"
                                             (click)="activarUsuario(usuario.id)">
                                         <i class="bi bi-person-check"></i>
                                     </button>
@@ -64,7 +63,7 @@
                         </tr>
                         } @empty {
                         <tr>
-                            <td colspan="5" class="text-center">No hay usuarios registrados</td>
+                            <td colspan="5" class="text-center">{{ 'USERS.NO_USERS' | translate }}</td>
                         </tr>
                         }
                     </tbody>

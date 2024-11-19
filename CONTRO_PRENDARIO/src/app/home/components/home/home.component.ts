@@ -8,6 +8,7 @@ import { MovimientoService } from '../../../movimientos/services/movimiento.serv
 import { PagoService } from '../../../pagos/services/pago.service';
 import { LogoutButtonComponent } from "../../../pages/components/logout-button/logout-button.component";
 import { UsuariosCrearComponent } from "../../../admin/components/usuarios-crear/usuarios-crear.component";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface ResumenNegocio {
   dineroFluyendo: number;
@@ -19,7 +20,7 @@ interface ResumenNegocio {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, RouterModule, LogoutButtonComponent, UsuariosCrearComponent],
+  imports: [TranslateModule, CommonModule, SidebarComponent, HeaderComponent, RouterModule, LogoutButtonComponent, UsuariosCrearComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -27,6 +28,7 @@ export class HomeComponent {
   
   private prestamoService = inject(PrestamoService);
   private movimientoService = inject(MovimientoService);
+  private translateService = inject(TranslateService);
 
   resumen: ResumenNegocio = {
     dineroFluyendo: 0,
@@ -57,7 +59,7 @@ export class HomeComponent {
           const fechaVencimiento = new Date(p.fechaVencimiento);
           const ahora = new Date();
           return (fechaVencimiento < ahora && p.estadoPrestamo === 'ACTIVO') || 
-          p.estadoPrestamo === 'VENCIDO';
+           p.estadoPrestamo === 'VENCIDO';
         })
         .sort((a, b) => {
           const fechaA = new Date(a.fechaVencimiento!).getTime();
@@ -67,7 +69,9 @@ export class HomeComponent {
         .slice(0, 3); // Tomar solo los 3 primeros
     },
     error: (error) => {
-      this.error = 'Error al cargar los préstamos';
+      this.translateService.get('HOME.ERROR_LOADING_LOANS').subscribe((res: string) => {
+        this.error = res;
+      });
       this.loading = false;
       console.error('Error:', error);
     }
@@ -85,7 +89,7 @@ export class HomeComponent {
   }
 
   formatMoney(amount: number): string {
-    return new Intl.NumberFormat('es-CO', {
+    return new Intl.NumberFormat(this.translateService.currentLang, {
       style: 'currency',
       currency: 'COP'
     }).format(amount);

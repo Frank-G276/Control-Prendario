@@ -8,34 +8,38 @@ import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.comp
 import { ClienteFormComponent } from "../cliente-form/cliente-form.component";
 import { ClienteEditarComponent } from "../cliente-editar/cliente-editar.component";
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cliente-lista',
   standalone: true,
-  imports: [FormsModule,CommonModule, RouterModule, HeaderComponent, SidebarComponent, ClienteFormComponent, ClienteEditarComponent],
+  imports: [FormsModule, CommonModule, RouterModule, HeaderComponent, SidebarComponent, ClienteFormComponent, ClienteEditarComponent, TranslateModule],
   templateUrl: './cliente-lista.component.html',
   styleUrl: './cliente-lista.component.css'
 })
-export class ClienteListaComponent implements OnInit{
-  private clienteServie = inject(ClienteService);
-  clientes : Cliente[] = [];
-  selectedClienteId?: number;
+export class ClienteListaComponent implements OnInit {
+  private clienteService = inject(ClienteService);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
+
+  clientes: Cliente[] = [];
+  selectedClienteId?: number;
   nombreBusqueda: string = '';
   documentoBusqueda: string = '';
 
   ngOnInit(): void {
-      this.cargarClientes();
+    this.cargarClientes();
   }
 
   actualizarLista() {
     this.cargarClientes();
   }
+
   cargarClientes(): void {
-    this.clienteServie.obtenerClientes().subscribe({
+    this.clienteService.obtenerClientes().subscribe({
       next: (data) => this.clientes = data,
       error: (error) => console.error('Error al cargar clientes', error)
-    })
+    });
   }
 
   editarCliente(id: number): void {
@@ -47,29 +51,33 @@ export class ClienteListaComponent implements OnInit{
   }
 
   eliminarCliente(id: number): void {
-    if (confirm('¿Está seguro que desea eliminar este cliente?')) {
-      this.clienteServie.eliminarCliente(id).subscribe({
-        next: () => {
-          this.cargarClientes(); // Recargar la lista después de eliminar
-          // Aquí podrías mostrar un mensaje de éxito
-        },
-        error: (error) => 
-          console.error('Error al eliminar cliente', error)
-          // Aquí podrías mostrar un mensaje de error
-        
-      });
-    }
+    this.translateService.get('CLIENTS.CONFIRM_DELETE').subscribe((res: string) => {
+      if (confirm(res)) {
+        this.clienteService.eliminarCliente(id).subscribe({
+          next: () => {
+            this.cargarClientes();
+            // Aquí podrías mostrar un mensaje de éxito
+          },
+          error: (error) => {
+            console.error('Error al eliminar cliente', error);
+            // Aquí podrías mostrar un mensaje de error
+          }
+        });
+      }
+    });
   }
+
   setSelectedCliente(id: number): void {
     this.selectedClienteId = id;
   }
+
   buscarClientes(): void {
     if (!this.nombreBusqueda && !this.documentoBusqueda) {
       this.cargarClientes();
       return;
     }
 
-    this.clienteServie.buscarClientes(this.nombreBusqueda, this.documentoBusqueda)
+    this.clienteService.buscarClientes(this.nombreBusqueda, this.documentoBusqueda)
       .subscribe({
         next: (data) => {
           this.clientes = data;
@@ -77,10 +85,10 @@ export class ClienteListaComponent implements OnInit{
         error: (error) => console.error('Error en la búsqueda', error)
       });
   }
+
   limpiarBusqueda(): void {
     this.nombreBusqueda = '';
     this.documentoBusqueda = '';
     this.cargarClientes();
   }
-
 }

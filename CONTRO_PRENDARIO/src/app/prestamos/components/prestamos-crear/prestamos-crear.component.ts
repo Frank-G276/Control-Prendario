@@ -9,11 +9,12 @@ import { HeaderComponent } from "../../../pages/components/header/header.compone
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
 import { Cliente } from '../../../clientes/models/cliente.interface';
 import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-prestamos-crear',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ClienteFormComponent, HeaderComponent, SidebarComponent],
+  imports: [CommonModule, ReactiveFormsModule, ClienteFormComponent, HeaderComponent, SidebarComponent, TranslateModule],
   templateUrl: './prestamos-crear.component.html',
   styleUrl: './prestamos-crear.component.css'
 })
@@ -22,6 +23,7 @@ export class PrestamosCrearComponent implements OnInit{
   router = inject(Router);
   private prestamoService = inject(PrestamoService);
   private clienteService = inject(ClienteService);
+  private translateService = inject(TranslateService);
    
   tiposVehiculo: string[] = ['AUTOMOVIL', 'MOTOCICLETA', 'CAMIONETA', 'CAMION'];
   modelosDisponibles: number[] = [];
@@ -74,11 +76,14 @@ export class PrestamosCrearComponent implements OnInit{
       },
       error: (error) => {
         console.error('Error en la búsqueda:', error);
-        this.error = 'Error al buscar clientes';
+        this.translateService.get('LOAN_CREATE.CLIENT_SEARCH_ERROR').subscribe((res: string) => {
+          this.error = res;
+        });
         this.buscando = false;
       }
     });
   }
+
   onClienteCreado(cliente: Cliente) {
     this.seleccionarCliente(cliente);
     this.clientesEncontrados = [cliente];
@@ -109,7 +114,7 @@ export class PrestamosCrearComponent implements OnInit{
       tipoVehiculo: ['MOTOCICLETA', Validators.required],
       marca: ['', Validators.required],
       linea: ['', Validators.required],
-      modelo: ['', [Validators.required, Validators.min(1900), Validators.max(2024)]],
+      modelo: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
       placa: ['', [Validators.required, Validators.pattern('[A-Za-z0-9]+')]],
       cilindraje: ['', [Validators.required, Validators.min(0)]],
       color: ['', Validators.required],
@@ -167,7 +172,9 @@ export class PrestamosCrearComponent implements OnInit{
     this.prestamoService.createPrestamo(prestamoData).subscribe({
       next: (response) => {
             console.log('Préstamo creado:', response);
-            this.successMessage = 'Préstamo creado exitosamente';
+            this.translateService.get('LOAN_CREATE.SUCCESS_MESSAGE').subscribe((res: string) => {
+              this.successMessage = res;
+            });
             this.loading = false;
             setTimeout(() => {
                 this.router.navigate(['/prestamos']);
@@ -175,7 +182,9 @@ export class PrestamosCrearComponent implements OnInit{
       },
       error: (error) => {
             console.error('Error:', error);
-            this.error = error.message || 'Error al crear el préstamo';
+            this.translateService.get('LOAN_CREATE.ERROR_MESSAGE').subscribe((res: string) => {
+              this.error = error.message || res;
+            });
             this.loading = false;
       }
     });
@@ -189,5 +198,4 @@ export class PrestamosCrearComponent implements OnInit{
       }
     });
   }  
-
 }
