@@ -371,7 +371,35 @@
     "REGISTER_MOVEMENT": "Registrar Movimiento",
     "SUCCESS_MESSAGE": "Movimiento registrado exitosamente",
     "ERROR_MESSAGE": "Error al registrar el movimiento"
+  },
+  
+  "CONFIGURATION": {
+    "TITLE": "Configuración",
+    "MANAGE_USERS": "Administrar Usuarios",
+    "LANGUAGE_PROMPT": "Selecciona aquí el idioma",
+    "LANGUAGE_PROMPT_2": "de tu preferencia"
+  },
+  "LOGOUT_BUTTON": {
+    "TEXT": "Cerrar Sesión"
+  },
+  "LANGUAGE_SELECTOR": {
+    "CURRENT_LANGUAGE": "Idioma",
+    "SPANISH": "Español",
+    "ENGLISH": "Inglés"
+  },
+  "LOGIN": {
+    "LOGO_ALT": "Logo",
+    "TITLE": "Login ",
+    "EMAIL_PLACEHOLDER": "Correo electrónico",
+    "PASSWORD_PLACEHOLDER": "Contraseña",
+    "SUBMIT_BUTTON": "Iniciar Sesión",
+    "CONTINUE_AS_CLIENT": "Continuar como cliente",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "ERROR_EMPTY_FIELDS": "Por favor, complete todos los campos",
+    "ERROR_INVALID_CREDENTIALS": "Credenciales inválidas",
+    "ERROR_LOGIN": "Error en el inicio de sesión"
   }
+  
   
 
 

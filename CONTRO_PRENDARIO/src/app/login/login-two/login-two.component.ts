@@ -1,19 +1,19 @@
-// src/app/pages/login-two/login-two.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { LoginCredentials } from '../../../core/interfaces/auth.interface';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LoginCredentials } from '../../core/interfaces/auth.interface';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login-two',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule, RouterModule],
   templateUrl: './login-two.component.html',
   styleUrl: './login-two.component.css'
 })
-export class LoginTwoComponent implements OnInit{
+export class LoginTwoComponent implements OnInit {
   credentials: LoginCredentials = {
     username: '',
     password: ''
@@ -23,11 +23,11 @@ export class LoginTwoComponent implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
-    // Redirigir si ya está autenticado
     if (this.authService.isLoggedIn()) {
       this.redirectBasedOnRole();
     }
@@ -35,7 +35,9 @@ export class LoginTwoComponent implements OnInit{
 
   onLogin(): void {
     if (!this.credentials.username || !this.credentials.password) {
-      this.error = 'Por favor, complete todos los campos';
+      this.translateService.get('LOGIN.ERROR_EMPTY_FIELDS').subscribe((res: string) => {
+        this.error = res;
+      });
       return;
     }
 
@@ -48,9 +50,9 @@ export class LoginTwoComponent implements OnInit{
       },
       error: (error) => {
         console.error('Error de login:', error);
-        this.error = error.status === 401 
-          ? 'Credenciales inválidas' 
-          : 'Error en el inicio de sesión';
+        this.translateService.get(error.status === 401 ? 'LOGIN.ERROR_INVALID_CREDENTIALS' : 'LOGIN.ERROR_LOGIN').subscribe((res: string) => {
+          this.error = res;
+        });
         this.isLoading = false;
       }
     });
@@ -58,12 +60,11 @@ export class LoginTwoComponent implements OnInit{
 
   onClienteClick(event: Event) {
     event.preventDefault();
-    this.router.navigate(['/Cliente']);
+    this.router.navigate(['/consulta-prestamos']);
   }
 
   onOlvidePasswordClick(event: Event) {
     event.preventDefault();
-    // Implementar lógica para recuperar contraseña
     console.log('Recuperar contraseña');
   }
 
@@ -75,5 +76,3 @@ export class LoginTwoComponent implements OnInit{
     }
   }
 }
-
-

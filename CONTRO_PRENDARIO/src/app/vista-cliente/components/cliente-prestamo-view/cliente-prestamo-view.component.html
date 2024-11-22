@@ -1,0 +1,82 @@
+<div class="body">
+    <div class="frame">
+        <a [routerLink]="['/consulta-prestamos']" class="logo-link">
+            <img src="assets/Img/LOGO-ELPISTON.png" alt="Logo El Piston" class="logo">
+        </a>
+        
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-4">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+
+        <!-- Content -->
+        <div *ngIf="!loading && !error && prestamo" class="prestamo-details">
+            <div class="header-section">
+                <h2>Préstamo #{{ prestamo.idPrestamo }}</h2>
+                <button class="btn btn-outline-success" (click)="volver()">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </button>
+            </div>
+
+            <div class="content-section">
+                <!-- Información del Préstamo -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Información del Préstamo</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-badge mb-3">
+                            <span class="badge" 
+                                  [ngClass]="{
+                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                    'bg-warning': prestamo.estadoPrestamo === 'PENDIENTE',
+                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                  }">
+                                {{ prestamo.estadoPrestamo }}
+                            </span>
+                        </div>
+                        <div class="info-grid">
+                            <p><strong>Fecha del Préstamo:</strong> {{ formatDate(prestamo.fechaPrestamo) }}</p>
+                            <p><strong>Fecha de Vencimiento:</strong> {{ formatDate(prestamo.fechaVencimiento) }}</p>
+                            <p><strong>Monto del Préstamo:</strong> {{ formatCurrency(prestamo.montoPrestamo) }}</p>
+                            <p><strong>Tasa de Interés:</strong> {{ prestamo.tasaInteres }}%</p>
+                            <p><strong>Total a Pagar:</strong> {{ formatCurrency(calcularTotal()) }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del Vehículo -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Información del Vehículo</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Tipo:</strong> {{ prestamo.vehiculo.tipoVehiculo }}</p>
+                                <p><strong>Marca:</strong> {{ prestamo.vehiculo.marca }}</p>
+                                <p><strong>Línea:</strong> {{ prestamo.vehiculo.linea }}</p>
+                                <p><strong>Modelo:</strong> {{ prestamo.vehiculo.modelo }}</p>
+                                <p><strong>Placa:</strong> {{ prestamo.vehiculo.placa }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Color:</strong> {{ prestamo.vehiculo.color }}</p>
+                                <p><strong>Número de Motor:</strong> {{ prestamo.vehiculo.numeroMotor }}</p>
+                                <p><strong>Cilindraje:</strong> {{ prestamo.vehiculo.cilindraje }} cc</p>
+                                <p><strong>Fecha de Matrícula:</strong> {{ formatDate(prestamo.vehiculo.fechaMatricula) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="body">
+    <div class="frame">
+        <a href="#">
+            <img src="assets/Img/LOGO-ELPISTON.png" alt="">
+        </a>
+        <h1>Estado de prestamos</h1>
+        <p>Consulta aqui tus prestamos</p>
+        <div class="position-relative">
+            <label class="search rounded" for="buscador">
+                <i class="bi bi-search text-primary ps-2 pe-2"></i>
+                <input 
+                    type="text" 
+                    [(ngModel)]="searchTerm"
+                    (input)="onSearchInput()"
+                    (blur)="onBlur()"
+                    placeholder="Numero de identificación o placa del vehículo" 
+                    class="ps-2 rounded text-black text-opacity-75" 
+                    id="buscador" 
+                    name="buscador">
+            </label>
+
+            <!-- Resultados -->
+            <div *ngIf="showResults" class="results-container mt-2">
+                <div *ngFor="let prestamo of searchResults" 
+                     class="result-item p-2 border-bottom"
+                     (click)="selectPrestamo(prestamo)">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>{{ prestamo.cliente?.nombres }} {{ prestamo.cliente?.apellidos }}</strong>
+                            <br>
+                            <small>Doc: {{ prestamo.cliente?.numeroDocumento }}</small>
+                        </div>
+                        <span [class]="'badge ' + 
+                                (prestamo.estadoPrestamo === 'ACTIVO' ? 'bg-success' : 
+                                (prestamo.estadoPrestamo === 'PAGADO' ? 'bg-info' : 'bg-danger'))" style="height: 25px;">
+                            {{ prestamo.estadoPrestamo }}
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

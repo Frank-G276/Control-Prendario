@@ -371,6 +371,33 @@
     "REGISTER_MOVEMENT": "Register Movement",
     "SUCCESS_MESSAGE": "Movement registered successfully",
     "ERROR_MESSAGE": "Error registering movement"
+  },
+  "CONFIGURATION": {
+    "TITLE": "Configuration",
+    "MANAGE_USERS": "Manage Users",
+    "LANGUAGE_PROMPT": "Select your preferred",
+    "LANGUAGE_PROMPT_2": "language here"
+  },
+  "LOGOUT_BUTTON": {
+    "TEXT": "Logout"
+  },
+  "LANGUAGE_SELECTOR": {
+    "CURRENT_LANGUAGE": "Language",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English"
+  },
+  "LOGIN": {
+    "LOGO_ALT": "Logo",
+    "TITLE": "Login",
+    "EMAIL_PLACEHOLDER": "Email",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "SUBMIT_BUTTON": "Log In",
+    "CONTINUE_AS_CLIENT": "Continue as client",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "ERROR_EMPTY_FIELDS": "Please fill in all fields",
+    "ERROR_INVALID_CREDENTIALS": "Invalid credentials",
+    "ERROR_LOGIN": "Login error"
   }
+
 
 }

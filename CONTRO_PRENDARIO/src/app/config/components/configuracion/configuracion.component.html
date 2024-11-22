@@ -1,17 +1,15 @@
-<!-- home.component.html -->
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
     <div class="flex-grow-1 cuerpo text-success">
-        
-        <h2 class=" font-bold">Configuracion</h2>
+        <h2 class="font-bold">{{ 'CONFIGURATION.TITLE' | translate }}</h2>
         <div class="configuration-cuerpo d-flex justify-content-between">
-
             <a *ngIf="authService.isAdmin()" [routerLink]="['/usuarios']" class="btn btn-success">
-                Administrar Usuarios
+                {{ 'CONFIGURATION.MANAGE_USERS' | translate }}
             </a>
-            <div class="d-flex justify-content-between border border-success p-1 " >
-                <p class="pe-3">Selecciona aqui el lenguaje<br/> de tu preferencia <i class="bi bi-arrow-right"></i></p>
+            <div class="d-flex justify-content-between border border-success p-1">
+                <p class="pe-3">{{ 'CONFIGURATION.LANGUAGE_PROMPT' | translate }}<br/>
+                    {{ 'CONFIGURATION.LANGUAGE_PROMPT_2' | translate }} <i class="bi bi-arrow-right"></i></p>
                 <app-lenguage-selector></app-lenguage-selector>
             </div>
             <app-logout-button></app-logout-button>

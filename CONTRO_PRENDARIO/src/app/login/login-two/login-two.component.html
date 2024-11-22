@@ -1,11 +1,8 @@
-<!-- src/app/pages/login-two/login-two.component.html -->
 <div class="login">
-    <img src="assets/Img/LOGO-PISTON.png" alt="Logo">
-    <h2 class="pt-sans-bold">Login</h2>
+    <img src="assets/Img/LOGO-PISTON.png" alt="{{ 'LOGIN.LOGO_ALT' | translate }}">
+    <h2 class="pt-sans-bold">{{ 'LOGIN.TITLE' | translate }}</h2>
     
-    @if (error) {
-    <span class="error">{{error}}</span>
-    }
+   
     
     <label for="user" style="margin-top: 200px;">
         <div class="input">
@@ -15,7 +12,7 @@
             <input type="email"
                    name="username"
                    id="user"
-                   placeholder="Email"
+                   placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}"
                    [(ngModel)]="credentials.username"
                    required>
         </div>
@@ -29,21 +26,21 @@
             <input type="password"
                    name="password"
                    id="password"
-                   placeholder="Contraseña"
+                   placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
                    [(ngModel)]="credentials.password"
                    required>
         </div>
     </label>
 
     <button type="button" class="btn" (click)="onLogin()">
-        Iniciar Sesión
+        {{ 'LOGIN.SUBMIT_BUTTON' | translate }}
     </button>
 
     <div class="center">
-        <a href="#" (click)="onClienteClick($event)">Continuar como cliente</a>
+        <a  (click)="onClienteClick($event)">{{ 'LOGIN.CONTINUE_AS_CLIENT' | translate }}</a>
     </div>
 
     <div class="center-two">
-        <a href="#" (click)="onOlvidePasswordClick($event)">¿Olvidaste tu contraseña?</a>
+        <a [routerLink]="['/login']" (click)="onOlvidePasswordClick($event)">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
     </div>
 </div>

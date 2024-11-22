@@ -1,9 +1,9 @@
 <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-      {{ 'LANGUAGE' | translate }}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-      <li><a class="dropdown-item"  (click)="switchLang('es')">Español</a></li>
-      <li><a class="dropdown-item"  (click)="switchLang('en')">English</a></li>
-    </ul>
-  </div>
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="lenguageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    {{ 'LANGUAGE_SELECTOR.CURRENT_LANGUAGE' | translate }}
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+    <li><a class="dropdown-item" (click)="switchLang('es')">{{ 'LANGUAGE_SELECTOR.SPANISH' | translate }}</a></li>
+    <li><a class="dropdown-item" (click)="switchLang('en')">{{ 'LANGUAGE_SELECTOR.ENGLISH' | translate }}</a></li>
+  </ul>
+</div>

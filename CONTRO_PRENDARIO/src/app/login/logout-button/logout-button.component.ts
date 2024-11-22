@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-logout-button',
   standalone: true,
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './logout-button.component.html',
   styleUrl: './logout-button.component.css'
 })

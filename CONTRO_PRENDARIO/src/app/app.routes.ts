@@ -1,7 +1,6 @@
 import { Routes  } from '@angular/router';
-import { LoginOneComponent } from './pages/components/login-one/login-one.component';
-import { LoginTwoComponent } from './pages/components/login-two/login-two.component';
-import { VistaClienteOneComponent } from './pages/components/vista-cliente-one/vista-cliente-one.component';
+
+import { VistaClienteOneComponent } from './vista-cliente/components/vista-cliente-one/vista-cliente-one.component';
 import { ClienteFormComponent } from './clientes/components/cliente-form/cliente-form.component';
 import { ClienteListaComponent } from './clientes/components/cliente-lista/cliente-lista.component';
 import { ClienteEditarComponent } from './clientes/components/cliente-editar/cliente-editar.component';
@@ -22,9 +21,11 @@ import { homeGuard } from './core/guards/home.guard';
 import { UsuariosCrearComponent } from './admin/components/usuarios-crear/usuarios-crear.component';
 import { ConfiguracionComponent } from './config/components/configuracion/configuracion.component';
 import { UsuariosListaComponent } from './admin/components/usuarios-lista/usuarios-lista.component';
+import { PublicPrestamoViewComponent } from './vista-cliente/components/cliente-prestamo-view/cliente-prestamo-view.component';
+import { LoginTwoComponent } from './login/login-two/login-two.component';
 
 export const routes: Routes = [
-    {path: "Cliente", component: VistaClienteOneComponent},
+    
     {path: "configuracion", component: ConfiguracionComponent},
 
 
@@ -113,6 +114,15 @@ export const routes: Routes = [
         component: AdminComponent,
         canActivate: [authGuard],
         data: { role: 'ADMIN' }
+    },
+
+    {
+      path: 'consulta-prestamos',
+      component: VistaClienteOneComponent
+    },
+    {
+      path: 'consulta-prestamos/:id',
+      component: PublicPrestamoViewComponent
     },
 
 

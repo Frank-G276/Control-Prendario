@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { PrestamoService } from '../../../prestamos/services/prestamo.service';
 import { MovimientoService } from '../../../movimientos/services/movimiento.service';
 import { PagoService } from '../../../pagos/services/pago.service';
-import { LogoutButtonComponent } from "../../../pages/components/logout-button/logout-button.component";
+import { LogoutButtonComponent } from "../../../login/logout-button/logout-button.component";
 import { UsuariosCrearComponent } from "../../../admin/components/usuarios-crear/usuarios-crear.component";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
