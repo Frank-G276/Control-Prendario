@@ -15,12 +15,7 @@
     }
 }
 
-.cuerpo{
-    margin-top: 58px !important;
-    width: auto;
-    margin-left: 5%;
-    margin-right: 5%;
-}
+
 .titulo{
     height: 118px;
 }
@@ -30,31 +25,8 @@ h2{
     text-align: start;
     margin-bottom: 45px;
 }
-.tabla{
-    background-color: white;
-    width: 100%;
-    border-bottom: 1px solid #f6f6f6;
-   
-}
 
-.cabeza-tabla tr th{
-    background-color: #eeeff3;
-    height: 80px;  
-    padding: 0 25px; 
-    font-size: 14px;
-}
-.buscador_tabla {
-    height: 70px;
-    width: 100%;
-    background-color: #eeeff3;
-    border-radius:10px 10px 0px 0 ;
-    border-bottom: 1px solid #d0d0d0;
-}
-.buscador_tabla input{
-    width: 120px;
-    height: 40px;
-    font-size: 14px;
-}
+
 .btn{
     font-size: 14px;
 }
@@ -66,7 +38,7 @@ h2{
 }
 
 .prestamo-crear{
-    margin-top: 58px;
+    margin-top: 17px;
     width: 75%;
 }
 

@@ -17,25 +17,25 @@
                                 <div class="card-body">
                                     <h5 class="card-title text-success">{{ 'MOVEMENTS.GENERAL_BALANCE' | translate }}</h5>
                                     <div class=" g-3">
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 w-100">
                                             <div class="d-flex justify-content-between">
                                                 <span>{{ 'MOVEMENTS.MOVEMENTS' | translate }}:</span>
                                                 <strong>{{ formatMoney(balance.movimientos) }}</strong>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 w-100">
                                             <div class="d-flex justify-content-between">
                                                 <span>{{ 'MOVEMENTS.PAYMENTS_RECEIVED' | translate }}:</span>
                                                 <strong class="text-success">{{ formatMoney(balance.pagos) }}</strong>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 w-100">
                                             <div class="d-flex justify-content-between">
                                                 <span>{{ 'MOVEMENTS.ACTIVE_LOANS' | translate }}:</span>
                                                 <strong class="text-danger">{{ formatMoney(balance.prestamos) }}</strong>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 w-100">
                                             <div class="d-flex justify-content-between">
                                                 <span>{{ 'MOVEMENTS.TOTAL_BALANCE' | translate }}:</span>
                                                 <strong [class.text-success]="balance.total >= 0" 

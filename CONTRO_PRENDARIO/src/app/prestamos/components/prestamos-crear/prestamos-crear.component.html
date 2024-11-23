@@ -1,9 +1,10 @@
 <app-header></app-header>
 <div class="pagina d-flex" >
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
-   
+    
     <div class="prestamo-crear  mx-auto text-success">
         <app-cliente-form (clienteCreado)="onClienteCreado($event)"></app-cliente-form>  
+        
         <h2 class="text-success font-bold">{{ 'LOAN_CREATE.TITLE' | translate }}</h2>
        
         <div class="crear-cuerpo bg-white  rounded p-6">
@@ -314,5 +315,6 @@
                     </span>
                 </button>
             </div>
+
         </div>
     </div>
