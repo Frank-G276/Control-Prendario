@@ -397,6 +397,10 @@
     "ERROR_EMPTY_FIELDS": "Please fill in all fields",
     "ERROR_INVALID_CREDENTIALS": "Invalid credentials",
     "ERROR_LOGIN": "Login error"
+  },
+
+  "REPORT": {   
+    "GENERATE": "Document Generate"
   }
 
 

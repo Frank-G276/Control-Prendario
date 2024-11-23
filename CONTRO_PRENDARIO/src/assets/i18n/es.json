@@ -398,7 +398,12 @@
     "ERROR_EMPTY_FIELDS": "Por favor, complete todos los campos",
     "ERROR_INVALID_CREDENTIALS": "Credenciales inválidas",
     "ERROR_LOGIN": "Error en el inicio de sesión"
+  },
+
+  "REPORT": {
+    "GENERATE": "Generar Documento"
   }
+  
   
   
 

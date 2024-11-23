@@ -1,4 +1,4 @@
-<!-- prestamo-view.component.html -->
+
 <app-header></app-header>
 <div class="pagina d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
@@ -22,6 +22,10 @@
                     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">{{ 'LOAN_VIEW.LOAN_NUMBER' | translate }} #{{ prestamo.idPrestamo }}</h3>
                         <div>
+                            <app-report-button
+                            [prestamoId]="prestamo.idPrestamo" 
+                            class="me-2">
+                            </app-report-button>
                             <button class="btn btn-outline-light me-2" (click)="navigateToEdit()">
                                 <i class="bi bi-pencil"></i> {{ 'LOAN_VIEW.EDIT' | translate }}
                             </button>

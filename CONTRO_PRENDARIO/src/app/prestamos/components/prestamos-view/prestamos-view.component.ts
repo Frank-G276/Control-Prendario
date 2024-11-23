@@ -6,11 +6,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PrestamoService } from '../../services/prestamo.service';
 import { Prestamo } from '../../models/prestamo.interface';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ReportButtonComponent } from '../../../reports/components/report-button.component/report-button.component.component';
 
 @Component({
   selector: 'app-prestamos-view',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, SidebarComponent, TranslateModule],
+  imports: [
+    CommonModule, 
+    HeaderComponent, 
+    SidebarComponent, 
+    TranslateModule,
+    ReportButtonComponent 
+  ],
   templateUrl: './prestamos-view.component.html',
   styleUrl: './prestamos-view.component.css'
 })
