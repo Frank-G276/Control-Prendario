@@ -8,6 +8,14 @@ import control.prendario.model.Rol;
 import control.prendario.model.Usuario;
 import control.prendario.service.UserService;
 import control.prendario.service.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -25,6 +33,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
+@Tag(name = "Usuarios", description = "Gestión de usuarios del sistema")
+@SecurityRequirement(name = "JWT")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -33,9 +43,34 @@ public class UserController {
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
-    @PostMapping
+
+    @Operation(summary = "Crear nuevo usuario",
+            description = "Crea un nuevo usuario en el sistema. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario creado exitosamente",
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos",
+                    content = @Content(schema = @Schema(
+                            type = "object",
+                            example = "{\"email\": \"Email inválido\", \"password\": \"La contraseña es requerida\"}"
+                    ))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationDTO userDTO, BindingResult result) {
+    @PostMapping
+    public ResponseEntity<?> createUser(
+            @Parameter(description = "Datos del nuevo usuario", required = true)
+            @Valid @RequestBody UserCreationDTO userDTO,
+            BindingResult result) {
         logger.debug("Recibiendo solicitud para crear usuario: {}", userDTO.getEmail());
 
         // Validar errores de campo
@@ -72,6 +107,23 @@ public class UserController {
         }
     }
 
+
+    @Operation(summary = "Obtener todos los usuarios",
+            description = "Lista todos los usuarios del sistema. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de usuarios obtenida exitosamente",
+                    content = @Content(schema = @Schema(
+                            type = "array",
+                            implementation = UserResponseDTO.class
+                    ))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -81,9 +133,28 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @Operation(summary = "Obtener usuario por ID",
+            description = "Obtiene los detalles de un usuario específico. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario encontrado",
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(
+            @Parameter(description = "ID del usuario", required = true, example = "1")
+            @PathVariable Long id) {
         try {
             Usuario user = userService.buscarPorId(id);
             return ResponseEntity.ok(new UserResponseDTO(user));
@@ -92,10 +163,33 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Actualizar usuario",
+            description = "Actualiza la información de un usuario existente. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario actualizado exitosamente",
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUser(
+            @Parameter(description = "ID del usuario", required = true, example = "1")
             @PathVariable Long id,
+            @Parameter(description = "Datos actualizados del usuario", required = true)
             @Valid @RequestBody UserUpdateDTO updateDTO) {
         try {
             Usuario updatedUser = userService.actualizarUsuario(
@@ -113,9 +207,27 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Desactivar usuario",
+            description = "Desactiva un usuario del sistema. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario desactivado exitosamente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
+    public ResponseEntity<?> deactivateUser(
+            @Parameter(description = "ID del usuario a desactivar", required = true, example = "1")
+            @PathVariable Long id) {
         try {
             userService.desactivarUsuario(id);
             return ResponseEntity.ok().build();
@@ -123,9 +235,28 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Operation(summary = "Activar usuario",
+            description = "Activa un usuario previamente desactivado. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario activado exitosamente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @PostMapping("/{id}/activate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> activateUser(@PathVariable Long id) {
+    public ResponseEntity<?> activateUser(
+            @Parameter(description = "ID del usuario a activar", required = true, example = "1")
+            @PathVariable Long id) {
         try {
             userService.activarUsuario(id);
             return ResponseEntity.ok().build();
@@ -134,10 +265,32 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Cambiar contraseña",
+            description = "Cambia la contraseña de un usuario. Requiere rol de administrador.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Contraseña cambiada exitosamente"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Contraseña inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos de administrador"
+            )
+    })
     @PostMapping("/{id}/change-password")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> changePassword(
+            @Parameter(description = "ID del usuario", required = true, example = "1")
             @PathVariable Long id,
+            @Parameter(description = "Nueva contraseña", required = true)
             @Valid @RequestBody PasswordChangeDTO passwordDTO) {
         try {
             userService.cambiarPassword(id, passwordDTO.getNewPassword());

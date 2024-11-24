@@ -385,7 +385,8 @@
   "LANGUAGE_SELECTOR": {
     "CURRENT_LANGUAGE": "Idioma",
     "SPANISH": "Español",
-    "ENGLISH": "Inglés"
+    "ENGLISH": "Inglés",
+    "PORTUGUESE": "Portugués"
   },
   "LOGIN": {
     "LOGO_ALT": "Logo",

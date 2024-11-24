@@ -1,0 +1,436 @@
+{
+    "LANGUAGE_SELECTOR": {
+      "CURRENT_LANGUAGE": "Idioma",
+      "SPANISH": "Espanhol",
+      "ENGLISH": "Inglês",
+      "PORTUGUESE": "Português"
+    },
+
+    "HEADER": {
+        "SEARCH_PLACEHOLDER": "Pesquisar empréstimos...",
+        "LOGOUT": "Sair"
+    },
+
+    "ROLES": {
+        "ADMIN": "Administrador",
+        "GERENTE": "Gerente"
+    },
+
+    "SIDEBAR": {
+        "MAIN": "Principal",
+        "HOME": "Início",
+        "LOANS": "Empréstimos",
+        "PAYMENTS": "Pagamentos",
+        "CLIENTS": "Clientes",
+        "MOVEMENTS": "Movimentações",
+        "SETTINGS": "Configurações",
+        "CONFIGURATION": "Configuração",
+        "SEND_EMAIL": "Enviar-nos um email",
+        "NAME": "Nome",
+        "QUERY_DETAILS": "Detalhes da sua consulta",
+        "CLOSE": "Fechar",
+        "SEND": "Enviar email"
+    },
+
+    "LOANS": {
+        "TITLE": "Empréstimos",
+        "NEW_LOAN": "+ Novo Empréstimo",
+        "NUMBER": "Número",
+        "CLIENT": "Cliente",
+        "CREATION_DATE": "Data de Criação",
+        "DUE_DATE": "Data de Vencimento",
+        "TOTAL": "Total",
+        "PAID": "Pago",
+        "BALANCE": "Saldo",
+        "STATUS": "Status",
+        "ACTIONS": "Ações",
+        "CLEAR": "Limpar",
+        "NO_LOANS_FOUND": "Nenhum empréstimo encontrado com os filtros aplicados",
+        "CONFIRM_DELETE": "Tem certeza que deseja excluir este empréstimo?",
+        "ERROR_DELETE": "Erro ao excluir o empréstimo",
+        "STATUS_ACTIVO": "Ativo",
+        "STATUS_PENDIENTE": "Pendente",
+        "STATUS_VENCIDO": "Vencido",
+        "STATUS_PAGADO": "Pago"
+    },
+
+    "LOAN_CREATE": {
+        "TITLE": "Novo Empréstimo",
+        "GENERAL_INFO": "Informação geral",
+        "VEHICLE_TYPE": "Tipo de Veículo",
+        "SELECT_TYPE": "Selecione um tipo",
+        "BRAND": "Marca",
+        "LINE": "Linha",
+        "MODEL": "Modelo (Ano)",
+        "SELECT_YEAR": "Selecione o ano",
+        "PLATE": "Placa",
+        "CYLINDER_CAPACITY": "Cilindrada",
+        "COLOR": "Cor",
+        "ENGINE_NUMBER": "Número do Motor",
+        "CHASSIS_NUMBER": "Número do Chassi",
+        "REGISTRATION_PLACE": "Local do Registro",
+        "REGISTRATION_DATE": "Data do Registro",
+        "OWNER": "Proprietário",
+        "OWNER_DOCUMENT": "Número do Documento do Proprietário",
+        "REQUIRED_FIELD": "Campo obrigatório",
+        "SEARCH_CLIENT": "Buscar Cliente",
+        "SEARCH_CLIENT_PLACEHOLDER": "Buscar por nome ou documento...",
+        "NO_CLIENTS_FOUND": "Nenhum cliente encontrado",
+        "NEW_CLIENT": "+ Novo Cliente",
+        "CLIENT_REQUIRED": "Deve selecionar um cliente",
+        "LOAN_AMOUNT": "Valor do Empréstimo",
+        "INTEREST_RATE": "Taxa de Juros (%)",
+        "OBSERVATIONS": "Observações",
+        "OBSERVATIONS_PLACEHOLDER": "Digite qualquer observação relevante sobre o empréstimo...",
+        "CANCEL": "Cancelar",
+        "PROCESSING": "Processando...",
+        "REGISTER_LOAN": "Registrar Empréstimo",
+        "SUCCESS_MESSAGE": "Empréstimo criado com sucesso",
+        "ERROR_MESSAGE": "Erro ao criar o empréstimo",
+        "CLIENT_SEARCH_ERROR": "Erro ao buscar clientes",
+        "AMOUNT_REQUIRED": "O valor é obrigatório",
+        "AMOUNT_MIN": "O valor deve ser maior que 0",
+        "RATE_REQUIRED": "A taxa de juros é obrigatória",
+        "RATE_RANGE": "A taxa deve estar entre 0 e 100"
+    },
+
+    "VEHICLE_TYPES": {
+        "AUTOMOVIL": "Automóvel",
+        "MOTOCICLETA": "Motocicleta",
+        "CAMIONETA": "Caminhonete",
+        "CAMION": "Caminhão"
+    },
+
+    "LOAN_EDIT": {
+        "TITLE": "Editar Empréstimo",
+        "EDIT_MODE": "Modo Edição",
+        "GENERAL_INFO": "Informação geral",
+        "VEHICLE_TYPE": "Tipo de Veículo",
+        "SELECT_TYPE": "Selecione um tipo",
+        "REQUIRED_FIELD": "Campo obrigatório",
+        "SEARCH_CLIENT": "Buscar Cliente",
+        "SEARCH_CLIENT_PLACEHOLDER": "Buscar por nome ou documento...",
+        "NO_CLIENTS_FOUND": "Nenhum cliente encontrado",
+        "CLIENT_REQUIRED": "Deve selecionar um cliente",
+        "CANCEL": "Cancelar",
+        "PROCESSING": "Processando...",
+        "UPDATE_LOAN": "Atualizar Empréstimo",
+        "SUCCESS_MESSAGE": "Empréstimo atualizado com sucesso",
+        "ERROR_MESSAGE": "Erro ao atualizar o empréstimo"
+    },
+
+    "LOAN_VIEW": {
+        "LOADING": "Carregando...",
+        "LOAN_NUMBER": "Empréstimo",
+        "EDIT": "Editar",
+        "BACK": "Voltar",
+        "LOAN_INFO": "Informação do Empréstimo",
+        "STATUS": "Status",
+        "LOAN_DATE": "Data do Empréstimo",
+        "DUE_DATE": "Data de Vencimento",
+        "AMOUNT": "Valor",
+        "INTEREST_RATE": "Taxa de Juros",
+        "TOTAL_TO_PAY": "Total a Pagar",
+        "CLIENT_INFO": "Informação do Cliente",
+        "NAME": "Nome",
+        "DOCUMENT": "Documento",
+        "PHONE": "Telefone",
+        "EMAIL": "Email",
+        "ADDRESS": "Endereço",
+        "CITY": "Cidade",
+        "VEHICLE_INFO": "Informação do Veículo",
+        "TYPE": "Tipo",
+        "BRAND": "Marca",
+        "LINE": "Linha",
+        "MODEL": "Modelo",
+        "PLATE": "Placa",
+        "COLOR": "Cor",
+        "ENGINE_NUMBER": "Número do Motor",
+        "CHASSIS_NUMBER": "Número do Chassi",
+        "CYLINDER_CAPACITY": "Cilindrada",
+        "REGISTRATION_PLACE": "Local do Registro",
+        "REGISTRATION_DATE": "Data do Registro",
+        "OBSERVATIONS": "Observações",
+        "ERROR_LOADING": "Erro ao carregar empréstimo"
+    },
+
+    "LOAN_STATUS": {
+        "ACTIVO": "Ativo",
+        "PENDIENTE": "Pendente",
+        "VENCIDO": "Vencido",
+        "PAGADO": "Pago"
+    },
+
+    "PAYMENTS": {
+        "TITLE": "Pagamentos",
+        "NEW_PAYMENT": "+ Novo Pagamento",
+        "LOADING": "Carregando...",
+        "SEARCH_BY_CLIENT": "Buscar por cliente",
+        "PAYMENT_DATE": "Data do pagamento",
+        "PAYMENT_TYPE": "Tipo de Pagamento",
+        "PAYMENT_METHOD": "Método de Pagamento",
+        "CLEAR": "Limpar",
+        "LOAN": "Empréstimo",
+        "CLIENT": "Cliente",
+        "AMOUNT": "Valor",
+        "TYPE": "Tipo",
+        "METHOD": "Método",
+        "ACTIONS": "Ações",
+        "NO_PAYMENTS_FOUND": "Nenhum pagamento encontrado com os filtros aplicados",
+        "ERROR_LOADING": "Erro ao carregar os pagamentos"
+    },
+
+    "PAYMENT_TYPES": {
+        "CAPITAL": "Capital",
+        "INTERES": "Juros",
+        "MORA": "Mora"
+    },
+
+    "PAYMENT_METHODS": {
+        "EFECTIVO": "Dinheiro",
+        "TRANSFERENCIA": "Transferência",
+        "TARJETA": "Cartão"
+    },
+
+    "PAYMENT_CREATE": {
+        "TITLE": "Registrar Novo Pagamento",
+        "SEARCH_LOAN": "Buscar Empréstimo",
+        "SEARCH_PLACEHOLDER": "Buscar por nome do cliente ou documento",
+        "LOAN_NUMBER": "Empréstimo",
+        "LOAN_INFO": "Informação do Empréstimo",
+        "CLIENT": "Cliente",
+        "DOCUMENT": "Documento",
+        "LOAN_AMOUNT": "Valor do Empréstimo",
+        "INTEREST_RATE": "Taxa de Juros",
+        "CAPITAL_PAID": "Capital Pago",
+        "INTEREST_PAID": "Juros Pagos",
+        "CAPITAL_PENDING": "Capital Pendente",
+        "INTEREST_PENDING": "Juros Pendentes",
+        "TOTAL_PAID": "Total Pago",
+        "TOTAL_PENDING": "Total Pendente",
+        "AMOUNT_TO_PAY": "Valor a Pagar",
+        "AMOUNT_REQUIRED": "O valor é obrigatório",
+        "AMOUNT_MIN": "O valor deve ser maior que 0",
+        "PAYMENT_TYPE": "Tipo de Pagamento",
+        "SELECT_PAYMENT_TYPE": "Selecione tipo de pagamento",
+        "SELECT_PAYMENT_TYPE_REQUIRED": "Selecione um tipo de pagamento",
+        "PAYMENT_METHOD": "Método de Pagamento",
+        "SELECT_PAYMENT_METHOD": "Selecione método de pagamento",
+        "SELECT_PAYMENT_METHOD_REQUIRED": "Selecione um método de pagamento",
+        "OBSERVATIONS": "Observações",
+        "CANCEL": "Cancelar",
+        "CLEAR": "Limpar",
+        "REGISTER_PAYMENT": "Registrar Pagamento",
+        "ERROR_SEARCHING_LOANS": "Erro ao buscar empréstimos",
+        "ERROR_LOADING_SUMMARY": "Erro ao carregar o resumo de pagamentos",
+        "AMOUNT_EXCEEDS_PENDING": "O valor inserido ({{amount}}) excede o valor pendente ({{pending}})",
+        "SUCCESS_MESSAGE": "Pagamento registrado com sucesso",
+        "ERROR_REGISTERING": "Erro ao registrar o pagamento",
+        "FILL_ALL_FIELDS": "Por favor, preencha todos os campos obrigatórios corretamente."
+    },
+
+    "HOME": {
+        "MOVEMENTS": "Movimentações",
+        "LOADING": "Carregando...",
+        "BUSINESS_SUMMARY": "Resumo do negócio",
+        "FLOWING_MONEY": "Dinheiro em Circulação",
+        "AVAILABLE_MONEY": "Dinheiro Disponível",
+        "OVERDUE_LOANS": "Empréstimos Vencidos",
+        "DAYS_OVERDUE": "{{days}} dias vencido",
+        "NO_OVERDUE_LOANS": "Não há empréstimos vencidos",
+        "VIEW_ALL_OVERDUE_LOANS": "Ver todos os empréstimos vencidos",
+        "ERROR_LOADING_LOANS": "Erro ao carregar os empréstimos"
+    },
+
+    "CLIENTS": {
+        "TITLE": "Clientes",
+        "SEARCH_BY_NAME": "Buscar por nome",
+        "SEARCH_BY_ID": "Buscar por identificação",
+        "SEARCH": "Buscar",
+        "CLEAR": "Limpar",
+        "DOCUMENT": "Documento",
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Sobrenome",
+        "PHONE": "Telefone",
+        "ACTIONS": "Ações",
+        "NO_CLIENTS": "Não há clientes registrados",
+        "CONFIRM_DELETE": "Tem certeza que deseja excluir este cliente?"
+    },
+
+    "CLIENT_FORM": {
+        "NEW_CLIENT": "Novo Cliente",
+        "CLIENT_REGISTRATION": "Registro de Cliente",
+        "DOCUMENT_TYPE": "Tipo de Documento",
+        "SELECT_TYPE": "Selecione um tipo",
+        "PASSPORT": "Passaporte",
+        "ID_CARD": "Carteira de Identidade",
+        "DOCUMENT_NUMBER": "Número do Documento",
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Sobrenome",
+        "BIRTH_DATE": "Data de Nascimento",
+        "ADDRESS": "Endereço",
+        "CITY": "Cidade",
+        "PHONE": "Telefone",
+        "EMAIL": "Email",
+        "FIELD_REQUIRED": "Este campo é obrigatório",
+        "INVALID_EMAIL": "Email inválido",
+        "SAVE": "Salvar",
+        "SUCCESS_MESSAGE": "Cliente salvo com sucesso",
+        "ERROR_MESSAGE": "Erro ao salvar o cliente"
+    },
+
+    "CLIENT_EDIT": {
+        "EDIT_CLIENT": "Editar Cliente",
+        "DOCUMENT_TYPE": "Tipo de Documento",
+        "PASSPORT": "Passaporte",
+        "ID_CARD": "Carteira de Identidade",
+        "DOCUMENT_NUMBER": "Número do Documento",
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Sobrenome",
+        "BIRTH_DATE": "Data de nascimento",
+        "ADDRESS": "Endereço",
+        "CITY": "Cidade",
+        "PHONE": "Telefone",
+        "EMAIL": "Email",
+        "CANCEL": "Cancelar",
+        "SAVE_CHANGES": "Salvar Alterações",
+        "ERROR_LOADING": "Erro ao carregar o cliente",
+        "SUCCESS_UPDATE": "Cliente atualizado com sucesso",
+        "ERROR_UPDATE": "Erro ao atualizar o cliente"
+    },
+
+    "CLIENT_VIEW": {
+        "CLIENT_DETAILS": "Detalhes do Cliente",
+        "BACK": "Voltar",
+        "PERSONAL_INFO": "Informação Pessoal",
+        "DOCUMENT": "Documento",
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Sobrenome",
+        "BIRTH_DATE": "Data de Nascimento",
+        "CONTACT_INFO": "Informação de Contato",
+        "ADDRESS": "Endereço",
+        "CITY": "Cidade",
+        "PHONE": "Telefone",
+        "EMAIL": "Email",
+        "ADDITIONAL_INFO": "Informação Adicional",
+        "REGISTRATION_DATE": "Data de Registro",
+        "LOADING": "Carregando informação do cliente...",
+        "ERROR_LOADING": "Erro ao carregar a informação do cliente"
+    },
+
+    "USERS": {
+        "SYSTEM_USERS": "Usuários do Sistema",
+        "CREATE_USER": "Criar Usuário",
+        "EMAIL": "Email",
+        "NAME": "Nome",
+        "ROLES": "Funções",
+        "STATUS": "Status",
+        "ACTIONS": "Ações",
+        "ACTIVE": "Ativo",
+        "INACTIVE": "Inativo",
+        "NO_USERS": "Não há usuários registrados",
+        "ERROR_LOADING": "Erro ao carregar usuários",
+        "CONFIRM_DEACTIVATE": "Tem certeza que deseja desativar este usuário?",
+        "ERROR_DEACTIVATE": "Erro ao desativar usuário",
+        "CONFIRM_ACTIVATE": "Tem certeza que deseja reativar este usuário?",
+        "ERROR_ACTIVATE": "Erro ao ativar usuário"
+    },
+
+    "USER_ROLES": {
+        "ADMIN": "Administrador",
+        "GERENTE": "Gerente",
+        "USUARIO": "Usuário"
+    },
+
+    "USER_CREATE": {
+        "TITLE": "Criar Novo Usuário",
+        "EMAIL": "Email",
+        "NAME": "Nome",
+        "PASSWORD": "Senha",
+        "CONFIRM_PASSWORD": "Confirmar Senha",
+        "ROLES": "Funções",
+        "SELECT_ROLE": "Deve selecionar pelo menos uma função",
+        "CANCEL": "Cancelar",
+        "CREATING": "Criando...",
+        "CREATE_USER": "Criar Usuário",
+        "SELECT_ROLE_ERROR": "Deve selecionar pelo menos uma função",
+        "SUCCESS_MESSAGE": "Usuário criado com sucesso",
+        "ERROR_MESSAGE": "Erro ao criar o usuário",
+        "FIELD_REQUIRED": "Este campo é obrigatório",
+        "INVALID_EMAIL": "Email inválido",
+        "PASSWORD_LENGTH": "A senha deve ter pelo menos 6 caracteres",
+        "PASSWORD_MISMATCH": "As senhas não coincidem"
+    },
+
+    "MOVEMENTS": {
+        "TITLE": "Movimentações",
+        "NEW_MOVEMENT": "+ Nova Movimentação",
+        "GENERAL_BALANCE": "Balanço Geral",
+        "MOVEMENTS": "Movimentações",
+        "PAYMENTS_RECEIVED": "Pagamentos Recebidos",
+        "ACTIVE_LOANS": "Empréstimos Ativos",
+        "TOTAL_BALANCE": "Balanço Total",
+        "LOADING": "Carregando...",
+        "ID": "ID",
+        "DATE": "Data",
+        "TYPE": "Tipo",
+        "AMOUNT": "Valor",
+        "NO_MOVEMENTS": "Não há movimentações registradas",
+        "ERROR_LOADING": "Erro ao carregar as movimentações"
+    },
+
+    "MOVEMENT_TYPES": {
+        "ENTRADA": "Entrada",
+        "SALIDA": "Saída"
+    },
+
+    "MOVEMENT_CREATE": {
+        "TITLE": "Registrar Nova Movimentação",
+        "MOVEMENT_TYPE": "Tipo de Movimentação",
+        "SELECT_TYPE": "Selecione tipo",
+        "AMOUNT": "Valor",
+        "SELECT_TYPE_ERROR": "Selecione um tipo de movimentação",
+        "AMOUNT_ERROR": "Digite um valor válido",
+        "CANCEL": "Cancelar",
+        "REGISTER_MOVEMENT": "Registrar Movimentação",
+        "SUCCESS_MESSAGE": "Movimentação registrada com sucesso",
+        "ERROR_MESSAGE": "Erro ao registrar a movimentação"
+    },
+
+    "CONFIGURATION": {
+        "TITLE": "Configuração",
+        "MANAGE_USERS": "Gerenciar Usuários",
+        "LANGUAGE_PROMPT": "Selecione aqui o idioma",
+        "LANGUAGE_PROMPT_2": "de sua preferência"
+    },
+
+    "LOGOUT_BUTTON": {
+        "TEXT": "Sair"
+    },
+
+    "LANGUAGE_SELECTOR": {
+        "CURRENT_LANGUAGE": "Idioma",
+        "SPANISH": "Espanhol",
+        "ENGLISH": "Inglês",
+        "PORTUGUESE": "Português"
+    },
+
+    "LOGIN": {
+        "LOGO_ALT": "Logo",
+        "TITLE": "Login",
+        "EMAIL_PLACEHOLDER": "Email",
+        "PASSWORD_PLACEHOLDER": "Senha",
+        "SUBMIT_BUTTON": "Entrar",
+        "CONTINUE_AS_CLIENT": "Continuar como cliente",
+        "FORGOT_PASSWORD": "Esqueceu sua senha?",
+        "ERROR_EMPTY_FIELDS": "Por favor, preencha todos os campos",
+        "ERROR_INVALID_CREDENTIALS": "Credenciais inválidas",
+        "ERROR_LOGIN": "Erro no login"
+    },
+
+    "REPORT": {
+        "GENERATE": "Gerar Documento"
+    }
+
+
+  }

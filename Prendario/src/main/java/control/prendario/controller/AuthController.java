@@ -5,6 +5,12 @@ import control.prendario.model.AuthResponse;
 import control.prendario.model.LoginRequest;
 import control.prendario.model.Usuario;
 import control.prendario.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticación", description = "API para autenticación y gestión de tokens JWT")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
@@ -30,6 +37,13 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Iniciar sesión",
+            description = "Autenticar usuario y obtener token JWT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autenticación exitosa",
+                    content = @Content(schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Credenciales inválidas")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
