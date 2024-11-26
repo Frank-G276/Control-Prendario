@@ -32,11 +32,4 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Set<Rol> roles = new HashSet<>();
 
-    public void addRol(Rol rol) {
-        this.roles.add(rol);
-    }
-
-    public void removeRol(Rol rol) {
-        this.roles.remove(rol);
-    }
 }

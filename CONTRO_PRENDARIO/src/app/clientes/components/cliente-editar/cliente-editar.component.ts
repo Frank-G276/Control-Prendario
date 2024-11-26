@@ -14,7 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './cliente-editar.component.css'
 })
 export class ClienteEditarComponent implements OnInit {
-  @Input() clienteId?: number;  // Agregar input para recibir el ID
+  @Input() clienteId?: number;  
   @Input() modalId : string = '';
 
   private fb = inject(FormBuilder);
@@ -34,7 +34,7 @@ export class ClienteEditarComponent implements OnInit {
   });
 
   ngOnInit() {
-    // Si tenemos un ID, cargamos los datos del cliente
+    // Segun el ID, cargamos los datos del cliente
     if (this.clienteId) {
       this.cargarCliente(this.clienteId);
     }
@@ -58,7 +58,6 @@ export class ClienteEditarComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar cliente', error);
         this.translateService.get('CLIENT_EDIT.ERROR_LOADING').subscribe((res: string) => {
-          // Aquí puedes mostrar un mensaje de error
           console.error(res);
         });
       }
@@ -71,7 +70,6 @@ export class ClienteEditarComponent implements OnInit {
         next: (response) => {
           console.log('Cliente actualizado', response);
           this.translateService.get('CLIENT_EDIT.SUCCESS_UPDATE').subscribe((res: string) => {
-            // Aquí puedes mostrar un mensaje de éxito
             console.log(res);
           });
           window.location.reload();
@@ -79,7 +77,6 @@ export class ClienteEditarComponent implements OnInit {
         error: (error) => {
           console.error('Error al actualizar', error);
           this.translateService.get('CLIENT_EDIT.ERROR_UPDATE').subscribe((res: string) => {
-            // Aquí puedes mostrar un mensaje de error
             console.error(res);
           });
         }

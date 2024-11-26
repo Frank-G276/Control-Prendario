@@ -31,7 +31,7 @@ export class LoginTwoComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.redirectBasedOnRole();
     }
-  }
+  }  
 
   onLogin(): void {
     if (!this.credentials.username || !this.credentials.password) {
@@ -70,7 +70,7 @@ export class LoginTwoComponent implements OnInit {
 
   private redirectBasedOnRole(): void {
     if (this.authService.isAdmin()) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/usuarios']);
     } else {
       this.router.navigate(['/home']);
     }

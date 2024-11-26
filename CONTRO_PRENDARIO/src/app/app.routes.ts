@@ -14,8 +14,6 @@ import { ClienteViewComponent } from './clientes/components/cliente-view/cliente
 import { PrestamosViewComponent } from './prestamos/components/prestamos-view/prestamos-view.component';
 import { PagosCrearComponent } from './pagos/components/pagos-crear/pagos-crear.component';
 import { MovimientosCrearComponent } from './movimientos/components/movimiento-crear/movimiento-crear.component';
-
-import { AdminComponent } from './admin/components/admin/admin.component';
 import { authGuard } from './core/guards/auth.guard';
 import { homeGuard } from './core/guards/home.guard';
 import { UsuariosCrearComponent } from './admin/components/usuarios-crear/usuarios-crear.component';
@@ -36,13 +34,6 @@ export const routes: Routes = [
     },
 
     { path: 'login', component: LoginTwoComponent },  
-
-    {
-        path: 'admin',
-        component: AdminComponent,
-        canActivate: [authGuard],
-        data: { role: 'ADMIN' }
-    },
 
     {
       path: 'usuarios/crear',
@@ -108,13 +99,6 @@ export const routes: Routes = [
           { path: 'nuevo', component: MovimientosCrearComponent }
         ]
       },
-
-    {
-        path: 'admin',
-        component: AdminComponent,
-        canActivate: [authGuard],
-        data: { role: 'ADMIN' }
-    },
 
     {
       path: 'consulta-prestamos',

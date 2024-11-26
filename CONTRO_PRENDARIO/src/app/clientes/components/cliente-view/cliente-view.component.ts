@@ -38,7 +38,6 @@ export class ClienteViewComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar cliente', error);
         this.translateService.get('CLIENT_VIEW.ERROR_LOADING').subscribe((res: string) => {
-          // Aquí puedes mostrar un mensaje de error
           console.error(res);
         });
         this.router.navigate(['/clientes']);

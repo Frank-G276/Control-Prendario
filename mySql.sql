@@ -69,32 +69,21 @@ CREATE TABLE movimientos (
     monto DECIMAL(12,2) NOT NULL
 );
 
--- Tabla de Documentos Adjuntos
--- Tabla modificada para guardar PDFs en MySQL
-CREATE TABLE documentos_prestamos (
-    id_documento INT PRIMARY KEY AUTO_INCREMENT,
-    id_prestamo INT,
-    nombre_archivo VARCHAR(255),
-    contenido_pdf MEDIUMBLOB, -- Para archivos hasta 16MB
-    mime_type VARCHAR(100),
-    tamano_archivo INT,
-    fecha_subida DATETIME DEFAULT CURRENT_TIMESTAMP,
-    usuario_subida VARCHAR(100),
-    hash_archivo VARCHAR(255), -- Para verificar integridad
-    FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
+CREATE TABLE usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 );
-CREATE TABLE documentos_pagos (
-    id_documento INT PRIMARY KEY AUTO_INCREMENT,
-    id_pago INT,
-    nombre_archivo VARCHAR(255),
-    contenido_pdf MEDIUMBLOB, -- Para archivos hasta 16MB
-    mime_type VARCHAR(100),
-    tamano_archivo INT,
-    fecha_subida DATETIME DEFAULT CURRENT_TIMESTAMP,
-    usuario_subida VARCHAR(100),
-    hash_archivo VARCHAR(255), -- Para verificar integridad
-    FOREIGN KEY (id_pago) REFERENCES prestamos(id_pago)
+
+CREATE TABLE usuario_roles (
+    usuario_id BIGINT NOT NULL,
+    rol ENUM('ADMIN', 'GERENTE', 'CLIENTE') NOT NULL,
+    PRIMARY KEY (usuario_id, rol),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
 
 -- Índices para optimizar búsquedas
 CREATE INDEX idx_documento_prestamo ON documentos(id_prestamo);
@@ -164,26 +153,24 @@ Table pagos{
   metodo_pago enum
   observaciones text
 }
-Table documentos_prestamos {
-  id_documento integer [pk, increment]
-  id_prestamos integer [ref: - prestamos.id_prestamo]
-  nombre_archivo varchar
-  contenido_pdf mediumblob
-  mime_type varchar
-  tamaño_archivo integer
-  fecha_subida datetime
-  usuarios_subida varchar
-  hash_archivo varchar
+Table movimientos{
+  id_movimiento integer [pk]
+  fecha_movimiento datetime
+  tipo_movimiento enum 
+  monto double
 }
-Table documentos_pagos {
-  id_documento integer [pk, increment]
-  id_pago integer [ref: - pagos.id_pago]
-  nombre_archivo varchar
-  contenido_pdf mediumblob
-  mime_type varchar
-  tamaño_archivo integer
-  fecha_subida datetime
-  usuarios_subida varchar
-  hash_archivo varchar
+
+Table usuarios{
+  id bigint [pk, increment]
+  email varchar [unique]
+  password varchar [not null]
+  nombre varchar [not null]
+  activo boolean [not null]
+}
+
+Table usuario_roles{
+  usuario_id bigint [primary key, not null, ref: > usuarios.id]
+  rol enum [primary key ]
+  
 }
 */

@@ -48,7 +48,6 @@ import { PagoService } from '../../pagos/services/pago.service';
       );
     }
   
-      // Actualizar un préstamo existente
     updatePrestamo(id: number, prestamo: any): Observable<Prestamo> {
       return this.http.put<Prestamo>(`${this.apiUrl}/${id}`, prestamo).pipe(
           tap(response => console.log('Préstamo actualizado:', response)),

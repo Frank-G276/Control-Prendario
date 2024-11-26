@@ -40,13 +40,7 @@ export class ClienteFormComponent implements OnInit {
   });
 
   ngOnInit() {
-    // Verifica si hay un ID en la ruta para edición
-    this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.clienteId = +params['id'];
-        this.isEditing = true;
-      }
-    });
+    
   }
   
   onSubmit(): void {
@@ -56,14 +50,12 @@ export class ClienteFormComponent implements OnInit {
           this.clienteCreado.emit(cliente); // Emitir el cliente creado
           this.clienteForm.reset();
           this.translateService.get('CLIENT_FORM.SUCCESS_MESSAGE').subscribe((res: string) => {
-            // Aquí puedes mostrar un mensaje de éxito
             console.log(res);
           });
         },
         error: (error) => {
           console.error('Error al guardar', error);
           this.translateService.get('CLIENT_FORM.ERROR_MESSAGE').subscribe((res: string) => {
-            // Aquí puedes mostrar un mensaje de error
             console.error(res);
           });
         }
