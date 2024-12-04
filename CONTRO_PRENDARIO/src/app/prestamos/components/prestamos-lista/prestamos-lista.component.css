@@ -1,5 +1,6 @@
 .pagina{
     background-color: #F5F6FB;
+    width: auto;
 }
 
 @media (min-width:1200px) {
@@ -14,15 +15,17 @@
         width: 0;
     }
 }
-
+.container{
+    background-color: #F5F6FB;
+}
 .cuerpo{
     margin-top: 58px !important;
     width: auto;
-    margin-left: 5%;
-    margin-right: 5%;
+   
 }
 .titulo{
     height: 118px;
+    width: 95%;
 }
 h2{
     font-size: 40px;
@@ -35,7 +38,9 @@ h2{
     border-bottom: 1px solid #f6f6f6;
    
 }
-
+.taba{
+    width: 96%;
+}
 .cabeza-tabla tr th{
     background-color: #eeeff3;
     height: 80px;  

@@ -110,7 +110,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
             totalPagar: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres),
             totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
             saldoPendiente: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres) - 
-                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0))
+                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
+                           this.calculateIntereses(item.prestamo.montoPrestamo, item.prestamo.tasaInteres)
           }));
           this.prestamosFiltrados = this.prestamos;
           this.loading = false;
@@ -157,9 +158,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   
     calculateTotal(montoPrestamo: number, tasaInteres: number): number {
       const interesTotal = this.prestamoService.calcularInteresTotal(montoPrestamo, tasaInteres);
-      return montoPrestamo + interesTotal;
+      return montoPrestamo;
     }
   
+    calculateIntereses(montoPrestamo: number, tasaInteres: number): number {
+      const interesTotal = this.prestamoService.calcularInteresTotal(montoPrestamo, tasaInteres);
+      return interesTotal;
+    }
+
     navigateToEdit(id: number) {
       this.router.navigate(['/prestamos/edit', id]);
     }

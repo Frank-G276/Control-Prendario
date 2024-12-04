@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DocumentoEmpenoVehiculo" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9ea12dc6-f4c9-42e4-9c18-66d45b1a265f">
+	<parameter name="MONTO_LETRAS" class="java.lang.String"/>
+	<field name="cliente.nombres" class="java.lang.String"/>
+	<field name="cliente.apellidos" class="java.lang.String"/>
+	<field name="cliente.ciudad" class="java.lang.String"/>
+	<field name="cliente.numeroDocumento" class="java.lang.String"/>
+	<field name="vehiculo.tipoVehiculo" class="java.lang.String"/>
+	<field name="vehiculo.marca" class="java.lang.String"/>
+	<field name="vehiculo.linea" class="java.lang.String"/>
+	<field name="vehiculo.modelo" class="java.lang.Integer"/>
+	<field name="vehiculo.placa" class="java.lang.String"/>
+	<field name="vehiculo.cilindraje" class="java.lang.Integer"/>
+	<field name="vehiculo.color" class="java.lang.String"/>
+	<field name="vehiculo.numeroMotor" class="java.lang.String"/>
+	<field name="vehiculo.numeroChasis" class="java.lang.String"/>
+	<field name="vehiculo.sitioMatricula" class="java.lang.String"/>
+	<field name="vehiculo.fechaMatricula" class="java.util.Date"/>
+	<field name="vehiculo.propietario" class="java.lang.String"/>
+	<field name="montoPrestamo" class="java.math.BigDecimal"/>
+	<field name="tasaInteres" class="java.math.BigDecimal"/>
+	<field name="fechaPrestamo" class="java.time.LocalDateTime"/>
+	<field name="fechaVencimiento" class="java.time.LocalDateTime"/>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="1991b9d3-df4b-4d07-9308-a658b4b7958e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTO DE EMPEÑO DE UN VEHICULO AUTOMOTOR]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="650">
+			<textField>
+				<reportElement x="0" y="10" width="555" height="90" uuid="133671bf-7ee0-494e-8f04-7c63d082c673"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Entre los suscritos a saber " + $F{cliente.nombres} + " " + $F{cliente.apellidos} + " mayor de edad, domiciliado y residente en el municipio de " + $F{cliente.ciudad} + ", identificado con la cedula de ciudadanía número " + $F{cliente.numeroDocumento} + " y que para efectos del presente actúa como PROPIETARIO EMPEÑADOR, de una parte y el señor PEDRO NEL GUILOMBO ARDILA, también mayor de edad, vecino y residente en el municipio de Santa María, identificado con la cedula de ciudadanía número 83.116.232 de Santa María Huila, y que para efectos legales del presente documento actuar con condición de EMPEÑANTE de otra parte, hemos celebrado el presente contrato de EMPEÑO, el cual se rige por las normas aplicables sobre la materia y en especial por las siguientes cláusulas:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="555" height="20" uuid="58756602-7a47-48f3-9532-4a7705b30185"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIMERA.- Objeto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="120" width="555" height="80" uuid="4ada9001-bbfa-4e26-b266-8a590e2d2335"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["El propietario Empeñador da en calidad de EMPEÑO el siguiente bien inmueble: CLASE DE VEHICULO: " + $F{vehiculo.tipoVehiculo} + "\nMARCA: " + $F{vehiculo.marca} + " LINEA: " + $F{vehiculo.linea} + " MODELO: " + $F{vehiculo.modelo} + "\nPLACA: " + $F{vehiculo.placa} + " CILINDRAJE: " + $F{vehiculo.cilindraje} + " COLOR: " + $F{vehiculo.color} + "\nNUMERO DE MOTOR: " + $F{vehiculo.numeroMotor} + " NUMERO DE CHASIS: " + $F{vehiculo.numeroChasis} + "\nSITIO DE MATRICULA: " + $F{vehiculo.sitioMatricula} + " FECHA DE MATRICULA: " + new SimpleDateFormat("dd/MM/yyyy").format($F{vehiculo.fechaMatricula}) + " Y FIGURA A NOMBRE DE: " + $F{vehiculo.propietario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="210" width="555" height="20" uuid="989ad656-9f9a-4bdd-b89d-f4f46f16fd70"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEGUNDA. – Valor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="230" width="555" height="40" uuid="b79fcec2-123b-41ae-8f8b-cfae3f5bc530"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["El precio de este empeño es por la suma de " + $P{MONTO_LETRAS} + " ($" + new java.text.DecimalFormat("#,##0").format($F{montoPrestamo}) + ") al " + $F{tasaInteres} + "% los cuales son pagaderos a la firma del presente documento en efectivo."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="280" width="555" height="20" uuid="0ce72199-2b0c-4011-8314-9434a7c3abf4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TERCERA. – Entrega:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="300" width="555" height="40" uuid="f8ea2057-c06a-4459-a6e1-155a4b4cc5cf"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["El propietario manifiesta que la entrega del vehículo se realiza a la firma del presente documento y por un tiempo de tres (3) meses, contados a partir del día " + new SimpleDateFormat("dd/MM/yyyy").format(java.sql.Timestamp.valueOf($F{fechaPrestamo})) + " al " + new SimpleDateFormat("dd/MM/yyyy").format(java.sql.Timestamp.valueOf($F{fechaVencimiento})) + "."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="350" width="555" height="20" uuid="7143d1bc-7073-4f3f-bc2a-772adafc2b0f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUARTA. – Tradición:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="370" width="555" height="40" uuid="41473726-03db-4f10-8cb1-ecfaee42972e"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[El señor PROPIETARIO EMPEÑADOR manifiesta al señor EMPEÑANTE, que cumplido el plazo de los tres (3) meses, hará la devolución del dinero y a su vez del vehículo.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="420" width="555" height="40" uuid="d326abec-7488-47d4-9bf3-e6106aa53fcf"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["Para constancia se firma el presente documento una vez leído y aprobado tal como aparece, en Santa María Huila, a los " + new SimpleDateFormat("dd").format(java.sql.Timestamp.valueOf($F{fechaPrestamo})) + " días del mes de " + new SimpleDateFormat("MMMM").format(java.sql.Timestamp.valueOf($F{fechaPrestamo})).toUpperCase() + " de " + new SimpleDateFormat("yyyy").format(java.sql.Timestamp.valueOf($F{fechaPrestamo})) + ", en dos ejemplares para cada contratante."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="500" width="200" height="20" uuid="6038f963-b495-45eb-89fc-239c096ea0a1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[_______________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="500" width="200" height="20" uuid="84b1a498-8af5-4a5d-b873-c743ebca8c87"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[_______________________]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="520" width="200" height="20" uuid="2835505b-0230-40d2-b447-e3aa95fa0952"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["CC. " + $F{cliente.numeroDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="540" width="200" height="20" uuid="e202c049-add9-45dc-bab6-d2cc431e099c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[EL EMPEÑANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="520" width="200" height="20" uuid="0068f589-7b9e-4517-8b26-1f39155a3d08"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CC. 83.116.232]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="540" width="200" height="20" uuid="a213c77b-a962-4136-a618-eaee435c35fb"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[EL EMPEÑADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="580" width="200" height="20" uuid="e01d2fe3-dd6f-4073-87ef-13e4a43cc357"/>
+				<text><![CDATA[Testigo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="600" width="200" height="20" uuid="55f6a4c5-d613-4e70-8871-98863fc59c97"/>
+				<text><![CDATA[CC.]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
