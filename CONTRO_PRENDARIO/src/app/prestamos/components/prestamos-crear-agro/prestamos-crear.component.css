@@ -1,0 +1,81 @@
+.pagina{
+    background-color: #F5F6FB;
+}
+
+@media (min-width:1200px) {
+    
+}
+@media (max-width:1200px) {
+    .lateral{
+        width: 93px;
+    }
+}@media (max-width:700) {
+    .lateral{
+        width: 0;
+    }
+}
+
+
+.titulo{
+    height: 118px;
+}
+h2{
+    font-size: 40px;
+    justify-content: center;
+    text-align: start;
+    margin-bottom: 45px;
+}
+
+
+.btn{
+    font-size: 14px;
+}
+.buscador_tabla{
+    padding: 0 25px;
+}
+.bi-pencil{
+    width: 20px;
+}
+
+.prestamo-crear{
+    margin-top: 17px;
+    width: 75%;
+}
+
+.tabla_cuerpo tr td {
+    padding: 20px 25px;
+    font-size: 14px;
+}
+
+.crear-cuerpo{
+    padding: 25px;
+}
+.elemento-form{
+    margin-right: 25px;
+    margin-bottom: 30px;
+    width: 226px;
+}
+.elemento-form input{
+    width: 100%;
+    
+}
+.elemento-form select, .elemento-form{
+    width: 212px;
+}
+
+.area-texto{
+    width: 500px;
+    margin: 0;
+}
+.area-texto textarea{
+    width: 100%;
+    border-radius: 10px;  
+}
+.area-texto textarea::placeholder{
+    color: #093476;
+    opacity: 0.8; 
+}
+.botones{
+    width: 100%;
+    text-align: center;
+}

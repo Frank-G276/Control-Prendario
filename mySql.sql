@@ -50,6 +50,23 @@ CREATE TABLE prestamos (
     FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)
 );
 
+-- Tabla de Préstamos/Empeños de maquinas
+CREATE TABLE prestamos_maquinas (
+    id_prestamo_maquina INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT,
+    tipo_maquina VARCHAR(100),
+    marca VARCHAR(50),
+    fecha_prestamo DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_vencimiento DATE,
+    monto_prestamo DECIMAL(12,2),
+    tasa_interes DECIMAL(5,2),
+    estado_prestamo ENUM('ACTIVO', 'VENCIDO', 'PAGADO'),
+    observaciones TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+);
+
 -- Tabla de Pagos
 CREATE TABLE pagos (
     id_pago INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,6 +77,17 @@ CREATE TABLE pagos (
     metodo_pago ENUM('EFECTIVO', 'TRANSFERENCIA', 'TARJETA'),
     observaciones TEXT,
     FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
+);
+
+CREATE TABLE pagos_maquinas (
+    id_pago_maquina INT PRIMARY KEY AUTO_INCREMENT,
+    id_prestamo_maquina INT,
+    fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP,
+    monto_pagado DECIMAL(12,2),
+    tipo_pago ENUM('CAPITAL', 'INTERES', 'MORA'),
+    metodo_pago ENUM('EFECTIVO', 'TRANSFERENCIA', 'TARJETA'),
+    observaciones TEXT,
+    FOREIGN KEY (id_prestamo_maquina) REFERENCES prestamos_maquinas(id_prestamo_maquina)
 );
 
 CREATE TABLE movimientos (

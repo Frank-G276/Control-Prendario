@@ -173,4 +173,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     navigateToCreate() {
       this.router.navigate(['/prestamos/nuevo']);
     }
+    navigateToCreateA() {
+      this.router.navigate(['/prestamos/new']);
+    }
   }

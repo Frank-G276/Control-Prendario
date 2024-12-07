@@ -21,6 +21,7 @@ import { ConfiguracionComponent } from './config/components/configuracion/config
 import { UsuariosListaComponent } from './admin/components/usuarios-lista/usuarios-lista.component';
 import { PublicPrestamoViewComponent } from './vista-cliente/components/cliente-prestamo-view/cliente-prestamo-view.component';
 import { LoginTwoComponent } from './login/login-two/login-two.component';
+import { PrestamosCrearAgroComponent } from './prestamos/components/prestamos-crear-agro/prestamos-crear.component';
 
 export const routes: Routes = [
     
@@ -75,6 +76,7 @@ export const routes: Routes = [
         children: [
           { path: '', component: PrestamosListaComponent },
           { path: 'nuevo', component: PrestamosCrearComponent },
+          { path: 'new', component: PrestamosCrearAgroComponent },
           { path: 'edit/:id', component: PrestamosEditarComponent },
           { path: 'ver/:id', component: PrestamosViewComponent }
         ]
