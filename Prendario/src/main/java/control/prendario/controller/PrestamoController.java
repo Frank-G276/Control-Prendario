@@ -2,6 +2,8 @@ package control.prendario.controller;
 
 import control.prendario.DTO.PrestamoDTO;
 import control.prendario.model.Prestamo;
+import control.prendario.model.PrestamoMaquina;
+import control.prendario.service.PrestamoMaquinaService;
 import control.prendario.service.PrestamoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,21 +14,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/prestamos")
 @CrossOrigin(origins = "http://localhost:4200")
 @Tag(name = "Préstamos",
         description = "API para la gestión de préstamos prendarios")
-@SecurityRequirement(name = "JWT")
 public class PrestamoController {
 
     @Autowired
     private PrestamoService prestamoService;
+
+    @Autowired
+    private PrestamoMaquinaService prestamoMaquinaService;
 
     @Operation(summary = "Crear nuevo préstamo",
             description = "Crea un nuevo préstamo prendario con la información proporcionada")
@@ -83,9 +90,25 @@ public class PrestamoController {
                     )
             )
     })
-    @GetMapping
-    public ResponseEntity<List<Prestamo>> getAllPrestamos() {
-        return ResponseEntity.ok(prestamoService.getAllPrestamos());
+    @GetMapping("")
+    public ResponseEntity<Object> getAllPrestamosAndMaquinas() {
+        try {
+            List<PrestamoMaquina> maquinas = prestamoMaquinaService.obtenerTodosPrestamosMaquina();
+            List<Prestamo> prestamos = prestamoService.getAllPrestamos();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("prestamos", prestamos);
+            response.put("maquinas", maquinas);
+
+            System.out.println("Número de préstamos: " + prestamos.size());
+            System.out.println("Número de máquinas: " + maquinas.size());
+
+            return ResponseEntity.ok(response);
+
+
+        }catch (Exception e){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener datos :" + e.getMessage());
+        }
     }
 
     @Operation(summary = "Obtener préstamo por ID",

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
 import { HeaderComponent } from "../../../pages/components/header/header.component";
 import { RouterModule, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { PagoService } from '../../../pagos/services/pago.service';
 import { LogoutButtonComponent } from "../../../login/logout-button/logout-button.component";
 import { UsuariosCrearComponent } from "../../../admin/components/usuarios-crear/usuarios-crear.component";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Maquina, Prestamo } from '../../../prestamos/models/prestamo.interface';
 
 interface ResumenNegocio {
   dineroFluyendo: number;
@@ -24,7 +25,9 @@ interface ResumenNegocio {
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
+  prestamos: Prestamo[] = [];
+  maquinas: Maquina[] = [];
   
   private prestamoService = inject(PrestamoService);
   private movimientoService = inject(MovimientoService);
@@ -42,12 +45,16 @@ export class HomeComponent {
 
   ngOnInit() {
     this.cargarResumen();
+
   }
 
   private cargarResumen() {
     // Cargar préstamos activos
-    this.prestamoService.getPrestamos().subscribe({
-      next: (prestamos) => {
+    this.prestamoService.getAllPrestamos().subscribe({
+      next: (response) => {
+        const prestamos = this.prestamos = response.prestamos;
+        const maquinas = this.maquinas = response.maquinas;
+
         this.loading = false;
         const prestamosActivos = prestamos.filter(p => p.estadoPrestamo === 'ACTIVO');
         this.resumen.dineroFluyendo = prestamosActivos.reduce((total, p) => total + p.montoPrestamo, 0);

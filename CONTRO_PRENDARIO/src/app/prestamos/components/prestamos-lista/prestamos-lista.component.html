@@ -40,6 +40,17 @@
                     </div>
                 </div>
 
+                <select
+                [(ngModel)]="selectTable" 
+                (change)="onTableChange()" 
+                    class="mb-4 p-2 border rounded"
+                    
+                >
+                    <option value="vehiculos">Vehículos</option>
+                    <option value="maquinas">Máquinas</option>
+                </select>
+
+               
                 <!-- Loading State -->
                 <div *ngIf="loading" class="flex justify-center items-center py-8">
                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -51,7 +62,7 @@
                 </div>
 
                 <!-- Table -->
-                <div *ngIf="!loading && !error" class="bg-white shadow-md rounded-lg overflow-hidden taba">
+                <div *ngIf="!loading && !error" class=" shadow-md rounded-lg overflow-hidden taba">
                     
                     <div class="d-flex align-items-center justify-content-between buscador_tabla" [formGroup]="filtrosForm">
                         <input type="text" 

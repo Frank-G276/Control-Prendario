@@ -3,60 +3,62 @@ import { HeaderComponent } from "../../../pages/components/header/header.compone
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Prestamo } from '../../models/prestamo.interface';
+import { Maquina, Prestamo, PrestamoConResumen, PrestamoMaquinaResponse } from '../../models/prestamo.interface';
 import { PrestamoService } from '../../services/prestamo.service';
 import { ClienteService } from '../../../clientes/services/cliente.service';
 import { forkJoin, Observable, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Cliente } from '../../../clientes/models/cliente.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-prestamos-lista',
     standalone: true,
-    imports: [CommonModule, HeaderComponent, SidebarComponent, RouterModule, DecimalPipe, ReactiveFormsModule, TranslateModule],
+    imports: [CommonModule, HeaderComponent, SidebarComponent, RouterModule, DecimalPipe, ReactiveFormsModule, TranslateModule, FormsModule],
     templateUrl: './prestamos-lista.component.html',
     styleUrl: './prestamos-lista.component.css'
-  })
-  export class PrestamosListaComponent implements OnInit {
-    private router = inject(Router);
-    private prestamoService = inject(PrestamoService);
-    private clienteService = inject(ClienteService);
-    private fb = inject(FormBuilder);
-    private translateService = inject(TranslateService);
+})
+export class PrestamosListaComponent implements OnInit {
+  private router = inject(Router);
+  private prestamoService = inject(PrestamoService);
+  private clienteService = inject(ClienteService);
+  private fb = inject(FormBuilder);
+  private translateService = inject(TranslateService);
   
-    prestamos: Prestamo[] = [];
-    prestamosFiltrados: Prestamo[] = [];
-    loading: boolean = true;
-    error: string = '';
+  prestamos: Prestamo[] = [];
+  maquinas: Maquina[] = [];
+  prestamosFiltrados: Prestamo[] = [];
+  loading: boolean = true;
+  error: string = '';
+  selectTable : string = 'vehiculos';
 
-    estadosPrestamo = ['ACTIVO', 'PENDIENTE', 'VENCIDO', 'PAGADO'];
+  estadosPrestamo = ['ACTIVO', 'PENDIENTE', 'VENCIDO', 'PAGADO'];
   
-    filtrosForm: FormGroup = this.fb.group({
-      numeroPrestamo: [''],
-      nombreCliente: [''],
-      fechaCreacion: [''],
-      fechaVencimiento: [''],
-      estado: ['']
-    });
+  filtrosForm: FormGroup = this.fb.group({
+    numeroPrestamo: [''],
+    nombreCliente: [''],
+    fechaCreacion: [''],
+    fechaVencimiento: [''],
+    estado: ['']
+  });
 
-    ngOnInit() {
-      this.loadPrestamos();
-      this.setupFiltros();
-    }
+  ngOnInit() {
+    this.loadPrestamos();
+    this.setupFiltros();
+  }
 
-    private setupFiltros() {
-      this.filtrosForm.valueChanges
-        .pipe(
-          debounceTime(300),
-          distinctUntilChanged()
-        )
-        .subscribe(() => {
-          this.aplicarFiltros();
-        });
-    }
+  private setupFiltros() {
+    this.filtrosForm.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.aplicarFiltros();
+      });
+  }
   
-    private aplicarFiltros() {
+  private aplicarFiltros() {
       let prestamosFiltrados = [...this.prestamos];
       const filtros = this.filtrosForm.value;
   
@@ -102,8 +104,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
       this.loading = true;
       this.error = '';
   
-      this.prestamoService.getPrestamosConResumen().subscribe({
-        next: (prestamosConResumen) => {
+      this.prestamoService.getPrestamosConResumen(this.selectTable).subscribe({
+        next: (prestamosConResumen: PrestamoConResumen[]) => {
+          if (this.selectTable === 'vehiculos') {
+            console.log('Préstamos con resumen recibidos:', prestamosConResumen);
           this.prestamos = prestamosConResumen.map(item => ({
             ...item.prestamo,
             resumenPagos: item.resumen,
@@ -114,6 +118,17 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
                            this.calculateIntereses(item.prestamo.montoPrestamo, item.prestamo.tasaInteres)
           }));
           this.prestamosFiltrados = this.prestamos;
+        } else if (this.selectTable === 'maquinas') {
+          this.maquinas = prestamosConResumen.map(item =>({
+            ...item.maquina,
+            resumenPagos: item.resumen,
+            totalPagar: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres),
+            totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
+            saldoPendiente: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres) - 
+                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
+                           this.calculateIntereses(item.maquina.montoPrestamo, item.maquina.tasaInteres)
+          }));
+        }
           this.loading = false;
         },
         error: (error) => {
@@ -145,7 +160,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
               });
           }
       });
-  }
+    }
   
     verPrestamo(id: number): void {
       this.router.navigate(['/prestamos/ver', id]);
@@ -176,4 +191,22 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     navigateToCreateA() {
       this.router.navigate(['/prestamos/new']);
     }
+    
+  onTableChange() {
+      this.loadPrestamos();
   }
+
+  LlamarPrestamos() {
+      this.prestamoService.getAllPrestamos().subscribe({
+          next: (response: PrestamoMaquinaResponse) => {
+              console.log(response); // Aquí obtienes la respuesta de la API
+          },
+          error: (error: any) => {
+              console.error('Error al obtener los préstamos:', error); // Manejo de errores
+          },
+          complete: () => {
+              console.log('Solicitud completada'); // Puedes realizar algo cuando la solicitud termine
+          }
+      });
+  }
+}

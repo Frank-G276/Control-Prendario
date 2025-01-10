@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { catchError, forkJoin, map, mergeMap, Observable, tap, throwError } from 'rxjs';
-import { Prestamo } from '../models/prestamo.interface';
+import { catchError, forkJoin, map, mergeMap, Observable, of, tap, throwError } from 'rxjs';
+import { Maquina, Prestamo, PrestamoMaquinaResponse, PrestamoConResumen } from '../models/prestamo.interface';
 import { PagoService } from '../../pagos/services/pago.service';
+import { log } from 'console';
 
 @Injectable({
     providedIn: 'root'
@@ -20,11 +21,15 @@ import { PagoService } from '../../pagos/services/pago.service';
       private pagoService: PagoService
     ) {}
   
-    getPrestamos(): Observable<Prestamo[]> {
-      return this.http.get<Prestamo[]>(this.apiUrl).pipe(
+    getPrestamos(tableName: string): Observable<(Prestamo | Maquina)[]> {
+      return this.http.get<(Prestamo | Maquina)[]>(`${this.apiUrl}/${tableName}`).pipe(
           tap(prestamos => console.log('Préstamos obtenidos:', prestamos)),
           catchError(this.handleError)
       );
+    }
+
+    getAllPrestamos():Observable<PrestamoMaquinaResponse>{
+      return this.http.get<PrestamoMaquinaResponse>(`${this.apiUrl}`)
     }
 
     getPrestamosVencidos(): Observable<Prestamo[]> {
@@ -91,19 +96,39 @@ import { PagoService } from '../../pagos/services/pago.service';
     return this.http.get<Prestamo[]>(`${this.apiUrl}/buscar`, { params });
   }
 
-  getPrestamosConResumen(): Observable<any[]> {
-    return this.getPrestamos().pipe(
-      map(prestamos => {
-        const observables = prestamos.map(prestamo => 
-          forkJoin({
-            prestamo: Promise.resolve(prestamo),
-            resumen: this.pagoService.obtenerResumenPagos(prestamo.idPrestamo!)
-          })
-        );
-        return forkJoin(observables);
-      }),
-      mergeMap(results => results)
-    );
+  getPrestamosConResumen(tableName: string): Observable<PrestamoConResumen[]> {
+    if (tableName === 'vehiculos') {
+      return this.getAllPrestamos().pipe(
+        map(response => {
+          const observables = response.prestamos.map(prestamo =>
+            forkJoin({
+              prestamo: Promise.resolve(prestamo),
+              resumen: this.pagoService.obtenerResumenPagos(prestamo.idPrestamo!),
+              maquina: Promise.resolve({} as Maquina)
+            })
+          );
+          console.log('observables:' + response);
+          return forkJoin(observables);
+        }),
+        mergeMap(results => results)
+      );
+    } else if (tableName === 'maquinas') {
+      return this.getAllPrestamos().pipe(
+        map(response => {
+          const observables = response.maquinas.map(maquina =>
+            forkJoin({
+              maquina: Promise.resolve(maquina),
+              resumen: this.pagoService.obtenerResumenPagos(maquina.idPrestamo!),
+              prestamo: Promise.resolve({} as Prestamo)
+            })
+          );
+          return forkJoin(observables);
+        }),
+        mergeMap(results => results)
+      );
+    }
+
+    throw new Error(`Tabla no válida: ${tableName}`);
   }
   
   calcularInteresTotal(montoPrestamo: number, tasaInteres: number): number {
