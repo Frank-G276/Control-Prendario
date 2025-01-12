@@ -60,11 +60,18 @@ import { log } from 'console';
       );
     }
   
-    deletePrestamo(id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+    deletePrestamo(tableName: string,id: number): Observable<void> {
+      if(tableName === 'vehiculos'){
+        return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+            tap(() => console.log('Préstamo eliminado:', id)),
+            catchError(this.handleError)
+        );
+      }else{
+        return this.http.delete<void>(`${this.apiUrl}/maquina/${id}`).pipe(
           tap(() => console.log('Préstamo eliminado:', id)),
           catchError(this.handleError)
-      );
+        );
+      }
     }
 
     private handleError(error: HttpErrorResponse) {
@@ -103,11 +110,11 @@ import { log } from 'console';
           const observables = response.prestamos.map(prestamo =>
             forkJoin({
               prestamo: Promise.resolve(prestamo),
-              resumen: this.pagoService.obtenerResumenPagos(prestamo.idPrestamo!),
+              resumen: this.pagoService.obtenerResumenPagos(tableName,prestamo.idPrestamo!),
               maquina: Promise.resolve({} as Maquina)
             })
           );
-          console.log('observables:' + response);
+          
           return forkJoin(observables);
         }),
         mergeMap(results => results)
@@ -118,7 +125,7 @@ import { log } from 'console';
           const observables = response.maquinas.map(maquina =>
             forkJoin({
               maquina: Promise.resolve(maquina),
-              resumen: this.pagoService.obtenerResumenPagos(maquina.idPrestamo!),
+              resumen: this.pagoService.obtenerResumenPagos(tableName, maquina.idPrestamoMaquina!),
               prestamo: Promise.resolve({} as Prestamo)
             })
           );

@@ -109,6 +109,7 @@ public class PagoMaquinaController {
                     description = "Préstamo no encontrado"
             )
     })
+
     @GetMapping("/prestamo/{idPrestamoMaquina}/resumen")
     public ResponseEntity<Map<String, BigDecimal>> obtenerResumenPagos(
             @Parameter(description = "ID del préstamo de máquina", required = true, example = "1")

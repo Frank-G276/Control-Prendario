@@ -3,7 +3,7 @@ import { HeaderComponent } from "../../../pages/components/header/header.compone
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Maquina, Prestamo, PrestamoConResumen, PrestamoMaquinaResponse } from '../../models/prestamo.interface';
+import { Maquina, Prestamo, PrestamoBase, PrestamoConResumen, PrestamoMaquinaResponse } from '../../models/prestamo.interface';
 import { PrestamoService } from '../../services/prestamo.service';
 import { ClienteService } from '../../../clientes/services/cliente.service';
 import { forkJoin, Observable, map, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -27,7 +27,7 @@ export class PrestamosListaComponent implements OnInit {
   
   prestamos: Prestamo[] = [];
   maquinas: Maquina[] = [];
-  prestamosFiltrados: Prestamo[] = [];
+  prestamosFiltrados: PrestamoBase[] = [];
   loading: boolean = true;
   error: string = '';
   selectTable : string = 'vehiculos';
@@ -59,25 +59,32 @@ export class PrestamosListaComponent implements OnInit {
   }
   
   private aplicarFiltros() {
-      let prestamosFiltrados = [...this.prestamos];
-      const filtros = this.filtrosForm.value;
+    
+    let prestamosFiltrados = [...this.prestamosFiltrados];
+    const filtros = this.filtrosForm.value;
   
-      if (filtros.numeroPrestamo) {
-        prestamosFiltrados = prestamosFiltrados.filter(prestamo => 
-          prestamo.idPrestamo?.toString().includes(filtros.numeroPrestamo)
-        );
-      }
+    const elementosAFiltrar = this.selectTable === 'vehiculos' ? this.prestamos : this.maquinas;
+    prestamosFiltrados = [...elementosAFiltrar];
+
+    if (filtros.numeroPrestamo) {
+      prestamosFiltrados = prestamosFiltrados.filter(item => {
+        const id = this.selectTable === 'vehiculos' 
+          ? (item as Prestamo).idPrestamo
+          : (item as Maquina).idPrestamoMaquina;
+        return id?.toString().includes(filtros.numeroPrestamo);
+      });
+    }
   
-      if (filtros.nombreCliente) {
+    if (filtros.nombreCliente) {
         const termino = filtros.nombreCliente.toLowerCase();
         prestamosFiltrados = prestamosFiltrados.filter(prestamo =>
           prestamo.cliente?.nombres?.toLowerCase().includes(termino) ||
           prestamo.cliente?.apellidos?.toLowerCase().includes(termino) ||
           prestamo.cliente?.numeroDocumento?.toLowerCase().includes(termino)
         );
-      }
+    }
   
-      if (filtros.fechaCreacion) {
+    if (filtros.fechaCreacion) {
         const fechaBusqueda = new Date(filtros.fechaCreacion).toISOString().split('T')[0];
         prestamosFiltrados = prestamosFiltrados.filter(prestamo =>
           prestamo.fechaPrestamo?.toString().includes(fechaBusqueda)
@@ -98,16 +105,14 @@ export class PrestamosListaComponent implements OnInit {
       }
   
       this.prestamosFiltrados = prestamosFiltrados;
-    }
+  }
 
-    loadPrestamos() {
-      this.loading = true;
-      this.error = '';
-  
-      this.prestamoService.getPrestamosConResumen(this.selectTable).subscribe({
-        next: (prestamosConResumen: PrestamoConResumen[]) => {
-          if (this.selectTable === 'vehiculos') {
-            console.log('Préstamos con resumen recibidos:', prestamosConResumen);
+  loadPrestamos() {
+    this.loading = true;
+    this.error = '';
+    this.prestamoService.getPrestamosConResumen(this.selectTable).subscribe({
+      next: (prestamosConResumen: PrestamoConResumen[]) => {
+        if (this.selectTable === 'vehiculos') {
           this.prestamos = prestamosConResumen.map(item => ({
             ...item.prestamo,
             resumenPagos: item.resumen,
@@ -119,19 +124,20 @@ export class PrestamosListaComponent implements OnInit {
           }));
           this.prestamosFiltrados = this.prestamos;
         } else if (this.selectTable === 'maquinas') {
-          this.maquinas = prestamosConResumen.map(item =>({
-            ...item.maquina,
-            resumenPagos: item.resumen,
-            totalPagar: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres),
-            totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
-            saldoPendiente: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres) - 
-                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
-                           this.calculateIntereses(item.maquina.montoPrestamo, item.maquina.tasaInteres)
-          }));
+            this.maquinas = prestamosConResumen.map(item =>({
+              ...item.maquina,
+              resumenPagos: item.resumen,
+              totalPagar: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres),
+              totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
+              saldoPendiente: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres) - 
+                             ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
+                             this.calculateIntereses(item.maquina.montoPrestamo, item.maquina.tasaInteres)
+            }));
+            this.prestamosFiltrados = this.maquinas;
         }
-          this.loading = false;
-        },
-        error: (error) => {
+        this.loading = false;
+      },
+      error: (error) => {
           console.error('Error loading loans:', error);
           this.error = 'Error al cargar los préstamos';
           this.loading = false;
@@ -144,10 +150,12 @@ export class PrestamosListaComponent implements OnInit {
       this.prestamosFiltrados = this.prestamos;
     }
   
-    deletePrestamo(id: number) {
+    deletePrestamo(item: PrestamoBase) {
       this.translateService.get('LOANS.CONFIRM_DELETE').subscribe((res: string) => {
           if (confirm(res)) {
-              this.prestamoService.deletePrestamo(id).subscribe({
+            const id = this.getId(item);
+            
+              this.prestamoService.deletePrestamo(this.selectTable,id!).subscribe({
                   next: () => {
                       this.loadPrestamos();
                   },
@@ -158,12 +166,16 @@ export class PrestamosListaComponent implements OnInit {
                       });
                   }
               });
+            
           }
       });
     }
   
-    verPrestamo(id: number): void {
-      this.router.navigate(['/prestamos/ver', id]);
+    verPrestamo(item: PrestamoBase): void {
+      const id = this.getId(item);
+      if(id){
+        this.router.navigate(['/prestamos/ver', id]);
+      }
     }
 
     formatDate(date: string | Date): string {
@@ -181,7 +193,8 @@ export class PrestamosListaComponent implements OnInit {
       return interesTotal;
     }
 
-    navigateToEdit(id: number) {
+    navigateToEdit(item: PrestamoBase) {
+      const id = this.getId(item);
       this.router.navigate(['/prestamos/edit', id]);
     }
   
@@ -195,18 +208,11 @@ export class PrestamosListaComponent implements OnInit {
   onTableChange() {
       this.loadPrestamos();
   }
-
-  LlamarPrestamos() {
-      this.prestamoService.getAllPrestamos().subscribe({
-          next: (response: PrestamoMaquinaResponse) => {
-              console.log(response); // Aquí obtienes la respuesta de la API
-          },
-          error: (error: any) => {
-              console.error('Error al obtener los préstamos:', error); // Manejo de errores
-          },
-          complete: () => {
-              console.log('Solicitud completada'); // Puedes realizar algo cuando la solicitud termine
-          }
-      });
+  
+  getId(item: PrestamoBase): number | undefined {
+    return this.selectTable === 'vehiculos' 
+        ? (item as Prestamo).idPrestamo 
+        : (item as Maquina).idPrestamoMaquina;
   }
+  
 }

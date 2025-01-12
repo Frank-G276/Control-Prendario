@@ -137,9 +137,9 @@
                                 </tr>
                             </thead>
                             <tbody class="tabla_cuerpo text-success">
-                                <tr *ngFor="let prestamo of prestamosFiltrados" >
+                                <tr *ngFor="let prestamo  of prestamosFiltrados" >
                                     <td >
-                                        {{ prestamo.idPrestamo }}
+                                       {{ getId(prestamo) }}
                                     </td>
                                     <td >
                                         <div class="text-sm text-gray-900">
@@ -179,16 +179,16 @@
                                         </span>
                                     </td>
                                     <td >
-                                        <button (click)="verPrestamo(prestamo.idPrestamo!)" class="btn btn-sm me-2">
+                                        <button (click)="verPrestamo(prestamo)" class="btn btn-sm me-2">
                                             <i class="bi bi-eye text-success"></i>
                                         </button>
                                         <button 
-                                            (click)="navigateToEdit(prestamo.idPrestamo!)"
+                                            (click)="navigateToEdit(prestamo)"
                                             class="btn btn-sm">
                                             <i class="bi bi-pencil text-success"></i>
                                         </button>
                                         <button 
-                                            (click)="deletePrestamo(prestamo.idPrestamo!)"
+                                            (click)="deletePrestamo(prestamo)"
                                             class="btn btn-sm">
                                             <i class="bi bi-x-lg text-success"></i>
                                         </button>

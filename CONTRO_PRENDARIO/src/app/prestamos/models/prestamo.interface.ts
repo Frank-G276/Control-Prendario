@@ -8,11 +8,9 @@ export interface ResumenPagos {
     interesPendiente: number;
   }
   
-  export interface Prestamo {
-    idPrestamo?: number;
+  export interface PrestamoBase {
     idCliente: number;
     cliente?: Cliente;
-    vehiculo: Vehicle;
     fechaPrestamo?: string;
     fechaVencimiento?: string;
     montoPrestamo: number;
@@ -26,22 +24,15 @@ export interface ResumenPagos {
     saldoPendiente?: number;
   }
 
-  export interface Maquina {
-    idPrestamo?: number;
-    idCliente: number;
-    cliente?: Cliente;
-    fechaPrestamo?: string;
-    fechaVencimiento?: string;
-    montoPrestamo: number;
-    tasaInteres: number;
-    estadoPrestamo?: string;
-    observaciones?: string;
-    createdAt?: string;
-    updatedAt?: string | null;
-    resumenPagos?: ResumenPagos;
-    totalAbonado?: number;
-    saldoPendiente?: number;
-  }
+  export interface Prestamo extends PrestamoBase {
+  idPrestamo?: number;
+  vehiculo: Vehicle;
+}
+
+
+export interface Maquina extends PrestamoBase {
+  idPrestamoMaquina?: number;
+}
   
   // Para tipar mejor la respuesta del servicio
   export interface PrestamoConResumen {

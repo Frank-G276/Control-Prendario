@@ -218,6 +218,41 @@ public class PrestamoController {
         }
     }
 
+    @Operation(summary = "Eliminar préstamo de maquina",
+            description = "Elimina un préstamo del sistema de maquinas")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Préstamo eliminado exitosamente"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error al eliminar el préstamo"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Préstamo no encontrado"
+            )
+    })
+    @DeleteMapping("/maquina/{id}")
+    public ResponseEntity<?> deletePrestamoMaquina(
+            @Parameter(
+                    description = "ID del préstamo a eliminar",
+                    required = true,
+                    example = "1"
+            )
+            @PathVariable Long id) {
+        try {
+            prestamoMaquinaService.eliminarPrestamoMaquina(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error al eliminar el préstamo: " + e.getMessage());
+        }
+    }
+
+
+
     @Operation(summary = "Buscar préstamos",
             description = "Busca préstamos por diferentes criterios como término general, " +
                     "nombre del cliente o número de documento")

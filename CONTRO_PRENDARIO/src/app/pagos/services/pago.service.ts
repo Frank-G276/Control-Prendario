@@ -9,7 +9,8 @@ import { Prestamo } from '../../prestamos/models/prestamo.interface';
   providedIn: 'root'
 })
 export class PagoService {
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  private apiUrlPrestamos = 'http://localhost:8080/api/pagos';
+  private apiUrlMaquinas = ' http://localhost:8080/api/pagos-maquinas';
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -22,26 +23,32 @@ export class PagoService {
   constructor(private http: HttpClient) { }
 
   crearPago(pago: Pago): Observable<Pago> {
-    return this.http.post<Pago>(this.apiUrl, pago);
+    return this.http.post<Pago>(this.apiUrlPrestamos, pago);
   }
 
   obtenerPagosPorPrestamo(idPrestamo: number): Observable<Pago[]> {
-    return this.http.get<Pago[]>(`${this.apiUrl}/prestamo/${idPrestamo}`);
+    return this.http.get<Pago[]>(`${this.apiUrlPrestamos}/prestamo/${idPrestamo}`);
   }
 
-  obtenerResumenPagos(idPrestamo: number): Observable<ResumenPrestamo> {
-    return this.http.get<ResumenPrestamo>(`${this.apiUrl}/prestamo/${idPrestamo}/resumen`);
+  obtenerResumenPagos(tableName: string, idPrestamo: number): Observable<ResumenPrestamo> {
+    if (tableName === 'vehiculos') {
+      const response = idPrestamo;
+      return this.http.get<ResumenPrestamo>(`${this.apiUrlPrestamos}/prestamo/${idPrestamo}/resumen`);
+    } else {
+      const response = idPrestamo;
+    return this.http.get<ResumenPrestamo>(`${this.apiUrlMaquinas}/prestamo/${idPrestamo}/resumen`);
+    }
   }
 
   buscarPagosPorCliente(termino: string): Observable<Pago[]> {
-    return this.http.get<Pago[]>(`${this.apiUrl}/buscar`, {
+    return this.http.get<Pago[]>(`${this.apiUrlPrestamos}/buscar`, {
       params: { termino }
     });
   }
   
 
   obtenerTodosPagos(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.apiUrlPrestamos);
   }
   
 }

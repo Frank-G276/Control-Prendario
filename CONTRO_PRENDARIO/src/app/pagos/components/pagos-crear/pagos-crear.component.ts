@@ -86,7 +86,7 @@ export class PagosCrearComponent implements OnInit{
     });
     this.prestamosEncontrados = [];
 
-    this.pagoService.obtenerResumenPagos(prestamo.idPrestamo).subscribe({
+    this.pagoService.obtenerResumenPagos('vehiculos',prestamo.idPrestamo).subscribe({
       next: (resumen: ResumenPrestamo) => {
         this.prestamoSeleccionado = {
           ...prestamo,
