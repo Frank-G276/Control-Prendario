@@ -286,6 +286,39 @@ public class PrestamoController {
         return ResponseEntity.ok(prestamoService.buscarPorFiltros(termino, numeroDocumento));
     }
 
+    @Operation(summary = "Buscar préstamos",
+            description = "Busca préstamos por diferentes criterios como término general, " +
+                    "nombre del cliente o número de documento")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Búsqueda realizada exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "array",
+                                    implementation = Prestamo.class
+                            )
+                    )
+            )
+    })
+    @GetMapping("/maquina/buscar")
+    public ResponseEntity<List<PrestamoMaquina>> buscarPrestamoMaquina(
+            @Parameter(description = "Término general de búsqueda")
+            @RequestParam(required = false) String termino,
+
+            @Parameter(description = "Nombre del cliente")
+            @RequestParam(required = false) String nombreCliente,
+
+            @Parameter(description = "Número de documento del cliente")
+            @RequestParam(required = false) String numeroDocumento) {
+
+        if (termino != null) {
+            return ResponseEntity.ok(prestamoMaquinaService.buscarPorTermino(termino));
+        }
+        return ResponseEntity.ok(prestamoMaquinaService.buscarPorFiltros(termino, numeroDocumento));
+    }
+
     @Operation(summary = "Obtener préstamos vencidos",
             description = "Obtiene una lista de todos los préstamos que han superado su fecha de vencimiento")
     @ApiResponses(value = {

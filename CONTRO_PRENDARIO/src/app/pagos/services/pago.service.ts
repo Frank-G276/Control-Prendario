@@ -22,8 +22,12 @@ export class PagoService {
 
   constructor(private http: HttpClient) { }
 
-  crearPago(pago: Pago): Observable<Pago> {
-    return this.http.post<Pago>(this.apiUrlPrestamos, pago);
+  crearPago(tableName: string ,pago: Pago): Observable<Pago> {
+    if (tableName === 'vehiculos') {
+      return this.http.post<Pago>(this.apiUrlPrestamos, pago);
+    } else {
+      return this.http.post<Pago>(this.apiUrlMaquinas, pago);
+    }
   }
 
   obtenerPagosPorPrestamo(idPrestamo: number): Observable<Pago[]> {

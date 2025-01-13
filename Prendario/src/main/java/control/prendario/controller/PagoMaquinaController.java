@@ -47,15 +47,12 @@ public class PagoMaquinaController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> crearPago(
+    public ResponseEntity<PagoMaquina> crearPago(
             @Parameter(description = "Datos del pago a registrar", required = true)
             @RequestBody PagoMaquina pago) {
-        try {
+
             return ResponseEntity.ok(pagoMaquinaService.crearPago(pago));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body("Error al crear el pago: " + e.getMessage());
-        }
+
     }
 
     @Operation(summary = "Obtener pagos por préstamo",

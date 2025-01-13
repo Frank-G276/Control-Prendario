@@ -6,11 +6,38 @@
             <div class="container mx-auto px-6 py-8">
                 <div class="titulo d-flex align-items-center justify-content-between">
                     <h2 class="text-success">{{ 'PAYMENTS.TITLE' | translate }}</h2>
-                    <button 
-                        (click)="navigateToCreate()"
-                        class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         {{ 'PAYMENTS.NEW_PAYMENT' | translate }}
                     </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Tipo de pago</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body d-flex justify-content-between">
+                                <button 
+                                    data-bs-dismiss="modal"
+                                    (click)="navigateToCreate()"
+                                    class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                                    Pago Vehícular
+                                </button>
+                                <button  class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                                    data-bs-dismiss="modal"
+                                    (click)="navigateToCrearMaquina()"
+                                >
+                                    Pago Maquina
+                                </button>
+                            </div>
+                            
+                        </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Loading State -->
@@ -39,21 +66,21 @@
                                placeholder="{{ 'PAYMENTS.PAYMENT_DATE' | translate }}" 
                                class="form-control me-2">
                                
-                        <select formControlName="tipoPago" 
-                                class="form-control me-2">
-                            <option value="">{{ 'PAYMENTS.PAYMENT_TYPE' | translate }}</option>
-                            <option *ngFor="let tipo of tiposPago" [value]="tipo">
-                                {{ 'PAYMENT_TYPES.' + tipo | translate }}
-                            </option>
-                        </select>
-                        
-                        <select formControlName="metodoPago" 
-                                class="form-control me-2">
-                            <option value="">{{ 'PAYMENTS.PAYMENT_METHOD' | translate }}</option>
-                            <option *ngFor="let metodo of metodosPago" [value]="metodo">
-                                {{ 'PAYMENT_METHODS.' + metodo | translate }}
-                            </option>
-                        </select>
+                               <select formControlName="tipoPago" 
+                               class="form-control me-2">
+                           <option value="">{{ 'PAYMENTS.PAYMENT_TYPE' | translate }}</option>
+                           <option *ngFor="let tipo of tiposPago" [value]="tipo">
+                               {{ 'PAYMENT_TYPES.' + tipo | translate }}
+                           </option>
+                       </select>
+                       
+                       <select formControlName="metodoPago" 
+                               class="form-control me-2">
+                           <option value="">{{ 'PAYMENTS.PAYMENT_METHOD' | translate }}</option>
+                           <option *ngFor="let metodo of metodosPago" [value]="metodo">
+                               {{ 'PAYMENT_METHODS.' + metodo | translate }}
+                           </option>
+                       </select>
                         
                         <button class="btn btn-outline-success" 
                                 (click)="limpiarFiltros()">

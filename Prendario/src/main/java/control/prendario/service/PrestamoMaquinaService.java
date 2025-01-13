@@ -95,8 +95,17 @@ public class PrestamoMaquinaService {
         return prestamoMaquinaRepository.buscarPorCliente(termino);
     }
 
-    public List<PrestamoMaquina> buscarPorNumeroDocumento(String numeroDocumento) {
-        return prestamoMaquinaRepository.findByClienteNumeroDocumentoContaining(numeroDocumento);
+    public List<PrestamoMaquina> buscarPorTermino(String termino) {
+        return prestamoMaquinaRepository.findByBusquedaGeneral(termino);
+    }
+
+    public List<PrestamoMaquina> buscarPorFiltros(String termino, String numeroDocumento) {
+        if (termino != null && !termino.isEmpty()) {
+            return prestamoMaquinaRepository.findByClienteNombresContainingIgnoreCaseOrClienteApellidosContainingIgnoreCase(termino, termino);
+        } else if (numeroDocumento != null && !numeroDocumento.isEmpty()) {
+            return prestamoMaquinaRepository.findByClienteNumeroDocumentoContaining(numeroDocumento);
+        }
+        return obtenerTodosPrestamosMaquina();
     }
 
     public List<PrestamoMaquina> obtenerPrestamosVencidos() {

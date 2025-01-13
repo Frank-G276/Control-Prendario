@@ -47,18 +47,21 @@ export class PagosCrearComponent implements OnInit{
       idPrestamo: ['', Validators.required],
       montoPagado: ['', [Validators.required, Validators.min(0)]],
       tipoPago: ['', Validators.required],
-      metodoPago: ['', Validators.required],
+      metodoPago: ['EFECTIVO', Validators.required],
       observaciones: ['']
     });
 
-     // Configurar la búsqueda de préstamos
+    // Configurar la búsqueda de préstamos
     this.pagoForm.get('busquedaPrestamo')?.valueChanges
      .pipe(
        debounceTime(300),
        distinctUntilChanged(),
        switchMap(termino => {
-         if (!termino) return [];
-         return this.prestamoService.buscarPrestamos(termino, '');
+          if (!termino){ 
+            this.prestamosEncontrados = [];
+            return [];
+          }
+         return this.prestamoService.buscarPrestamos('vehiculo',termino, '');
        })
      )
      .subscribe({
@@ -81,9 +84,10 @@ export class PagosCrearComponent implements OnInit{
   seleccionarPrestamo(prestamo: any): void {
     this.prestamoSeleccionado = null;
     this.pagoForm.patchValue({
-      idPrestamo: prestamo.idPrestamo,
+      idPrestamo: prestamo.idPrestamoMaquina || prestamo.idPrestamo,
       busquedaPrestamo: `${prestamo.cliente.nombres} ${prestamo.cliente.apellidos}`
     });
+    
     this.prestamosEncontrados = [];
 
     this.pagoService.obtenerResumenPagos('vehiculos',prestamo.idPrestamo).subscribe({
@@ -149,7 +153,7 @@ export class PagosCrearComponent implements OnInit{
         observaciones: this.pagoForm.value.observaciones
       };
 
-      this.pagoService.crearPago(pago).subscribe({
+      this.pagoService.crearPago('vehiculos', pago).subscribe({
         next: (response) => {
           this.translateService.get('PAYMENT_CREATE.SUCCESS_MESSAGE').subscribe((res: string) => {
             this.success = res;

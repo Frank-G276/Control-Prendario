@@ -22,6 +22,7 @@ import { UsuariosListaComponent } from './admin/components/usuarios-lista/usuari
 import { PublicPrestamoViewComponent } from './vista-cliente/components/cliente-prestamo-view/cliente-prestamo-view.component';
 import { LoginTwoComponent } from './login/login-two/login-two.component';
 import { PrestamosCrearAgroComponent } from './prestamos/components/prestamos-crear-agro/prestamos-crear.component';
+import { PagosCrearMaquinaComponent } from './pagos/components/pagos-crear-maquina/pagos-crear.component';
 
 export const routes: Routes = [
     
@@ -88,7 +89,8 @@ export const routes: Routes = [
         data: { role: 'GERENTE' },
         children: [
           { path: '', component: PagosListaComponent },
-          { path: 'nuevo', component: PagosCrearComponent }
+          { path: 'nuevo', component: PagosCrearComponent },
+          { path: 'new', component: PagosCrearMaquinaComponent }
         ]
     },
 

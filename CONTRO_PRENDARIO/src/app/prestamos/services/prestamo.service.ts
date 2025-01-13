@@ -4,6 +4,7 @@ import { catchError, forkJoin, map, mergeMap, Observable, of, tap, throwError } 
 import { Maquina, Prestamo, PrestamoMaquinaResponse, PrestamoConResumen } from '../models/prestamo.interface';
 import { PagoService } from '../../pagos/services/pago.service';
 import { log } from 'console';
+import { PrestamoMaquina } from '../models/prestamomaquina.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -92,15 +93,25 @@ import { log } from 'console';
       return throwError(() => errorMessage);
   }
 
-  buscarPrestamos(termino: string, numeroDocumento: string): Observable<Prestamo[]> {
+  buscarPrestamos(tableName: string,termino: string, numeroDocumento: string): Observable<any[]> {
     let params = new HttpParams();
-    if (termino) {
-      params = params.set('termino', termino);
+    if (tableName === 'vehiculo'){
+      if (termino) {
+        params = params.set('termino', termino);
+      }
+      if (numeroDocumento) {
+        params = params.set('numeroDocumento', numeroDocumento);
+      }
+      return this.http.get<Prestamo[]>(`${this.apiUrl}/buscar`, { params });
+    }else{
+      if (termino) {
+        params = params.set('termino', termino);
+      }
+      if (numeroDocumento) {
+        params = params.set('numeroDocumento', numeroDocumento);
+      }
+      return this.http.get<PrestamoMaquina[]>(`${this.apiUrl}/maquina/buscar`, { params });
     }
-    if (numeroDocumento) {
-      params = params.set('numeroDocumento', numeroDocumento);
-    }
-    return this.http.get<Prestamo[]>(`${this.apiUrl}/buscar`, { params });
   }
 
   getPrestamosConResumen(tableName: string): Observable<PrestamoConResumen[]> {

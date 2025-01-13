@@ -1,11 +1,11 @@
 <app-header></app-header>
-<div class="pagina d-flex">
+<div class="pagina rounded d-flex">
     <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
-    <div class="cuerpo flex-grow-1">
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6 py-8">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-success text-white">
+    <div class="cuerpo  flex-grow-1">
+        <main class="flex-1 overflow-x-hidden pt-3 bg-gray-100 h-100">
+            <div class="container mx-auto px-6 ">
+                <div class="card shadow-lg h-100">
+                    <div class="card-header bg-success text-white rounded-top">
                         <h3 class="mb-0">{{ 'PAYMENT_CREATE.TITLE' | translate }}</h3>
                     </div>
                     <div class="card-body">
@@ -33,10 +33,10 @@
                                 <!-- Resultados de búsqueda -->
                                 <div *ngIf="prestamosEncontrados.length > 0" class="search-results">
                                     <div *ngFor="let prestamo of prestamosEncontrados" 
-                                         class="search-item" 
+                                         class="border border-3 border-secondary p-2 rounded" 
                                          (click)="seleccionarPrestamo(prestamo)">
                                         <div>{{prestamo.cliente.nombres}} {{prestamo.cliente.apellidos}}</div>
-                                        <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamo}} - {{prestamo.cliente.numeroDocumento}}</small>
+                                        <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamo}} - {{prestamo.vehiculo.marca}} - {{prestamo.vehiculo.linea}}</small>
                                     </div>
                                 </div>
                             </div>

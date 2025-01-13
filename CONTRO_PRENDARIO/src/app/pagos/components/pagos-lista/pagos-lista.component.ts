@@ -33,7 +33,7 @@ export class PagosListaComponent implements OnInit {
     nombreCliente: [''],
     fechaPago: [''],
     tipoPago: [''],
-    metodoPago: ['']
+    metodoPago: ['EFECTIVO']
   });
 
   ngOnInit(): void {
@@ -127,5 +127,9 @@ export class PagosListaComponent implements OnInit {
 
   navigateToCreate(): void {
     this.router.navigate(['/pagos/nuevo']);
+  }
+
+  navigateToCrearMaquina(): void {
+    this.router.navigate(['/pagos/new']);
   }
 }

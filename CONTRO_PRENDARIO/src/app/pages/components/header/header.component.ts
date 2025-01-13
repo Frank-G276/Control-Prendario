@@ -14,7 +14,7 @@ import { LenguageSelectorComponent } from "../../../internationalization/compone
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, LenguageSelectorComponent],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -46,8 +46,15 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this.searchSubscription = this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(term => this.prestamoService.buscarPrestamos(term, term))
-    ).subscribe(results => {
+      switchMap(termino => {
+        if (!termino){ 
+          this.searchResults = [];
+          return [];
+        }
+        return this.prestamoService.buscarPrestamos('vehiculo',termino, '');
+       })
+     )
+      .subscribe(results => {
       this.searchResults = results;
       this.showResults = results.length > 0;
     });
