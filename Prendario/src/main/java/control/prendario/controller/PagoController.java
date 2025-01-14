@@ -1,6 +1,7 @@
 package control.prendario.controller;
 
 import control.prendario.model.Pago;
+import control.prendario.model.PagoMaquina;
 import control.prendario.service.PagoMaquinaService;
 import control.prendario.service.PagoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,8 +76,8 @@ public class PagoController {
                     description = "No tiene permisos para ver los pagos"
             )
     })
-    @GetMapping
-    public ResponseEntity<List<Pago>> obtenerTodosPagosMaquinas() {
+    @GetMapping("/maquina")
+    public ResponseEntity<List<PagoMaquina>> obtenerTodosPagosMaquinas() {
         return ResponseEntity.ok(pagoMaquinaService.obtenerTodosPagos());
     }
 

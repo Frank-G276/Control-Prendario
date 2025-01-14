@@ -102,7 +102,7 @@ public class PagoMaquinaService {
         return pagoMaquinaRepository.findByPrestamoMaquinaIdPrestamoMaquinaOrderByFechaPagoDesc(idPrestamoMaquina);
     }
 
-    public List<Pago> obtenerTodosPagos() {
+    public List<PagoMaquina> obtenerTodosPagos() {
         return pagoMaquinaRepository.findAllPagosWithDetails();
     }
 }

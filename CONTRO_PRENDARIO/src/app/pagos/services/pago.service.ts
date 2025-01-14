@@ -57,7 +57,7 @@ export class PagoService {
     if(tableName === 'vehiculos'){
     return this.http.get<any[]>(this.apiUrlPrestamos);
     } else {
-      return this.http.get<any[]>(`${this.apiUrlMaquinas}/maquina`);
+      return this.http.get<any[]>(`${this.apiUrlPrestamos}/maquina`);
     }
   }
   

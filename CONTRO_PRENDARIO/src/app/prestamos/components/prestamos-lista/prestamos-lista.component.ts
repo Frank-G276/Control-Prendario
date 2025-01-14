@@ -169,19 +169,6 @@ export class PrestamosListaComponent implements OnInit {
           }
       });
     }
-  
-    verPrestamo(item: PrestamoBase): void {
-      const id = this.getId(item);
-      if(this.selectTable === 'vehiculos'){
-        if(id){
-          this.router.navigate(['/prestamos/ver', id]);
-        }
-      }else if(this.selectTable === 'maquinas'){
-        if(id){
-          this.router.navigate(['/prestamos/maquina/ver', id]);
-        }
-      }
-    }
 
     formatDate(date: string | Date): string {
       if (!date) return '';
@@ -198,9 +185,30 @@ export class PrestamosListaComponent implements OnInit {
       return interesTotal;
     }
 
+    verPrestamo(item: PrestamoBase): void {
+      const id = this.getId(item);
+      if(this.selectTable === 'vehiculos'){
+        if(id){
+          this.router.navigate(['/prestamos/ver', id]);
+        }
+      }else if(this.selectTable === 'maquinas'){
+        if(id){
+          this.router.navigate(['/prestamos/maquina/ver', id]);
+        }
+      }
+    }
+
     navigateToEdit(item: PrestamoBase) {
       const id = this.getId(item);
-      this.router.navigate(['/prestamos/edit', id]);
+      if(this.selectTable === 'vehiculos'){
+        if(id){
+          this.router.navigate(['/prestamos/edit', id]);
+        }
+      }else if(this.selectTable === 'maquinas'){
+        if(id){
+          this.router.navigate(['/prestamos/editar', id]);
+        }
+      }
     }
   
     navigateToCreate() {

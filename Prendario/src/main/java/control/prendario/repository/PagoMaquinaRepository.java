@@ -22,5 +22,5 @@ public interface PagoMaquinaRepository extends JpaRepository<PagoMaquina, Long> 
             "LEFT JOIN FETCH p.prestamoMaquina pr " +
             "LEFT JOIN FETCH pr.cliente " +
             "ORDER BY p.fechaPago DESC")
-    List<Pago> findAllPagosWithDetails();
+    List<PagoMaquina> findAllPagosWithDetails();
 }

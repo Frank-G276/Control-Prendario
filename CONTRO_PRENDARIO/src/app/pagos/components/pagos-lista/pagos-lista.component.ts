@@ -7,6 +7,7 @@ import { FormBuilder, FormsModule, FormGroup, ReactiveFormsModule } from '@angul
 import { PagoService } from '../../services/pago.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Maquina, Prestamo } from '../../../prestamos/models/prestamo.interface';
 
 @Component({
   selector: 'app-pagos-lista',
@@ -77,11 +78,21 @@ export class PagosListaComponent implements OnInit {
 
     if (filtros.nombreCliente) {
       const termino = filtros.nombreCliente.toLowerCase();
-      pagosFiltrados = pagosFiltrados.filter(pago =>
-        pago.prestamo?.cliente?.nombres?.toLowerCase().includes(termino) ||
-        pago.prestamo?.cliente?.apellidos?.toLowerCase().includes(termino) ||
-        pago.prestamo?.cliente?.numeroDocumento?.toLowerCase().includes(termino)
-      );
+      if(this.selectTable === 'vehiculos'){
+        pagosFiltrados = pagosFiltrados.filter(pago =>
+          
+            pago.prestamo?.cliente?.nombres?.toLowerCase().includes(termino) ||
+            pago.prestamo?.cliente?.apellidos?.toLowerCase().includes(termino) ||
+            pago.prestamo?.cliente?.numeroDocumento?.toLowerCase().includes(termino)
+          
+        );
+      } else {
+        pagosFiltrados = pagosFiltrados.filter(pago =>
+          pago.prestamoMaquina?.cliente?.nombres?.toLowerCase().includes(termino) ||
+          pago.prestamoMaquina?.cliente?.apellidos?.toLowerCase().includes(termino) ||
+          pago.prestamoMaquina?.cliente?.numeroDocumento?.toLowerCase().includes(termino)
+        );
+      }
     }
 
     if (filtros.fechaPago) {
@@ -122,8 +133,17 @@ export class PagosListaComponent implements OnInit {
     }).format(amount);
   }
 
-  verPrestamo(idPrestamo: number): void {
-    this.router.navigate(['/prestamos/ver', idPrestamo]);
+  verPrestamo(pago: any): void {
+    const id = this.getId(pago);
+    if(this.selectTable === 'vehiculos'){
+      if(id){
+        this.router.navigate(['/prestamos/ver', id]);
+      }
+    }else if(this.selectTable === 'maquinas'){
+      if(id){
+        this.router.navigate(['/prestamos/maquina/ver', id]);
+      }
+    }
   }
 
   navigateToCreate(): void {
@@ -136,5 +156,21 @@ export class PagosListaComponent implements OnInit {
 
   onTableChange() {
     this.cargarPagos();
-}
+  }
+
+  getId(item: any): number | undefined {
+    return this.selectTable === 'vehiculos' 
+      ? item.prestamo.idPrestamo 
+      : item.prestamoMaquina.idPrestamoMaquina;
+  }
+
+  getNombre(item: any): string | undefined {
+    return this.selectTable === 'vehiculos'? item.prestamo.cliente.nombres +' '+ item.prestamo.cliente.apellidos 
+    :item.prestamoMaquina.cliente.nombres +' '+ item.prestamoMaquina.cliente.apellidos;
+  }
+
+  getNumerodocumento(item: any): string | undefined{
+    return this.selectTable === 'vehiculos'? item.prestamo.cliente.numeroDocumento
+    :item.prestamoMaquina.cliente.numeroDocumento
+  }
 }

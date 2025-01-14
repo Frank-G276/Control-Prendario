@@ -127,14 +127,14 @@
                             <tbody class="tabla_cuerpo text-success">
                                 <tr *ngFor="let pago of pagosFiltrados">
                                     <td>
-                                        {{ pago.prestamo?.idPrestamo }}
+                                        {{ getId(pago) }}
                                     </td>
                                     <td>
                                         <div class="text-sm text-gray-900">
-                                            {{ pago.prestamo?.cliente?.nombres }} {{ pago.prestamo?.cliente?.apellidos }}
+                                            {{ getNombre(pago)}}
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            {{ pago.prestamo?.cliente?.numeroDocumento }}
+                                            {{ getNumerodocumento(pago)}}
                                         </div>
                                     </td>
                                     <td>
@@ -157,7 +157,7 @@
                                         {{ 'PAYMENT_METHODS.' + pago.metodoPago | translate }}
                                     </td>
                                     <td class="text-right">
-                                        <button (click)="verPrestamo(pago.prestamo.idPrestamo)" 
+                                        <button (click)="verPrestamo( pago )" 
                                                 class="btn btn-sm me-2">
                                             <i class="bi bi-eye text-success"></i>
                                         </button>
