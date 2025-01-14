@@ -115,22 +115,20 @@ export class PrestamosListaComponent implements OnInit {
           this.prestamos = prestamosConResumen.map(item => ({
             ...item.prestamo,
             resumenPagos: item.resumen,
-            totalPagar: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres),
+            totalPagar: item.prestamo.montoPrestamo,
             totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
-            saldoPendiente: this.calculateTotal(item.prestamo.montoPrestamo, item.prestamo.tasaInteres) - 
-                           ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
-                           this.calculateIntereses(item.prestamo.montoPrestamo, item.prestamo.tasaInteres)
+            saldoPendiente: item.prestamo.montoPrestamo - ((item.resumen.capitalPagado || 0)) + (item.resumen.interesPendiente)
+            
           }));
           this.prestamosFiltrados = this.prestamos;
         } else if (this.selectTable === 'maquinas') {
             this.maquinas = prestamosConResumen.map(item =>({
               ...item.maquina,
               resumenPagos: item.resumen,
-              totalPagar: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres),
+              totalPagar: item.maquina.montoPrestamo,
               totalAbonado: (item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0),
-              saldoPendiente: this.calculateTotal(item.maquina.montoPrestamo, item.maquina.tasaInteres) - 
-                             ((item.resumen.capitalPagado || 0) + (item.resumen.interesPagado || 0)) + 
-                             this.calculateIntereses(item.maquina.montoPrestamo, item.maquina.tasaInteres)
+              saldoPendiente: item.maquina.montoPrestamo - 
+                             ((item.resumen.capitalPagado || 0) ) + (item.resumen.interesPendiente)
             }));
             this.prestamosFiltrados = this.maquinas;
         }
@@ -175,8 +173,7 @@ export class PrestamosListaComponent implements OnInit {
       return new Date(date).toLocaleDateString();
     }
   
-    calculateTotal(montoPrestamo: number, tasaInteres: number): number {
-      const interesTotal = this.prestamoService.calcularInteresTotal(montoPrestamo, tasaInteres);
+    calculateTotal(montoPrestamo: number): number {
       return montoPrestamo;
     }
   

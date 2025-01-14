@@ -6,6 +6,7 @@ export interface ResumenPagos {
     interesPagado: number;
     capitalPendiente: number;
     interesPendiente: number;
+    interesTotal: number;
 }
   
 export interface PrestamoBase {
@@ -21,6 +22,7 @@ export interface PrestamoBase {
     updatedAt?: string | null;
     resumenPagos?: ResumenPagos;
     totalAbonado?: number;
+    interesTotal?: number;
     saldoPendiente?: number;
 }
 

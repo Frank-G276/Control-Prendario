@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -168,13 +169,21 @@ public class PagoService {
         if (capitalPagado == null) capitalPagado = BigDecimal.ZERO;
         if (interesPagado == null) interesPagado = BigDecimal.ZERO;
 
-        // Calcular el interés total
-        BigDecimal interesTotal = prestamo.getMontoPrestamo()
-                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal("3")))
-                .divide(new BigDecimal("100"));
+        // Fecha de inicio
+        LocalDate startDate = prestamo.getFechaPrestamo().toLocalDate();
+
+        // Fecha actual obtenida automáticamente
+        LocalDate currentDate = LocalDate.now();
 
         // Calcular pendientes
         BigDecimal capitalPendiente = prestamo.getMontoPrestamo().subtract(capitalPagado);
+
+        // Calcular el interés total
+        BigDecimal interesTotal = capitalPendiente
+                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal(calculateFullMonths(startDate, currentDate))))
+                .divide(new BigDecimal("100"));
+
+        //Calular interes pendiente
         BigDecimal interesPendiente = interesTotal.subtract(interesPagado);
 
         Map<String, BigDecimal> resumen = new HashMap<>();
@@ -186,6 +195,29 @@ public class PagoService {
         resumen.put("interesPendiente", interesPendiente);
 
         return resumen;
+    }
+
+    public static int calculateFullMonths(LocalDate startDate, LocalDate currentDate) {
+        // Si la fecha actual es anterior a la fecha de inicio, no hay meses completos
+        if (currentDate.isBefore(startDate)) {
+            return 0;
+        }
+
+        int fullMonths = 1; // Contador de meses completos
+        LocalDate tempDate = startDate;
+
+        // Iterar mes a mes
+        while (!tempDate.isAfter(currentDate)) {
+            // Avanzar al siguiente mes
+            tempDate = tempDate.plusMonths(1);
+
+            // Si el nuevo mes no excede la fecha actual, contar como mes completo
+            if (!tempDate.isAfter(currentDate)) {
+                fullMonths++;
+            }
+        }
+
+        return fullMonths;
     }
 
     public List<Pago> buscarPagosPorCliente(String termino) {

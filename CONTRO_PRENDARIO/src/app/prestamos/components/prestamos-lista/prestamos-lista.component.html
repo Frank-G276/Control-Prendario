@@ -156,10 +156,10 @@
                                         {{ formatDate(prestamo.fechaVencimiento!) }}
                                     </td>
                                     <td>
-                                        ${{ calculateTotal(prestamo.montoPrestamo, prestamo.tasaInteres) | number:'1.2-2' }}
+                                        ${{ prestamo.montoPrestamo | number:'1.2-2' }}
                                     </td>
                                     <td>
-                                        ${{ calculateIntereses(prestamo.montoPrestamo, prestamo.tasaInteres) | number:'1.2-2' }}
+                                        ${{ prestamo.resumenPagos?.interesPendiente}}
                                     </td>
                                     <td>
                                         ${{ prestamo.totalAbonado | number:'1.2-2' }}
