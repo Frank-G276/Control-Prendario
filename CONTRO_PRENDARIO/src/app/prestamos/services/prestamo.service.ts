@@ -40,8 +40,14 @@ import { PrestamoMaquina } from '../models/prestamomaquina.interface';
       );
     }
   
-    getPrestamoById(id: number): Observable<Prestamo> {
+    getPrestamoById(id: number): Observable<(Prestamo)> {
       return this.http.get<Prestamo>(`${this.apiUrl}/${id}`).pipe(
+          tap(prestamo => console.log('Préstamo obtenido:', prestamo)),
+          catchError(this.handleError)
+      );
+    }
+    getPrestamoPorId(id: number): Observable<(Maquina)> {
+      return this.http.get<Maquina>(`${this.apiUrl}/maquina/${id}`).pipe(
           tap(prestamo => console.log('Préstamo obtenido:', prestamo)),
           catchError(this.handleError)
       );
@@ -56,6 +62,13 @@ import { PrestamoMaquina } from '../models/prestamomaquina.interface';
   
     updatePrestamo(id: number, prestamo: any): Observable<Prestamo> {
       return this.http.put<Prestamo>(`${this.apiUrl}/${id}`, prestamo).pipe(
+          tap(response => console.log('Préstamo actualizado:', response)),
+          catchError(this.handleError)
+      );
+    }
+
+    actualizarPrestamo(id: number, prestamo: any): Observable<Maquina> {
+      return this.http.put<Maquina>(`${this.apiUrl}/maquina/${id}`, prestamo).pipe(
           tap(response => console.log('Préstamo actualizado:', response)),
           catchError(this.handleError)
       );

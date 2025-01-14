@@ -3,11 +3,10 @@ import { HeaderComponent } from "../../../pages/components/header/header.compone
 import { SidebarComponent } from "../../../pages/components/sidebar/sidebar.component";
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Maquina, Prestamo, PrestamoBase, PrestamoConResumen, PrestamoMaquinaResponse } from '../../models/prestamo.interface';
+import { Maquina, Prestamo, PrestamoBase, PrestamoConResumen } from '../../models/prestamo.interface';
 import { PrestamoService } from '../../services/prestamo.service';
 import { ClienteService } from '../../../clientes/services/cliente.service';
-import { forkJoin, Observable, map, debounceTime, distinctUntilChanged } from 'rxjs';
-import { Cliente } from '../../../clientes/models/cliente.interface';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -173,8 +172,14 @@ export class PrestamosListaComponent implements OnInit {
   
     verPrestamo(item: PrestamoBase): void {
       const id = this.getId(item);
-      if(id){
-        this.router.navigate(['/prestamos/ver', id]);
+      if(this.selectTable === 'vehiculos'){
+        if(id){
+          this.router.navigate(['/prestamos/ver', id]);
+        }
+      }else if(this.selectTable === 'maquinas'){
+        if(id){
+          this.router.navigate(['/prestamos/maquina/ver', id]);
+        }
       }
     }
 

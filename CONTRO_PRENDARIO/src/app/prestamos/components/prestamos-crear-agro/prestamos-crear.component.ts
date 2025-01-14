@@ -26,7 +26,7 @@ export class PrestamosCrearAgroComponent implements OnInit{
   private clienteService = inject(ClienteService);
   private translateService = inject(TranslateService);
    
-  tiposMaquinas: string[] = ['GUADAÑA', 'MOTOSIERRA', 'FUMIGADORA A MOTOR', 'ESTACIONARIA'];
+  tiposMaquinas: string[] = ['GUADAÑA', 'MOTOSIERRA', 'FUMIGADORA A MOTOR', 'OTRO'];
   modelosDisponibles: number[] = [];
   loanForm!: FormGroup;
   loading = false;

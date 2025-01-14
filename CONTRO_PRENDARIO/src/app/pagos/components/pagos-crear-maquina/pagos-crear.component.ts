@@ -144,7 +144,7 @@ export class PagosCrearMaquinaComponent implements OnInit{
       }
 
       const pago = {
-        prestamo: {
+        prestamoMaquina: {
           idPrestamoMaquina: this.pagoForm.value.idPrestamoMaquina
         },
         montoPagado: montoIngresado,
@@ -160,7 +160,7 @@ export class PagosCrearMaquinaComponent implements OnInit{
           });
           this.loading = false;
           setTimeout(() => {
-            this.router.navigate(['/prestamos/ver', pago.prestamo.idPrestamoMaquina]);
+            this.router.navigate(['/prestamos/maquina/ver', pago.prestamoMaquina.idPrestamoMaquina]);
           }, 2000);
         },
         error: (error) => {

@@ -1,6 +1,7 @@
 package control.prendario.controller;
 
 import control.prendario.model.Pago;
+import control.prendario.service.PagoMaquinaService;
 import control.prendario.service.PagoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +29,8 @@ public class PagoController {
 
     @Autowired
     private PagoService pagoService;
+    @Autowired
+    private PagoMaquinaService pagoMaquinaService;
 
     @Operation(summary = "Obtener todos los pagos",
             description = "Obtiene una lista de todos los pagos registrados en el sistema")
@@ -51,6 +54,30 @@ public class PagoController {
     @GetMapping
     public ResponseEntity<List<Pago>> obtenerTodosPagos() {
         return ResponseEntity.ok(pagoService.obtenerTodosPagos());
+    }
+
+    @Operation(summary = "Obtener todos los pagos",
+            description = "Obtiene una lista de todos los pagos registrados en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de pagos obtenida exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "array",
+                                    implementation = Pago.class
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos para ver los pagos"
+            )
+    })
+    @GetMapping
+    public ResponseEntity<List<Pago>> obtenerTodosPagosMaquinas() {
+        return ResponseEntity.ok(pagoMaquinaService.obtenerTodosPagos());
     }
 
     @Operation(summary = "Crear nuevo pago",
@@ -88,6 +115,7 @@ public class PagoController {
                     schema = @Schema(implementation = Pago.class)
             )
             @RequestBody Pago pago) {
+        System.out.println( "Pago a insertar de maquinas: " +pago);
         return ResponseEntity.ok(pagoService.crearPago(pago));
     }
 

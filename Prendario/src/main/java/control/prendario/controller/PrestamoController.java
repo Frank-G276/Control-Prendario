@@ -1,6 +1,7 @@
 package control.prendario.controller;
 
 import control.prendario.DTO.PrestamoDTO;
+import control.prendario.DTO.PrestamoMaquinaDTO;
 import control.prendario.model.Prestamo;
 import control.prendario.model.PrestamoMaquina;
 import control.prendario.service.PrestamoMaquinaService;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,6 +127,38 @@ public class PrestamoController {
                     description = "Préstamo no encontrado"
             )
     })
+    @GetMapping("/maquina/{id}")
+    public ResponseEntity<?> getPrestamoPorId(
+            @Parameter(
+                    description = "ID del préstamo",
+                    required = true,
+                    example = "1"
+            )
+            @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(prestamoMaquinaService.obtenerPrestamoMaquinaPorId(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error al obtener el préstamo: " + e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Obtener préstamo por ID",
+            description = "Obtiene los detalles de un préstamo específico por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Préstamo encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Prestamo.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Préstamo no encontrado"
+            )
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getPrestamoById(
             @Parameter(
@@ -179,6 +211,48 @@ public class PrestamoController {
             @RequestBody PrestamoDTO prestamoDTO) {
         try {
             return ResponseEntity.ok(prestamoService.updatePrestamo(id, prestamoDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error al actualizar el préstamo: " + e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Actualizar préstamo",
+            description = "Actualiza la información de un préstamo existente")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Préstamo actualizado exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Prestamo.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error al actualizar el préstamo"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Préstamo no encontrado"
+            )
+    })
+    @PutMapping("/maquina/{id}")
+    public ResponseEntity<?> actualizarPrestamo(
+            @Parameter(
+                    description = "ID del préstamo a actualizar",
+                    required = true,
+                    example = "1"
+            )
+            @PathVariable Long id,
+            @Parameter(
+                    description = "Nuevos datos del préstamo",
+                    required = true,
+                    schema = @Schema(implementation = PrestamoDTO.class)
+            )
+            @RequestBody PrestamoMaquinaDTO prestamoMaquinaDTO) {
+        try {
+            return ResponseEntity.ok(prestamoMaquinaService.actualizarPrestamoMaquina(id, prestamoMaquinaDTO));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body("Error al actualizar el préstamo: " + e.getMessage());

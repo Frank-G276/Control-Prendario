@@ -3,7 +3,7 @@ import { SidebarComponent } from '../../../pages/components/sidebar/sidebar.comp
 import { HeaderComponent } from '../../../pages/components/header/header.component';
 import { Router, RouterModule, } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PagoService } from '../../services/pago.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -11,7 +11,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-pagos-lista',
   standalone: true,
-  imports: [TranslateModule, SidebarComponent, HeaderComponent, RouterModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, TranslateModule, SidebarComponent, HeaderComponent, RouterModule, CommonModule, ReactiveFormsModule],
   templateUrl: './pagos-lista.component.html',
   styleUrl: './pagos-lista.component.css'
 })
@@ -25,6 +25,7 @@ export class PagosListaComponent implements OnInit {
   pagosFiltrados: any[] = [];
   loading = true;
   error = '';
+  selectTable : string = 'vehiculos';
 
   readonly tiposPago = ['CAPITAL', 'INTERES', 'MORA'];
   readonly metodosPago = ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA'];
@@ -33,7 +34,7 @@ export class PagosListaComponent implements OnInit {
     nombreCliente: [''],
     fechaPago: [''],
     tipoPago: [''],
-    metodoPago: ['EFECTIVO']
+    metodoPago: ['EFECTIVO'],
   });
 
   ngOnInit(): void {
@@ -54,7 +55,7 @@ export class PagosListaComponent implements OnInit {
 
   private cargarPagos() {
     this.loading = true;
-    this.pagoService.obtenerTodosPagos().subscribe({
+    this.pagoService.obtenerTodosPagos(this.selectTable).subscribe({
       next: (pagos) => {
         this.pagos = pagos;
         this.pagosFiltrados = pagos;
@@ -132,4 +133,8 @@ export class PagosListaComponent implements OnInit {
   navigateToCrearMaquina(): void {
     this.router.navigate(['/pagos/new']);
   }
+
+  onTableChange() {
+    this.cargarPagos();
+}
 }

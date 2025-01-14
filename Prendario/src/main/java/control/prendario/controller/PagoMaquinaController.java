@@ -1,5 +1,6 @@
 package control.prendario.controller;
 
+import control.prendario.model.Pago;
 import control.prendario.model.PagoMaquina;
 import control.prendario.service.PagoMaquinaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,10 +49,13 @@ public class PagoMaquinaController {
     })
     @PostMapping
     public ResponseEntity<PagoMaquina> crearPago(
-            @Parameter(description = "Datos del pago a registrar", required = true)
+            @Parameter(description = "Datos del pago a registrar",
+                    required = true,
+                    schema = @Schema(implementation = PagoMaquina.class))
             @RequestBody PagoMaquina pago) {
 
-            return ResponseEntity.ok(pagoMaquinaService.crearPago(pago));
+        System.out.println( "Pago a insertar de maquinas: " +pago);
+        return ResponseEntity.ok(pagoMaquinaService.crearPago(pago));
 
     }
 

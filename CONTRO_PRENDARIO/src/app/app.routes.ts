@@ -23,6 +23,8 @@ import { PublicPrestamoViewComponent } from './vista-cliente/components/cliente-
 import { LoginTwoComponent } from './login/login-two/login-two.component';
 import { PrestamosCrearAgroComponent } from './prestamos/components/prestamos-crear-agro/prestamos-crear.component';
 import { PagosCrearMaquinaComponent } from './pagos/components/pagos-crear-maquina/pagos-crear.component';
+import { PrestamosMaquinaViewComponent } from './prestamos/components/prestamos-view-agro/prestamos-view.component';
+import { PrestamosMaquinaEditarComponent } from './prestamos/components/prestamos-editar-agro/prestamos-editar.component';
 
 export const routes: Routes = [
     
@@ -79,7 +81,9 @@ export const routes: Routes = [
           { path: 'nuevo', component: PrestamosCrearComponent },
           { path: 'new', component: PrestamosCrearAgroComponent },
           { path: 'edit/:id', component: PrestamosEditarComponent },
-          { path: 'ver/:id', component: PrestamosViewComponent }
+          { path: 'editar/:id', component: PrestamosMaquinaEditarComponent},
+          { path: 'ver/:id', component: PrestamosViewComponent },
+          { path: 'maquina/ver/:id', component: PrestamosMaquinaViewComponent }
         ]
     },
 

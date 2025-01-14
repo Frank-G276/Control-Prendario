@@ -51,7 +51,7 @@ public class PrestamoMaquinaService {
     }
 
     @Transactional
-    public PrestamoMaquina actualizarPrestamoMaquina(Long id, PrestamoMaquina prestamo) {
+    public PrestamoMaquina actualizarPrestamoMaquina(Long id, PrestamoMaquinaDTO prestamo) {
         PrestamoMaquina prestamoExistente = prestamoMaquinaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Préstamo de máquina no encontrado"));
 
@@ -68,9 +68,6 @@ public class PrestamoMaquinaService {
         if (prestamo.getEstadoPrestamo() != null) {
             prestamoExistente.setEstadoPrestamo(prestamo.getEstadoPrestamo());
         }
-        if (prestamo.getFechaVencimiento() != null) {
-            prestamoExistente.setFechaVencimiento(prestamo.getFechaVencimiento());
-        }
         if (prestamo.getTipoMaquina() != null) {
             prestamoExistente.setTipoMaquina(prestamo.getTipoMaquina());
         }
@@ -79,8 +76,8 @@ public class PrestamoMaquinaService {
         }
 
         // Actualizar cliente si se proporciona
-        if (prestamo.getCliente() != null && prestamo.getCliente().getIdCliente() != null) {
-            Cliente cliente = clienteService.obtenerPorId(prestamo.getCliente().getIdCliente());
+        if (prestamo.getIdCliente() != null ) {
+            Cliente cliente = clienteService.obtenerPorId(prestamo.getIdCliente());
             prestamoExistente.setCliente(cliente);
         }
 

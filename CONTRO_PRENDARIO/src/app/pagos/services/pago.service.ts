@@ -24,8 +24,10 @@ export class PagoService {
 
   crearPago(tableName: string ,pago: Pago): Observable<Pago> {
     if (tableName === 'vehiculos') {
+      console.log('Pago :', pago);
       return this.http.post<Pago>(this.apiUrlPrestamos, pago);
     } else {
+      console.log('Pago :', pago);
       return this.http.post<Pago>(this.apiUrlMaquinas, pago);
     }
   }
@@ -51,8 +53,12 @@ export class PagoService {
   }
   
 
-  obtenerTodosPagos(): Observable<any[]> {
+  obtenerTodosPagos(tableName : string): Observable<any[]> {
+    if(tableName === 'vehiculos'){
     return this.http.get<any[]>(this.apiUrlPrestamos);
+    } else {
+      return this.http.get<any[]>(`${this.apiUrlMaquinas}/maquina`);
+    }
   }
   
 }

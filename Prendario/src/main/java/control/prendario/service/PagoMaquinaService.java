@@ -101,4 +101,8 @@ public class PagoMaquinaService {
     public List<PagoMaquina> obtenerPagosPorPrestamoMaquina(Long idPrestamoMaquina) {
         return pagoMaquinaRepository.findByPrestamoMaquinaIdPrestamoMaquinaOrderByFechaPagoDesc(idPrestamoMaquina);
     }
+
+    public List<Pago> obtenerTodosPagos() {
+        return pagoMaquinaRepository.findAllPagosWithDetails();
+    }
 }

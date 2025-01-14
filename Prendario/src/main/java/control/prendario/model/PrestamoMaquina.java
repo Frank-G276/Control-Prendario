@@ -12,38 +12,49 @@ import java.time.LocalDateTime;
 @Table(name = "prestamos_maquinas")
 @Data
 public class PrestamoMaquina {
+    @Schema(description = "Identificador único del préstamo", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_prestamo_maquina")
     private Long idPrestamoMaquina;
 
+    @Schema(description = "Cliente asociado al préstamo")
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
+    @Schema(description = "Tipo de maquina")
     @Column(name = "tipo_maquina")
     private String tipoMaquina;
 
+    @Schema(description = "Maquina en garantía")
     @Column(name = "marca")
     private String marcaMaquina;
 
+    @Schema(description = "Fecha del prestamo", example = "10000.00")
     @Column(name = "fecha_prestamo", updatable = false)
     private LocalDateTime fechaPrestamo;
 
+    @Schema(description = "Fecha de vencimiento del prestamo")
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 
+    @Schema(description = "Monto del prestamo")
     @Column(name = "monto_prestamo")
     private BigDecimal montoPrestamo;
 
+    @Schema(description = "Tasa de interés anual", example = "5.0")
     @Column(name = "tasa_interes")
     private BigDecimal tasaInteres;
 
+    @Schema(description = "Estado actual del préstamo",
+            allowableValues = {"ACTIVO", "VENCIDO", "PAGADO", "CANCELADO"},
+            example = "ACTIVO")
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_prestamo")
     private EstadoPrestamo estadoPrestamo = EstadoPrestamo.ACTIVO;
 
-    @Column(columnDefinition = "TEXT")
+    @Schema(description = "Observaciones del prestamo")
     private String observaciones;
 
     @Column(name = "created_at", updatable = false)

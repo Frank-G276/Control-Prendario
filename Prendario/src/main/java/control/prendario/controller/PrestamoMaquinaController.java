@@ -100,33 +100,6 @@ public class PrestamoMaquinaController {
         }
     }
 
-    @Operation(summary = "Actualizar préstamo de máquina",
-            description = "Actualiza la información de un préstamo de máquina existente")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Préstamo actualizado exitosamente",
-                    content = @Content(schema = @Schema(implementation = PrestamoMaquina.class))
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Préstamo no encontrado"
-            )
-    })
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarPrestamoMaquina(
-            @Parameter(description = "ID del préstamo", required = true, example = "1")
-            @PathVariable Long id,
-            @Parameter(description = "Datos actualizados del préstamo", required = true)
-            @RequestBody PrestamoMaquina prestamo) {
-        try {
-            return ResponseEntity.ok(prestamoMaquinaService.actualizarPrestamoMaquina(id, prestamo));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body("Error al actualizar el préstamo: " + e.getMessage());
-        }
-    }
-
     @Operation(summary = "Eliminar préstamo de máquina",
             description = "Elimina un préstamo de máquina del sistema")
     @ApiResponses(value = {

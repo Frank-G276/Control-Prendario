@@ -1,0 +1,122 @@
+
+<app-header></app-header>
+<div class="pagina d-flex">
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="cuerpo flex-grow-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                <!-- Loading State -->
+                <div *ngIf="loading" class="flex justify-center items-center py-8">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">{{ 'LOAN_VIEW.LOADING' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="error" class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+
+                <!-- Content -->
+                <div *ngIf="!loading && !error && prestamo" class="card ">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ 'LOAN_VIEW.LOAN_NUMBER' | translate }} #{{ prestamo.idPrestamoMaquina }}</h3>
+                        <div>
+                            <app-report-button
+                            [prestamoId]="prestamo.idPrestamoMaquina" 
+                            class="me-2">
+                            </app-report-button>
+                            <button class="btn btn-outline-light me-2" (click)="navigateToEdit()">
+                                <i class="bi bi-pencil"></i> {{ 'LOAN_VIEW.EDIT' | translate }}
+                            </button>
+                            <button class="btn btn-outline-light" (click)="volver()">
+                                <i class="bi bi-arrow-left"></i> {{ 'LOAN_VIEW.BACK' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <!-- Información del Préstamo -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">{{ 'LOAN_VIEW.LOAN_INFO' | translate }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="fw-bold text-success">{{ 'LOAN_VIEW.STATUS' | translate }}:</label>
+                                            <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-warning': prestamo.estadoPrestamo === 'PENDIENTE',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ 'LOAN_STATUS.' + prestamo.estadoPrestamo | translate }}
+                                            </span>
+                                        </div>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.LOAN_DATE' | translate }}:</strong> {{ formatDate(prestamo.fechaPrestamo) }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.DUE_DATE' | translate }}:</strong> {{ formatDate(prestamo.fechaVencimiento) }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.AMOUNT' | translate }}:</strong> {{ formatCurrency(prestamo.montoPrestamo) }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.INTEREST_RATE' | translate }}:</strong> {{ prestamo.tasaInteres }}%</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.TOTAL_TO_PAY' | translate }}:</strong> {{ formatCurrency(calcularTotal()) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Cliente -->
+                            <div class="col-md-6" *ngIf="prestamo.cliente">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">{{ 'LOAN_VIEW.CLIENT_INFO' | translate }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.NAME' | translate }}:</strong> {{ prestamo.cliente.nombres }} {{ prestamo.cliente.apellidos }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.DOCUMENT' | translate }}:</strong> {{ prestamo.cliente.tipoDocumento }} - {{ prestamo.cliente.numeroDocumento }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.PHONE' | translate }}:</strong> {{ prestamo.cliente.telefono }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.EMAIL' | translate }}:</strong> {{ prestamo.cliente.email }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.ADDRESS' | translate }}:</strong> {{ prestamo.cliente.direccion }}</p>
+                                        <p><strong class="text-success">{{ 'LOAN_VIEW.CITY' | translate }}:</strong> {{ prestamo.cliente.ciudad }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Vehículo -->
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">Información de la Máquina</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong class="text-success">Tipo de Máquina :</strong> {{prestamo.tipoMaquina | translate }}</p>
+                                                
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong class="text-success">Marca de Máquina :</strong> {{ prestamo.marcaMaquina }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="col-md-12" *ngIf="prestamo.observaciones">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h4 class="text-success mb-0">{{ 'LOAN_VIEW.OBSERVATIONS' | translate }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>{{ prestamo.observaciones }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

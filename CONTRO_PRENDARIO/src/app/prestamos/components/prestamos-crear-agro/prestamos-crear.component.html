@@ -24,7 +24,7 @@
                             <select id="tipoMaquina" formControlName="tipoMaquina" 
                                     class="w-full p-2 border rounded"
                                     [class.border-red-500]="loanForm.get('tipoMaquina')?.touched && loanForm.get('tipoMaquina')?.invalid">
-                                <option value="">Tipo de maquina</option>
+                                <option value="">Tipo de máquina</option>
                                 <option *ngFor="let tipo of tiposMaquinas" [value]="tipo">
                                     {{tipo}}
                                 </option>
@@ -163,7 +163,7 @@
                     {{ 'LOAN_CREATE.CANCEL' | translate }}
                 </button>
                 <button (click)="onSubmit()" 
-                        [disabled]="!loanForm.valid || !loanForm.valid || loading"
+                        [disabled]="!loanForm.valid || loading"
                         class="btn btn-success m-2">
                     <span *ngIf="loading" class="flex items-center">
                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

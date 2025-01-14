@@ -1,5 +1,6 @@
 package control.prendario.repository;
 
+import control.prendario.model.Pago;
 import control.prendario.model.Prestamo;
 import control.prendario.model.PrestamoMaquina;
 import org.springframework.data.jpa.repository.JpaRepository;

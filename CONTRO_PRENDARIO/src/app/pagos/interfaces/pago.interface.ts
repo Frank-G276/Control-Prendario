@@ -12,7 +12,7 @@ export interface PagoPrestamo {
 
 export interface PagoMaquina {
   idPago?: number;
-  prestamo: {
+  prestamoMaquina: {
     idPrestamoMaquina: number;
   };
   fechaPago?: string;

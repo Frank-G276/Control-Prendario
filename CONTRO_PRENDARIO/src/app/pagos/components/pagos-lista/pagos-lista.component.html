@@ -34,12 +34,20 @@
                                     Pago Maquina
                                 </button>
                             </div>
-                            
                         </div>
                         </div>
                     </div>
                 </div>
 
+                <select
+                [(ngModel)]="selectTable" 
+                (change)="onTableChange()" 
+                class="mb-4 p-2 border rounded"
+                                
+                >
+                    <option value="vehiculos">Vehículos</option>
+                     <option value="maquinas">Máquinas</option>
+                </select>
                 <!-- Loading State -->
                 <div *ngIf="loading" class="flex justify-center items-center py-8">
                     <div class="spinner-border text-success" role="status">

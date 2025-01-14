@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-prestamos-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ClienteFormComponent, SidebarComponent, HeaderComponent, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, SidebarComponent, HeaderComponent, TranslateModule],
   templateUrl: './prestamos-editar.component.html',
   styleUrl: './prestamos-editar.component.css'
 })
@@ -28,7 +28,7 @@ export class PrestamosEditarComponent implements OnInit{
   private clienteService = inject(ClienteService);
   private translateService = inject(TranslateService);
 
-  tiposVehiculo: string[] = ['AUTOMOVIL', 'MOTOCICLETA', 'CAMIONETA', 'CAMION'];
+  tiposVehiculo: string[] = ['AUTOMÓVIL', 'MOTOCICLETA', 'CAMIONETA', 'CAMION'];
   modelosDisponibles: number[] = [];
   vehicleForm!: FormGroup;
   loanForm!: FormGroup;
@@ -51,10 +51,10 @@ export class PrestamosEditarComponent implements OnInit{
   }
 
   private initializeModelosDisponibles() {
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear() + 1;
     const startYear = currentYear - 44;
     this.modelosDisponibles = Array.from(
-      { length: currentYear - startYear + 1 },
+      { length: (currentYear + 3) - startYear   },
       (_, index) => currentYear - index
     ).sort((a, b) => b - a);
   }

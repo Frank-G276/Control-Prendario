@@ -1,0 +1,182 @@
+<!-- prestamo-editar.component.html -->
+
+<app-header></app-header>
+<div class="pagina d-flex" >
+    <app-sidebar class="lateral container-mt-fluid"></app-sidebar>
+    <div class="prestamo-crear  mx-auto text-success">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">{{ 'LOAN_EDIT.TITLE' | translate }}</h2>
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                {{ 'LOAN_EDIT.EDIT_MODE' | translate }}
+            </span>
+        </div>
+    
+        <!-- Loading State -->
+        <div *ngIf="loading" class="flex justify-center items-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        </div>
+    
+        <ng-container *ngIf="!loading">
+            <div class="crear-cuerpo bg-white  rounded p-6">
+                <!-- Formulario del Vehículo -->
+                <div >
+                    <h3 class="text-xl font-bold mb-4">{{ 'LOAN_EDIT.GENERAL_INFO' | translate }}</h3>
+                </div>
+        
+                <!-- Formulario del Préstamo -->
+                <div >
+                    <form [formGroup]="loanForm" class="space-y-4">
+                        <div class="justify-content-between d-flex flex-wrap">
+                             <!-- Tipo de Vehículo -->
+                             <div class="elemento-form">
+                                <label for="tipoMaquina" class="block mb-1">{{ 'LOAN_EDIT.VEHICLE_TYPE' | translate }} *</label>
+                                <select id="tipoMaquina" formControlName="tipoMaquina" 
+                                        class="w-full p-2 border rounded"
+                                        [class.border-red-500]="loanForm.get('tipoMaquina')?.touched && loanForm.get('tipoMaquina')?.invalid">
+                                    <option value="">Tipo de Máquina</option>
+                                    <option *ngFor="let tipo of tiposMaquina" [value]="tipo">  
+                                        {{ tipo }}
+                                    </option>
+                                </select>
+                                <div *ngIf="loanForm.get('tipoMaquina')?.touched && loanForm.get('tipoMaquina')?.invalid" 
+                                     class="text-red-500 text-sm mt-1">
+                                    {{ 'LOAN_EDIT.REQUIRED_FIELD' | translate }}
+                                </div>
+                            </div>
+                
+                            <!-- Marca -->
+                            <div class="elemento-form">
+                                <label for="marcaMaquina" class="block mb-1">{{ 'LOAN_CREATE.BRAND' | translate }} *</label>
+                                <input type="text" id="marcaMaquina" formControlName="marcaMaquina" 
+                                       class="w-full p-2 border rounded"
+                                       [class.border-red-500]="loanForm.get('marca')?.touched && loanForm.get('marca')?.invalid">
+                                <div *ngIf="loanForm.get('marca')?.touched && loanForm.get('marca')?.invalid" 
+                                     class="text-red-500 text-sm mt-1">
+                                     {{ 'LOAN_CREATE.REQUIRED_FIELD' | translate }}
+                                </div>
+                            </div>
+                            
+                            <!-- Cliente -->
+                            <div class="elemento-form relative">
+                                <div class="mb-3 d-flex justify-content-between align-items-start">
+                                    <!-- Buscador -->
+                                    <div class="flex-grow-1 me-3">
+                                        <label for="buscadorClientes">{{ 'LOAN_EDIT.SEARCH_CLIENT' | translate }} *</label>
+                                        <div class="relative">
+                                            <input
+                                                id="buscadorClientes"
+                                                type="text"
+                                                [formControl]="buscadorControl"
+                                                class="w-full p-2 border rounded"
+                                                placeholder="{{ 'LOAN_EDIT.SEARCH_CLIENT_PLACEHOLDER' | translate }}"
+                                                [class.border-red-500]="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid"
+                                            >
+                                            <button
+                                                *ngIf="clienteSeleccionado"
+                                                (click)="limpiarSeleccion()"
+                                                class="btn"
+                                                type="button"
+                                            >
+                                            <i class="bi bi-x-circle"></i>
+                                            </button>
+                                        </div>
+                            
+                                        <!-- Lista de resultados -->
+                                        <div *ngIf="mostrarResultados && clientesEncontrados.length > 0"
+                                            class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                                           <ul class="max-h-60 overflow-auto">
+                                               <li *ngFor="let cliente of clientesEncontrados"
+                                                   (click)="seleccionarCliente(cliente)"
+                                                   class="p-2 hover:bg-gray-100 cursor-pointer">
+                                                   {{cliente.nombres}} {{cliente.apellidos}} - {{cliente.numeroDocumento}}
+                                               </li>
+                                           </ul>
+                                       </div>
+                            
+                                        <!-- Mensaje si no hay resultados -->
+                                        <div *ngIf="mostrarResultados && clientesEncontrados.length === 0 && buscadorControl.value"
+                                             class="mt-1 text-sm text-gray-500">
+                                            {{ 'LOAN_EDIT.NO_CLIENTS_FOUND' | translate }}
+                                        </div>
+                                    </div>
+                            
+                                    
+                                </div>
+                            
+                                <!-- Mensaje de validación -->
+                                <div *ngIf="loanForm.get('idCliente')?.touched && loanForm.get('idCliente')?.invalid" 
+                                     class="text-red-500 text-sm mt-1">
+                                    {{ 'LOAN_EDIT.CLIENT_REQUIRED' | translate }}
+                                </div>
+                            </div>
+            
+                            <!-- Monto del Préstamo -->
+                            <div class="elemento-form">
+                                <label for="montoPrestamo" class="block mb-1 font-medium">{{ 'LOAN_CREATE.LOAN_AMOUNT' | translate }} *</label>
+                                <input type="number" id="montoPrestamo" formControlName="montoPrestamo" 
+                                       class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       [class.border-red-500]="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid">
+                                <div *ngIf="loanForm.get('montoPrestamo')?.touched && loanForm.get('montoPrestamo')?.invalid" 
+                                     class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['required']">
+                                        {{ 'LOAN_CREATE.AMOUNT_REQUIRED' | translate }}
+                                    </div>
+                                    <div *ngIf="loanForm.get('montoPrestamo')?.errors?.['min']">
+                                        {{ 'LOAN_CREATE.AMOUNT_MIN' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Tasa de Interés -->
+                            <div class="elemento-form">
+                                <label for="tasaInteres" class="block mb-1 font-medium">{{ 'LOAN_CREATE.INTEREST_RATE' | translate }} *</label>
+                                <input type="number" id="tasaInteres" formControlName="tasaInteres" 
+                                       class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       [class.border-red-500]="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid">
+                                <div *ngIf="loanForm.get('tasaInteres')?.touched && loanForm.get('tasaInteres')?.invalid" 
+                                     class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="loanForm.get('tasaInteres')?.errors?.['required']">
+                                        {{ 'LOAN_CREATE.RATE_REQUIRED' | translate }}
+                                    </div>
+                                    <div *ngIf="loanForm.get('tasaInteres')?.errors?.['min'] || loanForm.get('tasaInteres')?.errors?.['max']">
+                                        {{ 'LOAN_CREATE.RATE_RANGE' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Observaciones -->
+                            <div class="elemento-form area-texto">
+                                <label for="observaciones" class="block mb-1 font-medium">{{ 'LOAN_CREATE.OBSERVATIONS' | translate }}</label>
+                                <textarea id="observaciones" formControlName="observaciones" 
+                                        rows="4"
+                                        placeholder="{{ 'LOAN_CREATE.OBSERVATIONS_PLACEHOLDER' | translate }}"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+        
+                <!-- Botones -->
+                <div class="botones flex justify-content-between mt-5">
+                    <button (click)="router.navigate(['/prestamos'])" 
+                            class="btn btn-danger m-2">
+                        {{ 'LOAN_EDIT.CANCEL' | translate }}
+                    </button>
+                    <button (click)="onSubmit()" 
+                            [disabled]="!loanForm.valid || loading"
+                            class="btn btn-success m-2">
+                        <span *ngIf="loading" class="flex items-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {{ 'LOAN_EDIT.PROCESSING' | translate }}
+                        </span>
+                        <span *ngIf="!loading">
+                            {{ 'LOAN_EDIT.UPDATE_LOAN' | translate }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+  </div> 
