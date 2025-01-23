@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, forkJoin, map, mergeMap, Observable, tap, throwError } from 'rxjs';
 import { PrestamoMaquina } from '../models/prestamomaquina.interface';
-import { PagoMaquinaService } from '../../pagos/services/pago-maquina.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +17,7 @@ export class PrestamoMaquinaService {
       };
 
     constructor(
-        private http: HttpClient,
-        private pagoMaquinaService: PagoMaquinaService
+        private http: HttpClient
     ) { }
 
     // Obtener todos los préstamos de máquinas
@@ -76,22 +74,6 @@ export class PrestamoMaquinaService {
             params: new HttpParams().set('termino', termino)
         }).pipe(
             catchError(this.handleError)
-        );
-    }
-
-    // Obtener préstamos con resumen de pagos
-    getPrestamosMaquinaConResumen(): Observable<any[]> {
-        return this.getPrestamosMaquina().pipe(
-            map(prestamos => {
-                const observables = prestamos.map(prestamo =>
-                    forkJoin({
-                        prestamo: Promise.resolve(prestamo),
-                        resumen: this.pagoMaquinaService.obtenerResumenPagos(prestamo.idPrestamoMaquina!)
-                    })
-                );
-                return forkJoin(observables);
-            }),
-            mergeMap(results => results)
         );
     }
 

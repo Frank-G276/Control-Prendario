@@ -26,12 +26,12 @@
                                 class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                                 data-bs-dismiss="modal"
                                 (click)="navigateToCreate()">
-                                    Prestamo Vehícular 
+                                    Prestamo Vehicular 
                                 </button>
                                 <button  class="btn btn-success hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                                 data-bs-dismiss="modal"
                                 (click)="navigateToCreateA()">
-                                    Prestamo Agromaquinas
+                                    Prestamo Máquina
                                 </button>
                             </div>
                             
@@ -43,12 +43,51 @@
                 <select
                 [(ngModel)]="selectTable" 
                 (change)="onTableChange()" 
-                    class="mb-4 p-2 border rounded"
+                    class="mb-2 p-2 border rounded"
                     
                 >
                     <option value="vehiculos">Vehículos</option>
                     <option value="maquinas">Máquinas</option>
                 </select>
+
+                <div class="d-flex justify-content-between align-items-center ">
+                    <div class="text-muted">
+                        Mostrando {{ (currentPage - 1) * pageSize + 1 }} - 
+                        {{ Math.min(currentPage * pageSize, totalItems) }} 
+                        de {{ totalItems }} elementos
+                    </div>
+                    
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item" [class.disabled]="currentPage === 1">
+                                <button class="page-link" 
+                                        (click)="onPageChange(currentPage - 1)"
+                                        [disabled]="currentPage === 1">
+                                    Anterior
+                                </button>
+                            </li>
+                            
+                            <li class="page-item" 
+                                *ngFor="let page of pages"
+                                [class.active]="page === currentPage">
+                                <button *ngIf="page !== -1" 
+                                        class="page-link" 
+                                        (click)="onPageChange(page)">
+                                    {{ page }}
+                                </button>
+                                <span *ngIf="page === -1" class="page-link">...</span>
+                            </li>
+                            
+                            <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                <button class="page-link"
+                                        (click)="onPageChange(currentPage + 1)"
+                                        [disabled]="currentPage === totalPages">
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
                
                 <!-- Loading State -->
@@ -65,6 +104,7 @@
                 <div *ngIf="!loading && !error" class=" shadow-md rounded-lg overflow-hidden taba">
                     
                     <div class="d-flex align-items-center justify-content-between buscador_tabla" [formGroup]="filtrosForm">
+                        
                         <input type="text" 
                                formControlName="numeroPrestamo"
                                placeholder="{{ 'LOANS.NUMBER' | translate }}" 
@@ -137,7 +177,7 @@
                                 </tr>
                             </thead>
                             <tbody class="tabla_cuerpo text-success">
-                                <tr *ngFor="let prestamo  of prestamosFiltrados" >
+                                <tr *ngFor="let prestamo  of prestamosAPaginar" >
                                     <td >
                                        {{ getId(prestamo) }}
                                     </td>
@@ -159,7 +199,7 @@
                                         ${{ prestamo.montoPrestamo | number:'1.2-2' }}
                                     </td>
                                     <td>
-                                        ${{ prestamo.resumenPagos?.interesPendiente}}
+                                        ${{ prestamo.resumenPagos?.interesPendiente | number: '1.2-2'}}
                                     </td>
                                     <td>
                                         ${{ prestamo.totalAbonado | number:'1.2-2' }}
@@ -168,14 +208,13 @@
                                         ${{ prestamo.saldoPendiente | number:'1.2-2' }}
                                     </td>
                                     <td >
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                              [ngClass]="{
-                                                'bg-green-100 text-green-800': prestamo.estadoPrestamo === 'ACTIVO',
-                                                'bg-yellow-100 text-yellow-800': prestamo.estadoPrestamo === 'PENDIENTE',
-                                                'bg-red-100 text-red-800': prestamo.estadoPrestamo === 'VENCIDO',
-                                                'bg-blue-100 text-blue-800': prestamo.estadoPrestamo === 'PAGADO'
-                                              }">
-                                            {{ prestamo.estadoPrestamo }}
+                                        <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ 'LOAN_STATUS.' + prestamo.estadoPrestamo | translate }}
                                         </span>
                                     </td>
                                     <td >
@@ -195,13 +234,51 @@
                                     </td>
                                 </tr>
                                 <!-- Empty State -->
-                                <tr *ngIf="prestamosFiltrados.length === 0">
+                                <tr *ngIf="prestamosAPaginar.length === 0">
                                     <td colspan="9" class="px-6 py-4 text-center text-gray-500">
                                         {{ 'LOANS.NO_LOANS_FOUND' | translate }}
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">
+                            Mostrando {{ (currentPage - 1) * pageSize + 1 }} - 
+                            {{ Math.min(currentPage * pageSize, totalItems) }} 
+                            de {{ totalItems }} elementos
+                        </div>
+                        
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                    <button class="page-link" 
+                                            (click)="onPageChange(currentPage - 1)"
+                                            [disabled]="currentPage === 1">
+                                        Anterior
+                                    </button>
+                                </li>
+                                
+                                <li class="page-item" 
+                                    *ngFor="let page of pages"
+                                    [class.active]="page === currentPage">
+                                    <button *ngIf="page !== -1" 
+                                            class="page-link" 
+                                            (click)="onPageChange(page)">
+                                        {{ page }}
+                                    </button>
+                                    <span *ngIf="page === -1" class="page-link">...</span>
+                                </li>
+                                
+                                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                    <button class="page-link"
+                                            (click)="onPageChange(currentPage + 1)"
+                                            [disabled]="currentPage === totalPages">
+                                        Siguiente
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

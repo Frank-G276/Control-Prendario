@@ -15,6 +15,7 @@ interface ResumenNegocio {
   dineroFluyendo: number;
   dineroDisponible: number;
   prestamosVencidos: any[];
+  maquinasVencidas: any[];
   interesesGenerados: number;
 }
 
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit{
     dineroFluyendo: 0,
     dineroDisponible: 0,
     prestamosVencidos: [],
+    maquinasVencidas: [],
     interesesGenerados: 0
   };
 
@@ -56,11 +58,25 @@ export class HomeComponent implements OnInit{
         const maquinas = this.maquinas = response.maquinas;
 
         this.loading = false;
-        const prestamosActivos = prestamos.filter(p => p.estadoPrestamo === 'ACTIVO');
-        this.resumen.dineroFluyendo = prestamosActivos.reduce((total, p) => total + p.montoPrestamo, 0);
         
         // Filtrar préstamos vencidos
         this.resumen.prestamosVencidos = prestamos
+        .filter(p => {
+          if (!p.fechaVencimiento) return false;
+          const fechaVencimiento = new Date(p.fechaVencimiento);
+          const ahora = new Date();
+          return (fechaVencimiento < ahora && p.estadoPrestamo === 'ACTIVO') || 
+           p.estadoPrestamo === 'VENCIDO';
+        })
+        .sort((a, b) => {
+          const fechaA = new Date(a.fechaVencimiento!).getTime();
+          const fechaB = new Date(b.fechaVencimiento!).getTime();
+          return fechaB - fechaA; // Ordenar por fecha de vencimiento más reciente
+        })
+        .slice(0, 3); // Tomar solo los 3 primeros
+
+        // Filtrar máquinas vencidos
+        this.resumen.maquinasVencidas = maquinas
         .filter(p => {
           if (!p.fechaVencimiento) return false;
           const fechaVencimiento = new Date(p.fechaVencimiento);
@@ -87,6 +103,7 @@ export class HomeComponent implements OnInit{
     // Cargar balance de movimientos
     this.movimientoService.obtenerBalance().subscribe({
       next: (balance) => {
+        this.resumen.dineroFluyendo = balance.activos;
         this.resumen.dineroDisponible = balance.total;
       },
       error: (error) => {

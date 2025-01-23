@@ -22,7 +22,8 @@ import { PrestamoMaquinaService } from '../../services/prestamo-maquina.service'
 export class PrestamosCrearAgroComponent implements OnInit{
   private fb = inject(FormBuilder);
   router = inject(Router);
-  private prestamoMaquinaService = inject(PrestamoMaquinaService)
+  private prestamoMaquinaService = inject(PrestamoMaquinaService);
+  private prestamoService = inject(PrestamoService);
   private clienteService = inject(ClienteService);
   private translateService = inject(TranslateService);
    
@@ -140,7 +141,15 @@ export class PrestamosCrearAgroComponent implements OnInit{
             });
             this.loading = false;
             setTimeout(() => {
-                this.router.navigate(['/prestamos']);
+              this.prestamoService.ultimoId('maquina').subscribe({
+                next: (ultimoId: number) => {
+                  // Navega a la ruta con el último ID
+                  this.router.navigate(['/prestamos/maquina/ver', ultimoId]);
+                },
+                error: (err) => {
+                  console.error('Error al obtener el último ID', err);
+                },
+              });
             }, 1500);
       },
       error: (error) => {

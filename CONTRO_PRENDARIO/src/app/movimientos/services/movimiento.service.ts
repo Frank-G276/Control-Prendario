@@ -14,6 +14,8 @@ export interface Balance {
   movimientos: number;
   pagos: number;
   prestamos: number;
+  activos: number;
+  interes: number;
   total: number;
 }
 

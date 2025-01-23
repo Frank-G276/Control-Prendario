@@ -21,6 +21,9 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     @Query("SELECT SUM(p.montoPagado) FROM Pago p WHERE p.prestamo.idPrestamo = :idPrestamo AND p.tipoPago = :tipoPago")
     BigDecimal sumMontoPagadoByPrestamoAndTipoPago(Long idPrestamo, Pago.TipoPago tipoPago);
 
+    @Query("SELECT SUM(p.montoPagado) FROM Pago p WHERE  p.tipoPago = :tipoPago")
+    BigDecimal sumMontoPagadoByTipoPago(Pago.TipoPago tipoPago);
+
     @Query("SELECT DISTINCT p FROM Pago p " +
             "LEFT JOIN FETCH p.prestamo pr " +
             "LEFT JOIN FETCH pr.cliente " +

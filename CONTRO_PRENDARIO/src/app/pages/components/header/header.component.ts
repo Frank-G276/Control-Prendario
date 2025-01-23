@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 import { PrestamoService } from '../../../prestamos/services/prestamo.service';
-import { Prestamo } from '../../../prestamos/models/prestamo.interface';
+import { Maquina, Prestamo } from '../../../prestamos/models/prestamo.interface';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LenguageSelectorComponent } from "../../../internationalization/components/lenguage-selector/lenguage-selector.component";
 
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   userRole: string = '';
   searchTerm: string = '';
   searchResults: Prestamo[] = [];
+  searchResultsMaquinas: Maquina[] = [];
   showResults: boolean = false;
   private searchSubject = new Subject<string>();
   private searchSubscription: Subscription | null = null;
@@ -58,6 +59,22 @@ export class HeaderComponent implements OnInit, OnDestroy{
       this.searchResults = results;
       this.showResults = results.length > 0;
     });
+
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(termino => {
+        if (!termino){ 
+          this.searchResults = [];
+          return [];
+        }
+        return this.prestamoService.buscarPrestamos('maquina',termino, '');
+       })
+     )
+      .subscribe(results => {
+      this.searchResultsMaquinas = results;
+      this.showResults = results.length > 0;
+    });
   }
 
   ngOnDestroy(): void {
@@ -83,6 +100,13 @@ export class HeaderComponent implements OnInit, OnDestroy{
   selectPrestamo(prestamo: Prestamo): void {
     console.log('Préstamo seleccionado:', prestamo);
     this.router.navigate(['/prestamos/ver', prestamo.idPrestamo]);
+    this.searchTerm = '';
+    this.showResults = false;
+  }
+
+  selectPrestamoMaquina(prestamo: Maquina): void {
+    console.log('Préstamo seleccionado:', prestamo);
+    this.router.navigate(['/prestamos/maquina/ver', prestamo.idPrestamoMaquina]);
     this.searchTerm = '';
     this.showResults = false;
   }

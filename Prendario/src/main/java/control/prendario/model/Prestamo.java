@@ -55,7 +55,7 @@ public class Prestamo {
     private BigDecimal tasaInteres;
 
     @Schema(description = "Estado actual del préstamo",
-            allowableValues = {"ACTIVO", "VENCIDO", "PAGADO", "CANCELADO"},
+            allowableValues = {"ACTIVO", "VENCIDO", "PAGADO"},
             example = "ACTIVO")
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_prestamo")

@@ -2,11 +2,21 @@ import { Cliente } from "../../clientes/models/cliente.interface";
 import { Vehicle } from "./vehicle.model";
 
 export interface ResumenPagos {
-    capitalPagado: number;
-    interesPagado: number;
-    capitalPendiente: number;
-    interesPendiente: number;
-    interesTotal: number;
+  capitalTotal: number;
+  interesTotal: number;
+  capitalPagado: number;
+  interesPagado: number;
+  capitalPendiente: number;
+  interesPendiente: number;
+}
+
+export interface ResumenPrestamo {
+  capitalTotal: number;
+  interesTotal: number;
+  capitalPagado: number;
+  interesPagado: number;
+  capitalPendiente: number;
+  interesPendiente: number;
 }
   
 export interface PrestamoBase {
@@ -20,7 +30,7 @@ export interface PrestamoBase {
     observaciones?: string;
     createdAt?: string;
     updatedAt?: string | null;
-    resumenPagos?: ResumenPagos;
+    resumenPagos?: ResumenPagos | ResumenPrestamo;
     totalAbonado?: number;
     interesTotal?: number;
     saldoPendiente?: number;

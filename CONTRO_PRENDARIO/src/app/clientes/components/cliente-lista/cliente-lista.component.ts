@@ -27,6 +27,12 @@ export class ClienteListaComponent implements OnInit {
   nombreBusqueda: string = '';
   documentoBusqueda: string = '';
 
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  clientesAPaginar: Cliente[] = [];
+  protected Math = Math;
+
   ngOnInit(): void {
     this.cargarClientes();
   }
@@ -37,7 +43,12 @@ export class ClienteListaComponent implements OnInit {
 
   cargarClientes(): void {
     this.clienteService.obtenerClientes().subscribe({
-      next: (data) => this.clientes = data,
+      next: (data) => {
+        this.clientes = data;
+        this.totalItems = this.clientes.length;
+        this.currentPage = 1; // Reset a la primera página cuando se aplican filtros
+        this.updatePaginatedItems();
+      },
       error: (error) => console.error('Error al cargar clientes', error)
     });
   }
@@ -90,5 +101,56 @@ export class ClienteListaComponent implements OnInit {
     this.nombreBusqueda = '';
     this.documentoBusqueda = '';
     this.cargarClientes();
+  }
+
+  private updatePaginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.clientesAPaginar = this.clientes.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const totalPages = this.totalPages;
+    const current = this.currentPage;
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    let start = Math.max(current - Math.floor(maxVisible / 2), 1);
+    let end = start + maxVisible - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - maxVisible + 1, 1);
+    }
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push(-1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push(-1);
+      pages.push(totalPages);
+    }
+
+    return pages;
   }
 }

@@ -91,4 +91,67 @@ public class ReporteController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(summary = "Generar documento de empeño",
+            description = "Genera un documento PDF con los detalles del empeño para un préstamo específico. " +
+                    "Este documento incluye información del cliente, maquina y condiciones del préstamo.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Documento generado exitosamente",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PDF_VALUE,
+                            schema = @Schema(
+                                    type = "string",
+                                    format = "binary",
+                                    description = "Archivo PDF del documento de empeño"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Préstamo no encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "object",
+                                    example = "{\"error\": \"Préstamo no encontrado\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno al generar el documento",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "object",
+                                    example = "{\"error\": \"Error al generar el documento de empeño\"}"
+                            )
+                    )
+            )
+    })
+    @GetMapping("/documento-maquina/{idPrestamoMaquina}")
+    public ResponseEntity<byte[]> generarDocumentoEmpenoMaquina(
+            @Parameter(
+                    description = "ID del préstamo para generar el documento",
+                    required = true,
+                    example = "1",
+                    schema = @Schema(type = "integer", format = "int64")
+            )
+            @PathVariable Long idPrestamoMaquina) {
+        try {
+            byte[] reporteBytes = reporteService.generarDocumentoEmpenoMaquina(idPrestamoMaquina);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "documento_maquina.pdf");
+
+            return new ResponseEntity<>(reporteBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -64,7 +64,7 @@ public class PrestamoService {
 
 
     public List<Prestamo> getAllPrestamos() {
-        return prestamoRepository.findAll();
+        return prestamoRepository.findAllByOrderByIdPrestamoDesc();
     }
 
     public Prestamo getPrestamoById(Long id) {
@@ -137,6 +137,10 @@ public class PrestamoService {
                                 prestamo.getFechaVencimiento() != null &&
                                 prestamo.getFechaVencimiento().isBefore(now))
                 .collect(Collectors.toList());
+    }
+
+    public Long getUltimoIdPrestamo() {
+        return prestamoRepository.findMaxId();
     }
 
 

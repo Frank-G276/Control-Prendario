@@ -25,12 +25,53 @@
         </label>
         
         <!-- Dropdown de resultados -->
-        <div class="dropdown-menu" [class.show]="showResults" style="max-height: 300px; overflow-y: auto;">
-          <button class="dropdown-item"
+        <div class="dropdown-menu border border-3 border-secondary p-2 rounded" [class.show]="showResults" style="width: 340px; overflow-y: auto;">
+          
+          <h5 class="text-success">Prestamos Encontrados</h5>
+          <small class="fst-italic text-success" style="font-size: small;">Vehículos</small>
+          <div class="fst-italic text-info" style="font-size: small;"
+           *ngIf="searchResults.length === 0">
+            No hay prestamos con ese nombre o numero de documento.
+          </div>
+          <hr *ngIf="searchResults.length === 0" class="m-0 p-0"/>
+          <button class="dropdown-item "
                   *ngFor="let prestamo of searchResults"
                   (click)="selectPrestamo(prestamo); "
                   type="button">
-            {{ prestamo.cliente?.nombres }} {{ prestamo.cliente?.apellidos }} - {{ prestamo.cliente?.numeroDocumento }}
+                  <div>{{prestamo.cliente?.nombres}} {{prestamo.cliente?.apellidos}}</div>
+                  <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamo}} - {{prestamo.vehiculo.marca}} - {{prestamo.vehiculo.linea}}
+                                        <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ 'LOAN_STATUS.' + prestamo.estadoPrestamo | translate }}
+                                        </span></small>
+              
+          </button>
+          
+          <small class="fst-italic text-success" style="font-size: small;">Máquinas</small>
+          <hr class="m-0 p-0"/>
+          <div class="fst-italic text-info" style="font-size: small;"
+           *ngIf="searchResultsMaquinas.length === 0">
+            No hay prestamos con ese nombre o numero de documento.
+          </div>
+          <button class="dropdown-item "
+                  *ngFor="let prestamo of searchResultsMaquinas"
+                  (click)="selectPrestamoMaquina(prestamo); "
+                  type="button">
+                  <div>{{prestamo.cliente?.nombres}} {{prestamo.cliente?.apellidos}}</div>
+                  <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamoMaquina}} - {{prestamo.tipoMaquina}} - {{prestamo.marcaMaquina}}
+                                        <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ 'LOAN_STATUS.' + prestamo.estadoPrestamo | translate }}
+                                        </span>
+                  </small>                  
           </button>
         </div>
       </div>

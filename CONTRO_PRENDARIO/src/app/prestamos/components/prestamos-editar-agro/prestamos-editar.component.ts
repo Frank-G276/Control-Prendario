@@ -175,7 +175,7 @@ export class PrestamosMaquinaEditarComponent implements OnInit{
         });
         this.loading = false;
         setTimeout(() => {
-          this.router.navigate(['/prestamos']);
+          this.router.navigate(['/prestamos/maquina/ver', this.prestamoId]);
         }, 1500);
       },
       error: (error) => {

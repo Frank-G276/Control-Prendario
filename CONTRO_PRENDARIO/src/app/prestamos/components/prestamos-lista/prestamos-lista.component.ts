@@ -18,6 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     styleUrl: './prestamos-lista.component.css'
 })
 export class PrestamosListaComponent implements OnInit {
+  protected Math = Math;
   private router = inject(Router);
   private prestamoService = inject(PrestamoService);
   private clienteService = inject(ClienteService);
@@ -27,23 +28,37 @@ export class PrestamosListaComponent implements OnInit {
   prestamos: Prestamo[] = [];
   maquinas: Maquina[] = [];
   prestamosFiltrados: PrestamoBase[] = [];
+  prestamosAPaginar: PrestamoBase[] = [];
   loading: boolean = true;
   error: string = '';
   selectTable : string = 'vehiculos';
-
   estadosPrestamo = ['ACTIVO', 'PENDIENTE', 'VENCIDO', 'PAGADO'];
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalItems: number = 0;
   
   filtrosForm: FormGroup = this.fb.group({
     numeroPrestamo: [''],
     nombreCliente: [''],
     fechaCreacion: [''],
     fechaVencimiento: [''],
-    estado: ['']
+    estado: [''],
+    itemsPerPage: [5]
   });
 
   ngOnInit() {
     this.loadPrestamos();
     this.setupFiltros();
+    this.setupPaginationChange();
+  }
+
+  private setupPaginationChange() {
+    // Listen to changes in items per page
+    this.filtrosForm.get('itemsPerPage')?.valueChanges.subscribe(value => {
+      this.pageSize = value;
+      this.currentPage = 1; // Reset to first page when changing items per page
+      this.updatePaginatedItems();
+    });
   }
 
   private setupFiltros() {
@@ -104,6 +119,66 @@ export class PrestamosListaComponent implements OnInit {
       }
   
       this.prestamosFiltrados = prestamosFiltrados;
+      this.totalItems = this.prestamosFiltrados.length;
+      this.updatePaginatedItems();
+  }
+
+  
+  private updatePaginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.prestamosAPaginar = this.prestamosFiltrados.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const totalPages = this.totalPages;
+    const current = this.currentPage;
+    const maxVisible = 5; // Número máximo de páginas visibles
+    
+    if (totalPages <= maxVisible) {
+      // Si hay menos páginas que el máximo, mostrarlas todas
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+  
+    // Calcular el rango de páginas a mostrar
+    let start = Math.max(current - Math.floor(maxVisible / 2), 1);
+    let end = start + maxVisible - 1;
+  
+    // Ajustar si llegamos al final
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - maxVisible + 1, 1);
+    }
+  
+    const pages = [];
+    
+    // Añadir primera página y ellipsis si es necesario
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push(-1); // -1 representa el ellipsis
+    }
+  
+    // Añadir páginas del rango
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+  
+    // Añadir última página y ellipsis si es necesario
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push(-1);
+      pages.push(totalPages);
+    }
+  
+    return pages;
   }
 
   loadPrestamos() {
@@ -132,6 +207,9 @@ export class PrestamosListaComponent implements OnInit {
             }));
             this.prestamosFiltrados = this.maquinas;
         }
+        this.totalItems = this.prestamosFiltrados.length; // Actualizar totalItems
+        this.currentPage = 1; // Resetear a la primera página
+        this.updatePaginatedItems(); // Actualizar elementos paginados
         this.loading = false;
       },
       error: (error) => {
@@ -143,9 +221,14 @@ export class PrestamosListaComponent implements OnInit {
     }
 
     limpiarFiltros() {
-      this.filtrosForm.reset();
-      this.prestamosFiltrados = this.prestamos;
-    }
+      this.filtrosForm.reset({
+          itemsPerPage: this.pageSize // Mantener el valor actual de items por página
+      });
+      this.prestamosFiltrados = this.selectTable === 'vehiculos' ? this.prestamos : this.maquinas;
+      this.totalItems = this.prestamosFiltrados.length;
+      this.currentPage = 1;
+      this.updatePaginatedItems();
+  }
   
     deletePrestamo(item: PrestamoBase) {
       this.translateService.get('LOANS.CONFIRM_DELETE').subscribe((res: string) => {

@@ -177,7 +177,15 @@ export class PrestamosCrearComponent implements OnInit{
             });
             this.loading = false;
             setTimeout(() => {
-                this.router.navigate(['/prestamos']);
+              this.prestamoService.ultimoId('vehiculo').subscribe({
+                next: (ultimoId: number) => {
+                  // Navega a la ruta con el último ID
+                  this.router.navigate(['/prestamos/ver', ultimoId]);
+                },
+                error: (err) => {
+                  console.error('Error al obtener el último ID', err);
+                },
+              });
             }, 1500);
       },
       error: (error) => {

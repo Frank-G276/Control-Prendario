@@ -21,11 +21,19 @@ export class MovimientoListaComponent implements OnInit {
   movimientos: any[] = [];
   loading = true;
   error = '';
+
+  currentPage: number = 1;
+  pageSize: number = 10;
+  totalItems: number = 0;
+  movimientosAPaginar: any[] = [];
+  protected Math = Math;
   
   balance = {
     movimientos: 0,
     pagos: 0,
     prestamos: 0,
+    activos: 0,
+    interes: 0,
     total: 0
   };
 
@@ -39,6 +47,9 @@ export class MovimientoListaComponent implements OnInit {
     this.movimientoService.obtenerMovimientos().subscribe({
       next: (data) => {
         this.movimientos = data;
+        this.totalItems = this.movimientos.length;
+        this.currentPage = 1;
+        this.updatePaginatedItems();
         this.loading = false;
       },
       error: (error) => {
@@ -49,6 +60,57 @@ export class MovimientoListaComponent implements OnInit {
         console.error('Error:', error);
       }
     });
+  }
+
+  private updatePaginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.movimientosAPaginar = this.movimientos.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const totalPages = this.totalPages;
+    const current = this.currentPage;
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    let start = Math.max(current - Math.floor(maxVisible / 2), 1);
+    let end = start + maxVisible - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - maxVisible + 1, 1);
+    }
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push(-1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push(-1);
+      pages.push(totalPages);
+    }
+
+    return pages;
   }
 
   cargarBalance(): void {

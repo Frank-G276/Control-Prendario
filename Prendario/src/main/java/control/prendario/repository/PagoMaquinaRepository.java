@@ -18,9 +18,16 @@ public interface PagoMaquinaRepository extends JpaRepository<PagoMaquina, Long> 
             "AND p.tipoPago = :tipoPago")
     BigDecimal sumMontoPagadoByPrestamoAndTipoPago(Long idPrestamoMaquina, Pago.TipoPago tipoPago);
 
+    @Query("SELECT SUM(p.montoPagado) FROM PagoMaquina p WHERE  p.tipoPago = :tipoPago")
+    BigDecimal sumMontoPagadoByTipoPago(Pago.TipoPago tipoPago);
+
     @Query("SELECT DISTINCT p FROM PagoMaquina p " +
             "LEFT JOIN FETCH p.prestamoMaquina pr " +
             "LEFT JOIN FETCH pr.cliente " +
             "ORDER BY p.fechaPago DESC")
     List<PagoMaquina> findAllPagosWithDetails();
+
+    @Query("SELECT COALESCE(SUM(p.montoPagado), 0) FROM PagoMaquina p")
+    BigDecimal sumTotalPagos();
+
 }

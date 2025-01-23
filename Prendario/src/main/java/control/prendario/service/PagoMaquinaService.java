@@ -20,6 +20,8 @@ public class PagoMaquinaService {
 
     @Autowired
     private PrestamoMaquinaRepository prestamoMaquinaRepository;
+    @Autowired
+    private CalculoInteresMaquinaService calculoInteresMaquinaService;
 
     @Transactional
     public PagoMaquina crearPago(PagoMaquina pago) {
@@ -78,23 +80,27 @@ public class PagoMaquinaService {
         capitalPagado = capitalPagado != null ? capitalPagado : BigDecimal.ZERO;
         interesPagado = interesPagado != null ? interesPagado : BigDecimal.ZERO;
 
-        // Fecha de inicio
-        LocalDate startDate = prestamoMaquina.getFechaPrestamo().toLocalDate();
-
-        // Fecha actual obtenida automáticamente
-        LocalDate currentDate = LocalDate.now();
-
         // Calculate pending amounts
         BigDecimal capitalPendiente = prestamoMaquina.getMontoPrestamo().subtract(capitalPagado);
 
-        // Calcular el interés total
-        BigDecimal interesTotal = capitalPendiente
-                .multiply(prestamoMaquina.getTasaInteres().multiply(new BigDecimal(calculateFullMonths(startDate, currentDate))))
-                .divide(new BigDecimal("100"));
+        // Calcular el interés pendiente
+        BigDecimal interesPendiente = calculoInteresMaquinaService.calcularInteresPendiente(
+                prestamoMaquina,
+                LocalDate.now()
+        );
+
+        if (interesPendiente.compareTo(BigDecimal.ZERO) < 0) {
+            interesPendiente = BigDecimal.ZERO;
+        }
 
         //Calcular interes pendiente
-        BigDecimal interesPendiente = interesTotal.subtract(interesPagado);
+        BigDecimal interesTotal = interesPagado.add(interesPendiente);
 
+        if ( capitalPendiente.compareTo(BigDecimal.ZERO) == 0){
+            prestamoMaquina.setEstadoPrestamo(EstadoPrestamo.PAGADO);
+            prestamoMaquinaRepository.save(prestamoMaquina);
+        }
+        
         // Create summary map
         Map<String, BigDecimal> resumen = new HashMap<>();
         resumen.put("capitalTotal", prestamoMaquina.getMontoPrestamo());
@@ -107,28 +113,6 @@ public class PagoMaquinaService {
         return resumen;
     }
 
-    public static int calculateFullMonths(LocalDate startDate, LocalDate currentDate) {
-        // Si la fecha actual es anterior a la fecha de inicio, no hay meses completos
-        if (currentDate.isBefore(startDate)) {
-            return 0;
-        }
-
-        int fullMonths = 1; // Contador de meses completos
-        LocalDate tempDate = startDate;
-
-        // Iterar mes a mes
-        while (!tempDate.isAfter(currentDate)) {
-            // Avanzar al siguiente mes
-            tempDate = tempDate.plusMonths(1);
-
-            // Si el nuevo mes no excede la fecha actual, contar como mes completo
-            if (!tempDate.isAfter(currentDate)) {
-                fullMonths++;
-            }
-        }
-
-        return fullMonths;
-    }
 
     public List<PagoMaquina> obtenerPagosPorPrestamoMaquina(Long idPrestamoMaquina) {
         return pagoMaquinaRepository.findByPrestamoMaquinaIdPrestamoMaquinaOrderByFechaPagoDesc(idPrestamoMaquina);

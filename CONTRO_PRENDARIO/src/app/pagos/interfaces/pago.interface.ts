@@ -41,6 +41,8 @@ export interface ResumenPrestamo {
   interesPendiente: number;
 }
 
+export type PagoGeneral = ResumenPrestamo ;
+
 export interface PrestamoSeleccionado {
   idPrestamo: number;
   cliente: {

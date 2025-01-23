@@ -28,7 +28,7 @@
                     <div class="row g-4">
                         <!-- Dinero Fluyendo -->
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-auto pb-4">
                                 <div class="card-body">
                                     <h5 class="card-title text-success">{{ 'HOME.FLOWING_MONEY' | translate }}</h5>
                                     <h2 class="mb-3">{{ formatMoney(resumen.dineroFluyendo) }}</h2>
@@ -41,7 +41,7 @@
 
                         <!-- Dinero Disponible -->
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-auto pb-4">
                                 <div class="card-body">
                                     <h5 class="card-title text-success">{{ 'HOME.AVAILABLE_MONEY' | translate }}</h5>
                                     <h2 class="mb-3">{{ formatMoney(resumen.dineroDisponible) }}</h2>
@@ -52,7 +52,7 @@
                             </div>
                         </div>
 
-                        <!-- Préstamos Vencidos -->
+                        <!-- Prestamos Vencidos -->
                         <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -65,6 +65,40 @@
                                     
                                     <div class="list-group mt-3">
                                         @for (prestamo of resumen.prestamosVencidos; track prestamo.idPrestamo) {
+                                            <div class="list-group-item border-0 border-bottom">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <div class="fw-bold">
+                                                            {{prestamo.cliente?.nombres}} {{prestamo.cliente?.apellidos}}
+                                                        </div>
+                                                        <small class="text-danger">
+                                                            {{ 'HOME.DAYS_OVERDUE' | translate:{days: getDiasVencidos(prestamo.fechaVencimiento)} }}
+                                                        </small>
+                                                    </div>
+                                                    <span class="badge bg-danger rounded-pill">
+                                                        {{formatMoney(prestamo.montoPrestamo)}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        } @empty {
+                                            <div class="text-center text-muted py-3">
+                                                {{ 'HOME.NO_OVERDUE_LOANS' | translate }}
+                                            </div>
+                                        }
+                                    </div>
+                        
+                                   
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title text-danger mb-0">Máquinas Vencidas</h5>
+                                        <span class="badge bg-danger">
+                                            {{resumen.maquinasVencidas.length}}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="list-group mt-3">
+                                        @for (prestamo of resumen.maquinasVencidas; track prestamo.idPrestamoMaquina) {
                                             <div class="list-group-item border-0 border-bottom">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>

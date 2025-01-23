@@ -15,4 +15,10 @@ import { Observable } from "rxjs";
         responseType: 'blob'
       });
     }
+
+    generarDocumentoEmpenoMaquina(idPrestamoMaquina: number): Observable<Blob> {
+      return this.http.get(`${this.apiUrl}/documento-maquina/${idPrestamoMaquina}`, {
+        responseType: 'blob'
+      });
+    }
   }

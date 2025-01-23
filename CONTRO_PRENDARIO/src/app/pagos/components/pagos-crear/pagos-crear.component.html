@@ -36,7 +36,16 @@
                                          class="border border-3 border-secondary p-2 rounded" 
                                          (click)="seleccionarPrestamo(prestamo)">
                                         <div>{{prestamo.cliente.nombres}} {{prestamo.cliente.apellidos}}</div>
-                                        <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamo}} - {{prestamo.vehiculo.marca}} - {{prestamo.vehiculo.linea}}</small>
+                                        <small>{{ 'PAYMENT_CREATE.LOAN_NUMBER' | translate }} #{{prestamo.idPrestamo}} - {{prestamo.vehiculo.marca}} - {{prestamo.vehiculo.linea}}
+                                            <span class="badge" 
+                                                  [ngClass]="{
+                                                    'bg-success': prestamo.estadoPrestamo === 'ACTIVO',
+                                                    'bg-danger': prestamo.estadoPrestamo === 'VENCIDO',
+                                                    'bg-info': prestamo.estadoPrestamo === 'PAGADO'
+                                                  }">
+                                                {{ 'LOAN_STATUS.' + prestamo.estadoPrestamo | translate }}
+                                        </span>
+                                        </small>
                                     </div>
                                 </div>
                             </div>

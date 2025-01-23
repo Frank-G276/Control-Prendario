@@ -2,6 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DocumentoEmpenoVehiculo" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9ea12dc6-f4c9-42e4-9c18-66d45b1a265f">
 	<parameter name="MONTO_LETRAS" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.io.InputStream"/>
 	<field name="cliente.nombres" class="java.lang.String"/>
 	<field name="cliente.apellidos" class="java.lang.String"/>
 	<field name="cliente.ciudad" class="java.lang.String"/>
@@ -133,6 +134,13 @@
 				<reportElement x="50" y="600" width="200" height="20" uuid="55f6a4c5-d613-4e70-8871-98863fc59c97"/>
 				<text><![CDATA[CC.]]></text>
 			</staticText>
+			<image>
+				<reportElement x="325" y="487" width="150" height="33" uuid="fe2da4ec-486a-41fb-bb3a-655cb5d0ff08">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

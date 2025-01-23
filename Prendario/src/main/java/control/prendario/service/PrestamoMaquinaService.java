@@ -42,7 +42,7 @@ public class PrestamoMaquinaService {
     }
 
     public List<PrestamoMaquina> obtenerTodosPrestamosMaquina() {
-        return prestamoMaquinaRepository.findAll();
+        return prestamoMaquinaRepository.findAllByOrderByIdPrestamoMaquinaDesc();
     }
 
     public PrestamoMaquina obtenerPrestamoMaquinaPorId(Long id) {
@@ -113,5 +113,9 @@ public class PrestamoMaquinaService {
                                 prestamo.getFechaVencimiento() != null &&
                                 prestamo.getFechaVencimiento().isBefore(now.toLocalDate()))
                 .toList();
+    }
+
+    public Long getUltimoIdPrestamo() {
+        return prestamoMaquinaRepository.findMaxId();
     }
 }

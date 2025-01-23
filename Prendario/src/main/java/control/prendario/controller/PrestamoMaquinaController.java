@@ -140,4 +140,6 @@ public class PrestamoMaquinaController {
     public ResponseEntity<List<PrestamoMaquina>> obtenerPrestamosVencidos() {
         return ResponseEntity.ok(prestamoMaquinaService.obtenerPrestamosVencidos());
     }
+
+
 }

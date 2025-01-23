@@ -212,7 +212,7 @@ export class PrestamosEditarComponent implements OnInit{
         });
         this.loading = false;
         setTimeout(() => {
-          this.router.navigate(['/prestamos']);
+          this.router.navigate(['/prestamos/ver', this.prestamoId]);
         }, 1500);
       },
       error: (error) => {

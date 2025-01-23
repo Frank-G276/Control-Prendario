@@ -31,11 +31,15 @@ export class ReportButtonComponent {
     this.reporteService.generarDocumentoEmpeno(this.prestamoId).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `documento_empeno_${this.prestamoId}.pdf`;
-        link.click();
-        window.URL.revokeObjectURL(url);
+        // En lugar de crear un elemento 'a' para descargar, abrimos en nueva pestaña
+        window.open(url, '_blank');
+        
+        // Es importante mantener la limpieza del URL creado
+        // Podemos hacerlo después de un pequeño delay para asegurar que se haya abierto
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 100);
+        
         this.isLoading = false;
       },
       error: (error) => {

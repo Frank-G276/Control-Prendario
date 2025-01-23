@@ -23,6 +23,9 @@ public class PagoService {
     @Autowired
     private PrestamoRepository prestamoRepository;
 
+    @Autowired
+    private CalculoInteresService calculoInteresService;
+
     @Transactional
     public Pago crearPago(Pago pago) {
         Prestamo prestamo = prestamoRepository.findById(pago.getPrestamo().getIdPrestamo())
@@ -65,88 +68,6 @@ public class PagoService {
         return pagoRepository.save(pago);
     }
 
-    private Map<String, BigDecimal> calcularValoresPrestamo(Prestamo prestamo) {
-        Map<String, BigDecimal> valores = new HashMap<>();
-
-        // 1. Obtener todos los pagos existentes
-        List<Pago> pagosCapital = pagoRepository.findByPrestamoAndTipoPago(
-                prestamo.getIdPrestamo(),
-                Pago.TipoPago.CAPITAL
-        );
-        List<Pago> pagosInteres = pagoRepository.findByPrestamoAndTipoPago(
-                prestamo.getIdPrestamo(),
-                Pago.TipoPago.INTERES
-        );
-
-        // 2. Calcular total pagado en capital
-        BigDecimal capitalPagado = pagosCapital.stream()
-                .map(Pago::getMontoPagado)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // 3. Calcular total pagado en intereses
-        BigDecimal interesPagado = pagosInteres.stream()
-                .map(Pago::getMontoPagado)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // 4. Calcular interés total del préstamo
-        BigDecimal interesTotal = prestamo.getMontoPrestamo()
-                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal("3")))
-                .divide(new BigDecimal("100"));
-
-        // 5. Calcular pendientes
-        BigDecimal capitalPendiente = prestamo.getMontoPrestamo().subtract(capitalPagado);
-        BigDecimal interesPendiente = interesTotal.subtract(interesPagado);
-
-        // 6. Guardar valores calculados
-        valores.put("capitalTotal", prestamo.getMontoPrestamo());
-        valores.put("interesTotal", interesTotal);
-        valores.put("capitalPagado", capitalPagado);
-        valores.put("interesPagado", interesPagado);
-        valores.put("capitalPendiente", capitalPendiente);
-        valores.put("interesPendiente", interesPendiente);
-
-        return valores;
-    }
-
-    private void verificarPagoCompleto(Prestamo prestamo, Map<String, BigDecimal> resumenPagos, BigDecimal nuevoPago) {
-        BigDecimal capitalPagado = resumenPagos.getOrDefault("capital", BigDecimal.ZERO).add(nuevoPago);
-        BigDecimal interesPagado = resumenPagos.getOrDefault("interes", BigDecimal.ZERO);
-
-        BigDecimal interesTotal = prestamo.getMontoPrestamo()
-                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal("3")))
-                .divide(new BigDecimal("100"));
-
-        if (capitalPagado.compareTo(prestamo.getMontoPrestamo()) >= 0 &&
-                interesPagado.compareTo(interesTotal) >= 0) {
-            prestamo.setEstadoPrestamo(EstadoPrestamo.PAGADO);
-            prestamoRepository.save(prestamo);
-        }
-    }
-
-    private void validarPagoCapital(Pago pago, Prestamo prestamo, Map<String, BigDecimal> resumenPagos) {
-        BigDecimal capitalPagado = resumenPagos.getOrDefault("capital", BigDecimal.ZERO);
-        BigDecimal capitalPendiente = prestamo.getMontoPrestamo().subtract(capitalPagado);
-
-        if (pago.getMontoPagado().compareTo(capitalPendiente) > 0) {
-            throw new RuntimeException("El monto del pago ($" + pago.getMontoPagado() +
-                    ") excede el capital pendiente ($" + capitalPendiente + ")");
-        }
-    }
-
-    private void validarPagoInteres(Pago pago, Prestamo prestamo, Map<String, BigDecimal> resumenPagos) {
-        BigDecimal interesPagado = resumenPagos.getOrDefault("interes", BigDecimal.ZERO);
-        BigDecimal interesTotal = prestamo.getMontoPrestamo()
-                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal("3")))
-                .divide(new BigDecimal("100"));
-        BigDecimal interesPendiente = interesTotal.subtract(interesPagado);
-
-        if (pago.getMontoPagado().compareTo(interesPendiente) > 0) {
-            throw new RuntimeException("El monto del pago ($" + pago.getMontoPagado() +
-                    ") excede el interés pendiente ($" + interesPendiente + ")");
-        }
-    }
-
-
     public List<Pago> obtenerPagosPorPrestamo(Long idPrestamo) {
         return pagoRepository.findByPrestamoIdPrestamoOrderByFechaPagoDesc(idPrestamo);
     }
@@ -169,22 +90,28 @@ public class PagoService {
         if (capitalPagado == null) capitalPagado = BigDecimal.ZERO;
         if (interesPagado == null) interesPagado = BigDecimal.ZERO;
 
-        // Fecha de inicio
-        LocalDate startDate = prestamo.getFechaPrestamo().toLocalDate();
-
-        // Fecha actual obtenida automáticamente
-        LocalDate currentDate = LocalDate.now();
-
         // Calcular pendientes
         BigDecimal capitalPendiente = prestamo.getMontoPrestamo().subtract(capitalPagado);
 
-        // Calcular el interés total
-        BigDecimal interesTotal = capitalPendiente
-                .multiply(prestamo.getTasaInteres().multiply(new BigDecimal(calculateFullMonths(startDate, currentDate))))
-                .divide(new BigDecimal("100"));
+        // Calcular el interés pendiente
+        BigDecimal interesPendiente = calculoInteresService.calcularInteresPendiente(
+                prestamo,
+                LocalDate.now()
+        );
 
-        //Calular interes pendiente
-        BigDecimal interesPendiente = interesTotal.subtract(interesPagado);
+        if (interesPendiente.compareTo(BigDecimal.ZERO) < 0) {
+            interesPendiente = BigDecimal.ZERO;
+        }
+
+        if ((EstadoPrestamo.ACTIVO.equals(prestamo.getEstadoPrestamo()) || EstadoPrestamo.VENCIDO
+                .equals(prestamo.getEstadoPrestamo())) && capitalPendiente.compareTo(BigDecimal.ZERO) == 0) {
+            prestamo.setEstadoPrestamo(EstadoPrestamo.PAGADO);
+            prestamoRepository.save(prestamo);
+        }
+
+        // Calcular interés total (intereses pagados + pendientes)
+        BigDecimal interesTotal = interesPagado.add(interesPendiente);
+
 
         Map<String, BigDecimal> resumen = new HashMap<>();
         resumen.put("capitalTotal", prestamo.getMontoPrestamo());
@@ -195,29 +122,6 @@ public class PagoService {
         resumen.put("interesPendiente", interesPendiente);
 
         return resumen;
-    }
-
-    public static int calculateFullMonths(LocalDate startDate, LocalDate currentDate) {
-        // Si la fecha actual es anterior a la fecha de inicio, no hay meses completos
-        if (currentDate.isBefore(startDate)) {
-            return 0;
-        }
-
-        int fullMonths = 1; // Contador de meses completos
-        LocalDate tempDate = startDate;
-
-        // Iterar mes a mes
-        while (!tempDate.isAfter(currentDate)) {
-            // Avanzar al siguiente mes
-            tempDate = tempDate.plusMonths(1);
-
-            // Si el nuevo mes no excede la fecha actual, contar como mes completo
-            if (!tempDate.isAfter(currentDate)) {
-                fullMonths++;
-            }
-        }
-
-        return fullMonths;
     }
 
     public List<Pago> buscarPagosPorCliente(String termino) {

@@ -7,7 +7,6 @@ import { FormBuilder, FormsModule, FormGroup, ReactiveFormsModule } from '@angul
 import { PagoService } from '../../services/pago.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Maquina, Prestamo } from '../../../prestamos/models/prestamo.interface';
 
 @Component({
   selector: 'app-pagos-lista',
@@ -27,6 +26,11 @@ export class PagosListaComponent implements OnInit {
   loading = true;
   error = '';
   selectTable : string = 'vehiculos';
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  pagosAPaginar: any[] = [];
+  protected Math = Math;
 
   readonly tiposPago = ['CAPITAL', 'INTERES', 'MORA'];
   readonly metodosPago = ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA'];
@@ -36,11 +40,13 @@ export class PagosListaComponent implements OnInit {
     fechaPago: [''],
     tipoPago: [''],
     metodoPago: ['EFECTIVO'],
+    itemsPerPage: [5]
   });
 
   ngOnInit(): void {
     this.cargarPagos();
     this.setupFiltros();
+    this.setupPaginationChange();
   }
 
   private setupFiltros() {
@@ -60,6 +66,8 @@ export class PagosListaComponent implements OnInit {
       next: (pagos) => {
         this.pagos = pagos;
         this.pagosFiltrados = pagos;
+        this.totalItems = this.pagosFiltrados.length;
+        this.updatePaginatedItems();
         this.loading = false;
       },
       error: (error) => {
@@ -115,6 +123,9 @@ export class PagosListaComponent implements OnInit {
     }
 
     this.pagosFiltrados = pagosFiltrados;
+    this.totalItems = this.pagosFiltrados.length;
+    this.currentPage = 1; // Reset a la primera página cuando se aplican filtros
+    this.updatePaginatedItems();
   }
 
   limpiarFiltros() {
@@ -172,5 +183,70 @@ export class PagosListaComponent implements OnInit {
   getNumerodocumento(item: any): string | undefined{
     return this.selectTable === 'vehiculos'? item.prestamo.cliente.numeroDocumento
     :item.prestamoMaquina.cliente.numeroDocumento
+  }
+
+  private updatePaginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.pagosAPaginar = this.pagosFiltrados.slice(startIndex, endIndex);
+  }
+  
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+  
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+  
+  get pages(): number[] {
+    const totalPages = this.totalPages;
+    const current = this.currentPage;
+    const maxVisible = 5; // Número máximo de páginas visibles
+    
+    if (totalPages <= maxVisible) {
+      // Si hay menos páginas que el máximo, mostrarlas todas
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+  
+    // Calcular el rango de páginas a mostrar
+    let start = Math.max(current - Math.floor(maxVisible / 2), 1);
+    let end = start + maxVisible - 1;
+  
+    // Ajustar si llegamos al final
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - maxVisible + 1, 1);
+    }
+  
+    const pages = [];
+    
+    // Añadir primera página y ellipsis si es necesario
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push(-1); // -1 representa el ellipsis
+    }
+  
+    // Añadir páginas del rango
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+  
+    // Añadir última página y ellipsis si es necesario
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push(-1);
+      pages.push(totalPages);
+    }
+  
+    return pages;
+  }
+  
+  private setupPaginationChange() {
+    this.filtrosForm.get('itemsPerPage')?.valueChanges.subscribe(value => {
+      this.pageSize = value;
+      this.currentPage = 1;
+      this.updatePaginatedItems();
+    });
   }
 }

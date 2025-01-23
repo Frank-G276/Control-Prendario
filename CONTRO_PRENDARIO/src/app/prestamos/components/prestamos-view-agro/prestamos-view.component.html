@@ -22,10 +22,13 @@
                     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">{{ 'LOAN_VIEW.LOAN_NUMBER' | translate }} #{{ prestamo.idPrestamoMaquina }}</h3>
                         <div>
-                            <app-report-button
+                            <a [routerLink] = "'/pagos/new'" class="btn btn-outline-warning me-2">
+                                <i class="bi bi-cash"></i> Agregar pago
+                            </a>
+                            <app-reportmaquina-button
                             [prestamoId]="prestamo.idPrestamoMaquina" 
                             class="me-2">
-                            </app-report-button>
+                            </app-reportmaquina-button>
                             <button class="btn btn-outline-light me-2" (click)="navigateToEdit()">
                                 <i class="bi bi-pencil"></i> {{ 'LOAN_VIEW.EDIT' | translate }}
                             </button>
@@ -59,8 +62,13 @@
                                         <p><strong class="text-success">{{ 'LOAN_VIEW.LOAN_DATE' | translate }}:</strong> {{ formatDate(prestamo.fechaPrestamo) }}</p>
                                         <p><strong class="text-success">{{ 'LOAN_VIEW.DUE_DATE' | translate }}:</strong> {{ formatDate(prestamo.fechaVencimiento) }}</p>
                                         <p><strong class="text-success">{{ 'LOAN_VIEW.AMOUNT' | translate }}:</strong> {{ formatCurrency(prestamo.montoPrestamo) }}</p>
+                                        <p><strong class="text-success">Monto abonado :</strong> {{ formatCurrency(prestamo.resumenPagos?.capitalPagado!) }}</p>
+                                        <p><strong class="text-danger-emphasis">Monto pendiente :</strong> {{ formatCurrency(prestamo.resumenPagos?.capitalPendiente!) }}</p>
                                         <p><strong class="text-success">{{ 'LOAN_VIEW.INTEREST_RATE' | translate }}:</strong> {{ prestamo.tasaInteres }}%</p>
-                                        <p><strong class="text-success">{{ 'LOAN_VIEW.TOTAL_TO_PAY' | translate }}:</strong> {{ formatCurrency(calcularTotal()) }}</p>
+                                        <p><strong class="text-danger-emphasis">Interes actual :</strong> {{ formatCurrency(prestamo.resumenPagos?.interesPendiente!) }}</p>
+                                        <p><strong class="text-success">Intereses Pagados :</strong> {{ formatCurrency(prestamo.resumenPagos?.interesPagado!) }}</p>
+                                        <p><strong class="text-success">Intereses total :</strong> {{ formatCurrency(prestamo.resumenPagos?.interesTotal!) }}</p>
+                                        <p><strong class="text-danger">{{ 'LOAN_VIEW.TOTAL_TO_PAY' | translate }} :</strong> {{ formatCurrency(calcularTotal())  }}</p>
                                     </div>
                                 </div>
                             </div>

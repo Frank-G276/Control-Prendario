@@ -412,4 +412,18 @@ public class PrestamoController {
     public ResponseEntity<List<Prestamo>> getPrestamosVencidos() {
         return ResponseEntity.ok(prestamoService.findPrestamosVencidos());
     }
+
+    @GetMapping("/ultimo-id")
+    public ResponseEntity<Long> obtenerUltimoIdPrestamo() {
+        Long ultimoId = prestamoService.getUltimoIdPrestamo();
+        System.out.println("Ultimo Id: " + ultimoId);
+        return ResponseEntity.ok(ultimoId);
+    }
+
+    @GetMapping("/ultimo-id/maquina")
+    public ResponseEntity<Long> obtenerUltimoIdPrestamoMaquina() {
+        Long ultimoId = prestamoMaquinaService.getUltimoIdPrestamo();
+        System.out.println("Ultimo Id: " + ultimoId);
+        return ResponseEntity.ok(ultimoId);
+    }
 }

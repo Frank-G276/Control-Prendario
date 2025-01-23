@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../../pages/components/header/header.component';
 import { SidebarComponent } from '../../../pages/components/sidebar/sidebar.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PrestamoService } from '../../services/prestamo.service';
 import { Maquina } from '../../models/prestamo.interface';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReportButtonComponent } from '../../../reports/components/report-button.component/report-button.component.component';
+import { ReportButtonMaquinaComponent } from '../../../reports/components/report-maquina.component/report-button.component.component';
+import { PagoService } from '../../../pagos/services/pago.service';
 
 @Component({
   selector: 'app-prestamosmaquina-view',
@@ -16,7 +17,8 @@ import { ReportButtonComponent } from '../../../reports/components/report-button
     HeaderComponent, 
     SidebarComponent, 
     TranslateModule,
-    ReportButtonComponent 
+    ReportButtonMaquinaComponent ,
+    RouterModule
   ],
   templateUrl: './prestamos-view.component.html',
   styleUrl: './prestamos-view.component.css'
@@ -27,10 +29,12 @@ export class PrestamosMaquinaViewComponent implements OnInit{
   private prestamoService = inject(PrestamoService);
   private router = inject(Router);
   private translateService = inject(TranslateService);
+  private pagoService = inject(PagoService);
 
   prestamo?: Maquina;
   loading = true;
   error = '';
+  resumen: any;
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -46,6 +50,11 @@ export class PrestamosMaquinaViewComponent implements OnInit{
     this.prestamoService.getPrestamoPorId(id).subscribe({
       next: (prestamo) => {
         this.prestamo = prestamo ;
+        this.pagoService.obtenerResumenPagos('maquinas', prestamo.idPrestamoMaquina!).subscribe(resumen => {
+          this.resumen = resumen; // Guardar el valor resuelto
+          this.prestamo!.resumenPagos = this.resumen;
+          console.log('Resumen:', this.resumen); // Aquí se imprimen los datos reales
+        });
         this.loading = false;
       },
       error: (error) => {
@@ -59,8 +68,8 @@ export class PrestamosMaquinaViewComponent implements OnInit{
   }
 
   calcularTotal(): number {
-    if (!this.prestamo) return 0;
-    return this.prestamo.montoPrestamo + (this.prestamo.montoPrestamo * ((this.prestamo.tasaInteres * 3) / 100));
+   if (!this.prestamo) return 0;
+    return this.prestamo.resumenPagos?.capitalPendiente! + (this.prestamo.resumenPagos?.interesPendiente!);
   }
 
   formatDate(date: string | undefined): string {
@@ -81,7 +90,7 @@ export class PrestamosMaquinaViewComponent implements OnInit{
 
   navigateToEdit(): void {;
     if (this.prestamo?.idPrestamoMaquina) {
-      this.router.navigate(['/prestamos/edit', this.prestamo.idPrestamoMaquina]);
+      this.router.navigate(['/prestamos/editar', this.prestamo.idPrestamoMaquina]);
     }
   }
 

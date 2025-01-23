@@ -59,6 +59,20 @@ import { PrestamoMaquina } from '../models/prestamomaquina.interface';
         catchError(this.handleError)
       );
     }
+
+    ultimoId(tableName:string): Observable<any>{
+      if(tableName === 'vehiculo'){
+        return this.http.get<any>(`${this.apiUrl}/ultimo-id`).pipe(
+          tap(response => console.log('Id obtenido:', response)),
+          catchError(this.handleError)
+        );
+      }else{
+        return this.http.get<any>(`${this.apiUrl}/ultimo-id/maquina`).pipe(
+          tap(response => console.log('Id obtenido:', response)),
+          catchError(this.handleError)
+        );
+      }
+    }
   
     updatePrestamo(id: number, prestamo: any): Observable<Prestamo> {
       return this.http.put<Prestamo>(`${this.apiUrl}/${id}`, prestamo).pipe(
@@ -131,13 +145,15 @@ import { PrestamoMaquina } from '../models/prestamomaquina.interface';
     if (tableName === 'vehiculos') {
       return this.getAllPrestamos().pipe(
         map(response => {
-          const observables = response.prestamos.map(prestamo =>
+            const observables = response.prestamos.map(prestamo =>
             forkJoin({
               prestamo: Promise.resolve(prestamo),
-              resumen: this.pagoService.obtenerResumenPagos(tableName,prestamo.idPrestamo!),
+              resumen: this.pagoService.obtenerResumenPagos(tableName, prestamo.idPrestamo!),
               maquina: Promise.resolve({} as Maquina)
-            })
-          );
+            }).pipe(
+              tap(observable => console.log('Observable:', observable))
+            )
+            );
           
           return forkJoin(observables);
         }),
@@ -151,7 +167,9 @@ import { PrestamoMaquina } from '../models/prestamomaquina.interface';
               maquina: Promise.resolve(maquina),
               resumen: this.pagoService.obtenerResumenPagos(tableName, maquina.idPrestamoMaquina!),
               prestamo: Promise.resolve({} as Prestamo)
-            })
+            }).pipe(
+              tap(observable => console.log('Observable:', observable))
+            )
           );
           return forkJoin(observables);
         }),
